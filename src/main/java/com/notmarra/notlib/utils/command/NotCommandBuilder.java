@@ -1,4 +1,4 @@
-package com.notmarra.notliba.utils.command;
+package com.notmarra.notlib.utils.command;
 
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.registrar.ReloadableRegistrarEvent;

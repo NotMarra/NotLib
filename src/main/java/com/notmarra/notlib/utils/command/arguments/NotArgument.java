@@ -1,10 +1,10 @@
-package com.notmarra.notliba.utils.command.arguments;
+package com.notmarra.notlib.utils.command.arguments;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.CommandNode;
-import com.notmarra.notliba.utils.command.Base;
+import com.notmarra.notlib.utils.command.Base;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 
