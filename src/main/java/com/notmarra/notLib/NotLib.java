@@ -1,17 +1,23 @@
-package com.notmarra.notLib;
+package com.notmarra.notlib;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class NotLib extends JavaPlugin {
+    private static NotLib instance;
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
+        instance = this;
+        this.getLogger().info("NotLib has been enabled!");
 
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        this.getLogger().info("NotLib has been disabled!");
+    }
+
+    public static NotLib getInstance() {
+        return instance;
     }
 }
