@@ -1,0 +1,7 @@
+name: NotLib
+version: '0.1-DEV'
+main: com.notmarra.notLib.NotLib
+api-version: '1.21'
+authors: [ NotMarra, TheNoiselessNoise ]
+description: Library for NotPlugins
+website: www.notmarra.com
