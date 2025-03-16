@@ -1,8 +1,9 @@
-package com.notmarra.notlib.utils.command;
+package com.notmarra.notliba.utils.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import com.notmarra.notlib.utils.command.arguments.NotArgument;
+import com.notmarra.notliba.utils.command.arguments.NotArgument;
+
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 

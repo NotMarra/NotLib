@@ -1,4 +1,4 @@
-package com.notmarra.notlib;
+package com.notmarra.notliba;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;

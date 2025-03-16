@@ -1,4 +1,4 @@
-package com.notmarra.notlib.utils;
+package com.notmarra.notliba.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,7 +15,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import org.bukkit.entity.Player;
 
-import com.notmarra.notlib.NotLib;
+import com.notmarra.notliba.NotLib;
 
 
 public class ChatF {

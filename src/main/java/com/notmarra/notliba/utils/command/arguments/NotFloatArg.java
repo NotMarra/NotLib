@@ -1,4 +1,4 @@
-package com.notmarra.notlib.utils.command.arguments;
+package com.notmarra.notliba.utils.command.arguments;
 
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
