@@ -239,6 +239,10 @@ public class ChatF {
     // shorthands
 
     public void send(Player player) {
+        if (this.player == null) {
+            this.player = player;
+        }
+        
         player.sendMessage(build());
     }
 }
