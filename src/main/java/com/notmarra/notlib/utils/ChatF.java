@@ -145,6 +145,11 @@ public class ChatF {
         return this;
     }
 
+    public ChatF nl() {
+        this.appendComponents.add(Component.newline());
+        return this;
+    }
+
     public ChatF append(ChatF formatter) {
         this.appendComponents.add(formatter.build());
         return this;
