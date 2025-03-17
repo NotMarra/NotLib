@@ -13,6 +13,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.notmarra.notlib.NotLib;
@@ -238,11 +239,19 @@ public class ChatF {
 
     // shorthands
 
-    public void send(Player player) {
+    public void sendTo(Player player) {
         if (this.player == null) {
             this.player = player;
         }
-        
+
         player.sendMessage(build());
+    }
+
+    public void sendTo(Entity entity) {
+        if (entity instanceof Player player) {
+            sendTo(player);
+        } else {
+            entity.sendMessage(build());
+        }
     }
 }
