@@ -5,3 +5,8 @@ api-version: "1.21"
 authors: [NotMarra, TheNoiselessNoise]
 description: Library for NotPlugins
 website: www.notmarra.com
+dependencies:
+  server:
+    PlaceholderAPI:
+      load: BEFORE
+      required: false

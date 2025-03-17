@@ -235,4 +235,10 @@ public class ChatF {
     private static Component toComponentBold(String inputString, TextColor color) {
         return toComponent(inputString).style(Style.style(TextDecoration.BOLD)).color(color);
     }
+
+    // shorthands
+
+    public void send(Player player) {
+        player.sendMessage(build());
+    }
 }
