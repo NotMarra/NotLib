@@ -30,7 +30,7 @@ public abstract class NotArgument<T> extends Base {
 
             if (argBuilder instanceof RequiredArgumentBuilder && !argument.suggestions.isEmpty()) {
                 argBuilder = ((RequiredArgumentBuilder<CommandSourceStack, ?>) argBuilder).suggests(
-                    (context, suggestionsBuilder) -> {
+                    (ctx, suggestionsBuilder) -> {
                         for (String suggestion : argument.suggestions) {
                             suggestionsBuilder.suggest(suggestion);
                         }
@@ -40,7 +40,10 @@ public abstract class NotArgument<T> extends Base {
             }
 
             if (argument.executor != null) {
-                argBuilder = argBuilder.executes(context -> argument.executor.apply(context));
+                argBuilder = argBuilder.executes(ctx -> {
+                    argument.executor.apply(ctx);
+                    return 1;
+                });
             }
 
             cmd = cmd.then(argBuilder.build());
@@ -49,7 +52,7 @@ public abstract class NotArgument<T> extends Base {
 
         if (cmd instanceof RequiredArgumentBuilder && !this.suggestions.isEmpty()) {
             cmd = ((RequiredArgumentBuilder<CommandSourceStack, ?>) cmd).suggests(
-                (context, suggestionsBuilder) -> {
+                (ctx, suggestionsBuilder) -> {
                     for (String suggestion : this.suggestions) {
                         suggestionsBuilder.suggest(suggestion);
                     }
@@ -66,7 +69,10 @@ public abstract class NotArgument<T> extends Base {
         });
 
         if (this.executor != null) {
-            cmd = cmd.executes(context -> executor.apply(context));
+            cmd = cmd.executes(ctx -> {
+                executor.apply(ctx);
+                return 1;
+            });
         }
 
         return cmd.build();

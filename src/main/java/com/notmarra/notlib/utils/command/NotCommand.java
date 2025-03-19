@@ -25,14 +25,17 @@ public class NotCommand extends Base {
         for (String arg : this.arguments.keySet()) {
             cmd = cmd.then(this.arguments.get(arg).build());
         }
-        cmd = cmd.requires(source -> {
+        cmd.requires(source -> {
             if (this.permission != null) {
                 return source.getSender().hasPermission(this.permission);
             }
             return true;
         });
         if (executor != null) {
-            cmd = cmd.executes(context -> executor.apply(context));
+            cmd.executes(ctx -> {
+                executor.apply(ctx);
+                return 1;
+            });
         }
         return cmd.build();
     }
