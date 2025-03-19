@@ -41,7 +41,7 @@ public abstract class NotArgument<T> extends Base {
 
             if (argument.executor != null) {
                 argBuilder = argBuilder.executes(ctx -> {
-                    argument.executor.apply(ctx);
+                    argument.executor.accept(ctx);
                     return 1;
                 });
             }
@@ -70,7 +70,7 @@ public abstract class NotArgument<T> extends Base {
 
         if (this.executor != null) {
             cmd = cmd.executes(ctx -> {
-                executor.apply(ctx);
+                executor.accept(ctx);
                 return 1;
             });
         }

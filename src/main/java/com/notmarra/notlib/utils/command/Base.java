@@ -9,12 +9,12 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 public abstract class Base {
     public final String name;
     public HashMap<String, NotArgument<?>> arguments = new HashMap<>();
-    @Nullable public Function<CommandContext<CommandSourceStack>, Void> executor;
+    @Nullable public Consumer<CommandContext<CommandSourceStack>> executor;
     public List<String> suggestions = List.of();
     @Nullable public String permission;
 
@@ -28,7 +28,7 @@ public abstract class Base {
         return this;
     }
 
-    public Base onExecute(Function<CommandContext<CommandSourceStack>, Void> executor) {
+    public Base onExecute(Consumer<CommandContext<CommandSourceStack>> executor) {
         this.executor = executor;
         return this;
     }

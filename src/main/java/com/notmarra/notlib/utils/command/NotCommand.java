@@ -33,7 +33,7 @@ public class NotCommand extends Base {
         });
         if (executor != null) {
             cmd.executes(ctx -> {
-                executor.apply(ctx);
+                executor.accept(ctx);
                 return 1;
             });
         }
