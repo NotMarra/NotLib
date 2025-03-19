@@ -14,7 +14,7 @@ import java.util.function.Function;
 public abstract class Base {
     public final String name;
     public HashMap<String, NotArgument<?>> arguments = new HashMap<>();
-    @Nullable public Function<CommandContext<CommandSourceStack>,Integer> executor;
+    @Nullable public Function<CommandContext<CommandSourceStack>, Void> executor;
     public List<String> suggestions = List.of();
     @Nullable public String permission;
 
@@ -28,7 +28,7 @@ public abstract class Base {
         return this;
     }
 
-    public Base onExecute(Function<CommandContext<CommandSourceStack>, Integer> executor) {
+    public Base onExecute(Function<CommandContext<CommandSourceStack>, Void> executor) {
         this.executor = executor;
         return this;
     }
