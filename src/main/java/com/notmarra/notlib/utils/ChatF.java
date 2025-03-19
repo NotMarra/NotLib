@@ -222,23 +222,23 @@ public class ChatF {
         return new ChatF(otherFormatter.build());
     }
 
-    private static Component toComponent(String inputString) {
+    public static Component toComponent(String inputString) {
         return miniMessage.deserialize(inputString);
     }
 
-    private static Component toComponent(String inputString, TextColor color) {
+    public static Component toComponent(String inputString, TextColor color) {
         return toComponent(inputString).color(color);
     }
 
-    private static Component toComponent(String inputString, Style style) {
+    public static Component toComponent(String inputString, Style style) {
         return toComponent(inputString).style(style);
     }
 
-    private static Component toComponentBold(String inputString) {
+    public static Component toComponentBold(String inputString) {
         return toComponent(inputString).style(Style.style(TextDecoration.BOLD));
     }
 
-    private static Component toComponentBold(String inputString, TextColor color) {
+    public static Component toComponentBold(String inputString, TextColor color) {
         return toComponent(inputString).style(Style.style(TextDecoration.BOLD)).color(color);
     }
 
