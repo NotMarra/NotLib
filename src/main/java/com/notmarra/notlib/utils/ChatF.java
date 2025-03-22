@@ -65,6 +65,8 @@ public class ChatF {
 
             if (value instanceof Component component) {
                 valueString = miniMessage.serialize(component);
+            } else if (value instanceof ChatF formatter) {
+                valueString = miniMessage.serialize(formatter.build());
             } else {
                 valueString = value.toString();
             }
