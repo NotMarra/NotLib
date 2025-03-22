@@ -63,7 +63,9 @@ public class ChatF {
             Object value = replacements.get(key);
             String valueString;
 
-            if (value instanceof Component component) {
+            if (value instanceof String string) {
+                valueString = string;
+            } else if (value instanceof Component component) {
                 valueString = miniMessage.serialize(component);
             } else if (value instanceof ChatF formatter) {
                 valueString = miniMessage.serialize(formatter.build());
