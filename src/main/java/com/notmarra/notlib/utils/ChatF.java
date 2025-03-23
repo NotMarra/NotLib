@@ -61,24 +61,18 @@ public class ChatF {
     private Component buildReplacements(Component baseComponent, HashMap<String, Object> replacements) {
         for (String key : replacements.keySet()) {
             Object value = replacements.get(key);
-            String valueString;
 
-            if (value instanceof String string) {
-                valueString = string;
+            TextReplacementConfig.Builder builder = TextReplacementConfig.builder().match(key);
+
+            if (value instanceof ChatF formatted) {
+                builder = builder.replacement(formatted.build());
             } else if (value instanceof Component component) {
-                valueString = miniMessage.serialize(component);
-            } else if (value instanceof ChatF formatter) {
-                valueString = miniMessage.serialize(formatter.build());
+                builder = builder.replacement(component);
             } else {
-                valueString = value.toString();
+                builder = builder.replacement(value.toString());
             }
-
-            TextReplacementConfig replacementConfig = TextReplacementConfig.builder()
-                .match(key)
-                .replacement(valueString)
-                .build();
             
-            baseComponent = baseComponent.replaceText(replacementConfig);
+            baseComponent = baseComponent.replaceText(builder.build());
         }
 
         return baseComponent;
