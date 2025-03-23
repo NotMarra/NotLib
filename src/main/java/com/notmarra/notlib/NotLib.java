@@ -16,12 +16,12 @@ public final class NotLib extends JavaPlugin {
             PlaceholderAPI = true;
         }
 
-        this.getLogger().info("NotLib has been enabled!");
+        this.getLogger().info("Enabled successfully!");
     }
 
     @Override
     public void onDisable() {
-        this.getLogger().info("NotLib has been disabled!");
+        this.getLogger().info("Disabled successfully!");
     }
 
     public static NotLib getInstance() {
