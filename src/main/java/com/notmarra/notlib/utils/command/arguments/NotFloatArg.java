@@ -2,9 +2,10 @@ package com.notmarra.notlib.utils.command.arguments;
 
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
+
+import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -14,6 +15,11 @@ public class NotFloatArg extends NotArgument<Float> {
 
     public NotFloatArg(String name) {
         super(name);
+    }
+
+    public static NotFloatArg of(String name) { return new NotFloatArg(name); }
+    public static NotFloatArg of(String name, Consumer<NotArgument<Float>> executor) {
+        return (NotFloatArg)NotFloatArg.of(name).onExecute(executor);
     }
 
     public NotFloatArg setMin(float min) {
@@ -46,7 +52,7 @@ public class NotFloatArg extends NotArgument<Float> {
     }
 
     @Override
-    public Float get(CommandContext<CommandSourceStack> ctx) {
-        return FloatArgumentType.getFloat(ctx, this.name);
+    public Float get() {
+        return FloatArgumentType.getFloat(this.ctx, this.name);
     }
 }

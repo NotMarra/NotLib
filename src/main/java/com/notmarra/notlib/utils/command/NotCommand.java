@@ -2,23 +2,19 @@ package com.notmarra.notlib.utils.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import com.notmarra.notlib.utils.command.arguments.NotArgument;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
+import java.util.function.Consumer;
 
-import java.util.HashMap;
-
-public class NotCommand extends Base {
+public class NotCommand extends Base<NotCommand> {
 
     public NotCommand(String name) {
         super(name);
     }
 
-    public NotCommand setArgs(HashMap<String, NotArgument<?>> args) {
-        this.arguments = args;
-        return this;
-    }
+    public static NotCommand of(String name) { return new NotCommand(name); }
+    public static NotCommand of(String name, Consumer<NotCommand> executor) { return (NotCommand)NotCommand.of(name).onExecute(executor); }
 
     public LiteralCommandNode<CommandSourceStack> build() {
         LiteralArgumentBuilder<CommandSourceStack> cmd = Commands.literal(this.name);
@@ -33,11 +29,11 @@ public class NotCommand extends Base {
         });
         if (executor != null) {
             cmd.executes(ctx -> {
-                executor.accept(ctx);
+                setContext(ctx);
+                executor.accept(this);
                 return 1;
             });
         }
         return cmd.build();
     }
-
 }

@@ -2,9 +2,10 @@ package com.notmarra.notlib.utils.command.arguments;
 
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
+
+import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -14,6 +15,11 @@ public class NotDoubleArg extends NotArgument<Double> {
 
     public NotDoubleArg(String name) {
         super(name);
+    }
+
+    public static NotDoubleArg of(String name) { return new NotDoubleArg(name); }
+    public static NotDoubleArg of(String name, Consumer<NotArgument<Double>> executor) {
+        return (NotDoubleArg)NotDoubleArg.of(name).onExecute(executor);
     }
 
     public NotDoubleArg setMin(double min) {
@@ -47,7 +53,7 @@ public class NotDoubleArg extends NotArgument<Double> {
 
 
     @Override
-    public Double get(CommandContext<CommandSourceStack> ctx) {
-        return DoubleArgumentType.getDouble(ctx, this.name);
+    public Double get() {
+        return DoubleArgumentType.getDouble(this.ctx, this.name);
     }
 }

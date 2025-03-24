@@ -1,39 +1,41 @@
 package com.notmarra.notlib.utils.command.arguments;
 
+import java.util.function.Consumer;
+
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.CommandNode;
 import com.notmarra.notlib.utils.command.Base;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 
-
-
-public abstract class NotArgument<T> extends Base {
+public abstract class NotArgument<T> extends Base<NotArgument<T>> {
     public NotArgument(String name) {
         super(name);
     }
 
     public abstract ArgumentBuilder<CommandSourceStack, ?> construct();
 
-    public abstract T get(CommandContext<CommandSourceStack> ctx);
+    public abstract T get();
 
-    @SuppressWarnings("unchecked")
+    @Override
+    public Base<NotArgument<T>> onExecute(Consumer<NotArgument<T>> executor) {
+        return super.onExecute(executor);
+    }
+
+    @SuppressWarnings({ "unchecked" })
     public CommandNode<CommandSourceStack> build() {
         ArgumentBuilder<CommandSourceStack, ?> cmd = construct();
 
         for (String arg : this.arguments.keySet()) {
-            NotArgument<?> argument = this.arguments.get(arg);
+            NotArgument<Object> argument = this.arguments.get(arg);
 
             ArgumentBuilder<CommandSourceStack, ?> argBuilder = argument.construct();
 
             if (argBuilder instanceof RequiredArgumentBuilder && !argument.suggestions.isEmpty()) {
                 argBuilder = ((RequiredArgumentBuilder<CommandSourceStack, ?>) argBuilder).suggests(
                     (ctx, suggestionsBuilder) -> {
-                        for (String suggestion : argument.suggestions) {
-                            suggestionsBuilder.suggest(suggestion);
-                        }
+                        argument.suggestions.forEach(suggestionsBuilder::suggest);
                         return suggestionsBuilder.buildFuture();
                     }
                 );
@@ -41,7 +43,8 @@ public abstract class NotArgument<T> extends Base {
 
             if (argument.executor != null) {
                 argBuilder = argBuilder.executes(ctx -> {
-                    argument.executor.accept(ctx);
+                    argument.setContext(ctx);
+                    argument.executor.accept(argument);
                     return 1;
                 });
             }
@@ -53,9 +56,7 @@ public abstract class NotArgument<T> extends Base {
         if (cmd instanceof RequiredArgumentBuilder && !this.suggestions.isEmpty()) {
             cmd = ((RequiredArgumentBuilder<CommandSourceStack, ?>) cmd).suggests(
                 (ctx, suggestionsBuilder) -> {
-                    for (String suggestion : this.suggestions) {
-                        suggestionsBuilder.suggest(suggestion);
-                    }
+                    this.suggestions.forEach(suggestionsBuilder::suggest);
                     return suggestionsBuilder.buildFuture();
                 }
             );
@@ -70,7 +71,8 @@ public abstract class NotArgument<T> extends Base {
 
         if (this.executor != null) {
             cmd = cmd.executes(ctx -> {
-                executor.accept(ctx);
+                setContext(ctx);
+                executor.accept(this);
                 return 1;
             });
         }

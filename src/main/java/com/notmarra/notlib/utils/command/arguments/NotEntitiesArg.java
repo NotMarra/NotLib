@@ -6,33 +6,33 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySelectorArgumentResolver;
-
-import java.util.function.Consumer;
-
 import org.bukkit.entity.Entity;
 
-public class NotEntityArg extends NotArgument<Entity> {
-    public NotEntityArg(String name) {
+import java.util.List;
+import java.util.function.Consumer;
+
+public class NotEntitiesArg extends NotArgument<List<Entity>> {
+    public NotEntitiesArg(String name) {
         super(name);
     }
 
-    public static NotEntityArg of(String name) { return new NotEntityArg(name); }
-    public static NotEntityArg of(String name, Consumer<NotArgument<Entity>> executor) {
-        return (NotEntityArg)NotEntityArg.of(name).onExecute(executor);
+    public static NotEntitiesArg of(String name) { return new NotEntitiesArg(name); }
+    public static NotEntitiesArg of(String name, Consumer<NotArgument<List<Entity>>> executor) {
+        return (NotEntitiesArg)NotEntitiesArg.of(name).onExecute(executor);
     }
 
     @Override
     public RequiredArgumentBuilder<CommandSourceStack, EntitySelectorArgumentResolver> construct() {
-        return Commands.argument(this.name, ArgumentTypes.entity());
+        return Commands.argument(this.name, ArgumentTypes.entities());
     }
 
     @Override
-    public Entity get() {
+    public List<Entity> get() {
         try {
             final EntitySelectorArgumentResolver resolver = ctx.getArgument(this.name, EntitySelectorArgumentResolver.class);
-            return resolver.resolve(ctx.getSource()).getFirst();
+            return resolver.resolve(ctx.getSource());
         } catch (CommandSyntaxException e) {
-            return null;
+            return List.of();
         }
     }
 }

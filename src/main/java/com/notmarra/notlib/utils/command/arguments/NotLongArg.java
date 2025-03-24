@@ -2,9 +2,10 @@ package com.notmarra.notlib.utils.command.arguments;
 
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
+
+import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -14,6 +15,11 @@ public class NotLongArg extends NotArgument<Long> {
 
     public NotLongArg(String name) {
         super(name);
+    }
+
+    public static NotLongArg of(String name) { return new NotLongArg(name); }
+    public static NotLongArg of(String name, Consumer<NotArgument<Long>> executor) {
+        return (NotLongArg)NotLongArg.of(name).onExecute(executor);
     }
 
     public NotLongArg setMin(long min) {
@@ -45,8 +51,8 @@ public class NotLongArg extends NotArgument<Long> {
     }
 
     @Override
-    public Long get(CommandContext<CommandSourceStack> ctx) {
-        return LongArgumentType.getLong(ctx, this.name);
+    public Long get() {
+        return LongArgumentType.getLong(this.ctx, this.name);
     }
 }
 

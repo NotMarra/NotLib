@@ -2,9 +2,10 @@ package com.notmarra.notlib.utils.command.arguments;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
+
+import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -14,6 +15,11 @@ public class NotIntArg extends NotArgument<Integer> {
 
     public NotIntArg(String name) {
         super(name);
+    }
+
+    public static NotIntArg of(String name) { return new NotIntArg(name); }
+    public static NotIntArg of(String name, Consumer<NotArgument<Integer>> executor) {
+        return (NotIntArg)NotIntArg.of(name).onExecute(executor);
     }
 
     public NotIntArg setMin(int min) {
@@ -46,7 +52,7 @@ public class NotIntArg extends NotArgument<Integer> {
     }
 
     @Override
-    public Integer get(CommandContext<CommandSourceStack> ctx) {
-        return IntegerArgumentType.getInteger(ctx, this.name);
+    public Integer get() {
+        return IntegerArgumentType.getInteger(this.ctx, this.name);
     }
 }
