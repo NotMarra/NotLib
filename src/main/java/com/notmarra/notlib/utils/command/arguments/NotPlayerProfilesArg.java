@@ -8,17 +8,17 @@ import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.PlayerProfileListResolver;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class NotPlayerProfilesArg extends NotArgument<Collection<PlayerProfile>> {
+public class NotPlayerProfilesArg extends NotArgument<List<PlayerProfile>> {
     public NotPlayerProfilesArg(String name) {
         super(name);
     }
 
     public static NotPlayerProfilesArg of(String name) { return new NotPlayerProfilesArg(name); }
-    public static NotPlayerProfilesArg of(String name, Consumer<NotArgument<Collection<PlayerProfile>>> executor) {
+    public static NotPlayerProfilesArg of(String name, Consumer<NotArgument<List<PlayerProfile>>> executor) {
         return (NotPlayerProfilesArg)NotPlayerProfilesArg.of(name).onExecute(executor);
     }
 
@@ -28,10 +28,10 @@ public class NotPlayerProfilesArg extends NotArgument<Collection<PlayerProfile>>
     }
 
     @Override
-    public Collection<PlayerProfile> get() {
+    public List<PlayerProfile> get() {
         try {
             final PlayerProfileListResolver resolver = ctx.getArgument(this.name, PlayerProfileListResolver.class);
-            return resolver.resolve(ctx.getSource());
+            return new ArrayList<>(resolver.resolve(ctx.getSource()));
         } catch (CommandSyntaxException e) {
             return List.of();
         }

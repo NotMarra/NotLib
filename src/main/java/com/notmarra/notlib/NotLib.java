@@ -1,21 +1,28 @@
 package com.notmarra.notlib;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.notmarra.notlib.utils.ChatF;
 import com.notmarra.notlib.utils.command.NotCommand;
-import com.notmarra.notlib.utils.gui.NotInvHolder;
+import com.notmarra.notlib.utils.gui.NotGUI;
+import com.notmarra.notlib.utils.gui.NotGUIListener;
 
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 
 public final class NotLib extends JavaPlugin {
     private static NotLib instance;
     private static Boolean PlaceholderAPI = false;
+    private NotGUIListener guiListener;
 
     @Override
     public void onEnable() {
         instance = this;
+        guiListener = new NotGUIListener(this);
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             this.getLogger().info("PlaceholderAPI found, hooking into it");
@@ -24,35 +31,105 @@ public final class NotLib extends JavaPlugin {
 
         this.getLogger().info("Enabled successfully!");
 
+        guiListener.register();
+
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
-            NotCommand cmd = NotCommand.of("testgui", c -> {
-                // NotGUI
-                //     .title("Test GUI")
-
-                //     .size(27) // must be a multiple of 9
-                //     .rows(3)
-
-                //     .item(0, Material.DIAMOND_SWORD, "Diamond Sword", "This is a diamond sword")
-                //     .onClick(isShiftClick -> {
-                //         ctx.getPlayer().sendMessage("Shift clicked!");
-                //     })
-
-                //     .pattern(List<String>)
-                //     .item('#', Material.DIAMOND_SWORD, "Diamond Sword", "This is a diamond sword")
-                    
-                //     // material: String, name: String, lore: List<String>
-                //     .item(ConfigurationSection, Material.DIAMOND_SWORD, "Diamond Sword", "This is a diamond sword")
-
-                //     .open(player);
-                NotInvHolder holder = new NotInvHolder(this);
-                c.getPlayer().openInventory(holder.getInventory());
+            NotCommand testgui = NotCommand.of("testgui", cmd -> {
+                NotGUI.create("Example GUI")
+                    .rows(6)
+                    .addButton(Material.COMPASS, "Navigation", 4, (event, c) -> {
+                        Player player = (Player) event.getWhoClicked();
+                        player.sendMessage(ChatF.of("You clicked the navigation button!").build());
+                    })
+                    .createContainer(1, 1, 7, 2)
+                        .addButton(Material.REDSTONE, "Settings", 0, 0, (event, c) -> {
+                            Player player = (Player) event.getWhoClicked();
+                            player.sendMessage(ChatF.of("Opening settings...").build());
+                        })
+                        .addButton(Material.PAPER, "Profile", 2, 0, (event, c) -> {
+                            Player player = (Player) event.getWhoClicked();
+                            player.sendMessage(ChatF.of("Opening profile...").build());
+                        })
+                        .addButton(Material.EMERALD, "Shop", 4, 0, (event, c) -> {
+                            Player player = (Player) event.getWhoClicked();
+                            player.sendMessage(ChatF.of("Opening shop...").build());
+                        })
+                        // NOTE: refresh() updates the GUI with the new position
+                        // .addButton(Material.GOLD_INGOT, "Bank", 6, 0, (event, c) -> {
+                        //     // Player player = (Player) event.getWhoClicked();
+                        //     // player.sendMessage(ChatF.of("Opening bank...").build());
+                        //     c.position(c.getPosition().x + 1, c.getPosition().y);
+                        //     c.gui().refresh();
+                        // })
+                        // NOTE: animate()
+                        // .addButton(Material.GOLD_INGOT, "Bank", 6, 0, (event, c) -> {
+                        //     int startX = c.getPosition().x;
+                        //     int endX = startX + 5;
+                            
+                        //     c.gui().animate(20L, 10, (progress) -> {
+                        //         int currentX = startX + Math.round(progress * (endX - startX));
+                        //         c.position(currentX, c.getPosition().y);
+                        //     }); // 20 ticks (1 second) duration, 10 frames
+                        // })
+                        // NOTE: createAnimation()
+                        .addButton(Material.GOLD_INGOT, "Bank", 6, 0, (event, c) -> {
+                            int startX = c.getPosition().x;
+                            int endX = startX + 5;
+                            
+                            c.gui().createAnimation(20L, 10).start((progress) -> {
+                                int currentX = startX + Math.round(progress * (endX - startX));
+                                c.position(currentX, c.getPosition().y);
+                            }); // 20 ticks (1 second) duration, 10 frames
+                        })
+                    .gui()
+                        .createContainer(1, 2, 7, 2)
+                            .createItem(Material.BOOK, 3, 0)
+                                .name("Inventory")
+                                .lore(List.of("Your personal items", "Click an item to use it"))
+                        .container()
+                            .createItem(Material.DIAMOND_SWORD, 0, 1)
+                                .name("Mythical Sword")
+                                .amount(1)
+                        .container()
+                            .createItem(Material.GOLDEN_APPLE, 2, 1)
+                                .name("Golden Apple")
+                                .amount(5)
+                        .container()
+                            .createItem(Material.POTION, 4, 1)
+                                .name("Health Potion")
+                                .amount(3)
+                        .container()
+                            .createItem(Material.ENDER_PEARL, 6, 1)
+                                .name("Ender Pearl")
+                                .amount(16)
+                    .gui()
+                        .createContainer(1, 5, 7, 1)
+                            .createItem(Material.PLAYER_HEAD, 3, 0)
+                                .name("Friends List")
+                    .gui()
+                        .createContainer()
+                            .position(0, 5)
+                            .size(3, 1)
+                                .createItem(Material.EMERALD_BLOCK, 1, 0)
+                                    .name("Online (3)")
+                    .gui()
+                        .createContainer()
+                            .position(6, 5)
+                            .size(3, 1)
+                                .createItem(Material.REDSTONE_BLOCK, 1, 0)
+                                    .name("Offline (7)")
+                    .gui()
+                        .addButton(Material.BARRIER, "Close", 4, 5, (event, c) -> {
+                            event.getWhoClicked().closeInventory();
+                        })
+                    .open(cmd.getPlayer());
             });
 
-            cmd.greedyStringArg("message", arg -> {
+            testgui.greedyStringArg("message", arg -> {
                 ChatF.of(arg.get(), ChatF.C_RED).sendTo(arg.getPlayer());
             });
 
-            commands.registrar().register(cmd.build());
+            commands.registrar().register(testgui.build());
         });
     }
 
@@ -66,4 +143,8 @@ public final class NotLib extends JavaPlugin {
     }
 
     public static Boolean hasPAPI() { return PlaceholderAPI; }
+
+    public NotGUIListener getGUIListener() {
+        return guiListener;
+    }
 }

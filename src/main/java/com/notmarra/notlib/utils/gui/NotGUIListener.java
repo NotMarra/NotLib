@@ -1,33 +1,26 @@
 package com.notmarra.notlib.utils.gui;
 
-import com.notmarra.notlib.utils.ChatF;
 import com.notmarra.notlib.utils.command.NotCommand;
 
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import net.kyori.adventure.text.Component;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Logger;
 
-import org.bukkit.Material;
-import org.bukkit.Server;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public abstract class NotGUIListener implements Listener {
+public class NotGUIListener implements Listener {
     public final JavaPlugin plugin;
 
-    private final Map<UUID, NotInvHolder> openInventories = new HashMap<>();
+    private final Map<UUID, NotGUI> openGUIs = new HashMap<>();
 
     private boolean isRegistered = false;
 
@@ -35,77 +28,41 @@ public abstract class NotGUIListener implements Listener {
         this.plugin = plugin;
     }
 
-    public boolean handleInventoryClick(Player player, NotInvHolder holder, int slot) {
-        UUID playerId = player.getUniqueId();
-        
-        Inventory clickedInventory = holder.getInventory();
-        int size = clickedInventory.getSize();
-        
-        if (slot == size - 1) {
-            // playerColors.remove(playerId);
-            ChatF.empty()
-                .appendBold("Your chat color has been reset!", ChatF.C_GREEN)
-                .sendTo(player);
-            player.closeInventory();
-            return true;
-        }
-        
-        ItemStack clicked = clickedInventory.getItem(slot);
-        
-        if (clicked != null) {
-            // for (Map.Entry<ChatColor, Material> entry : holder.getColorMaterials().entrySet()) {
-            //     if (clicked.getType() == entry.getValue()) {
-            //         ChatColor selectedColor = entry.getKey();
-            //         playerColors.put(playerId, selectedColor);
-            //         ChatF.empty()
-            //             .appendBold("Your chat color has been set to " + selectedColor.name() + "!", selectedColor.getColor())
-            //             .sendTo(player);
-            //         player.closeInventory();
-            //         return true;
-            //     }
-            // }
-        }
-        
-        return true;
+    public void openGUI(Player player, NotGUI gui) {
+        openGUIs.put(player.getUniqueId(), gui);
+        player.openInventory(gui.getInventory());
     }
     
-    public boolean handleInventoryClose(Player player) {
-        UUID playerId = player.getUniqueId();
-        // return openInventories.remove(playerId) != null;
-        return true;
-    }
-    
-    public Component applyColorToMessage(Player player, String message) {
-        UUID playerId = player.getUniqueId();
-        
-        // if (playerColors.containsKey(playerId)) {
-        //     ChatColor color = playerColors.get(playerId);
-        //     return ChatF.of(message, color.getColor()).build();
-        // }
-        
-        return ChatF.of(message).build();
-    }
-
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
+        if (!(event.getWhoClicked() instanceof Player)) return;
+
         Player player = (Player) event.getWhoClicked();
         Inventory clickedInventory = event.getClickedInventory();
-        NotInvHolder holder = openInventories.get(player.getUniqueId());
+        NotGUI gui = openGUIs.get(player.getUniqueId());
 
-        if (holder != null && holder.getInventory().equals(clickedInventory)) {
+        if (gui != null && clickedInventory != null && clickedInventory.equals(gui.getBuiltInventory())) {
             event.setCancelled(true);
-            handleInventoryClick(player, holder, event.getSlot());
+            gui.handleClick(new InventoryClickEvent(
+                player.getOpenInventory(),
+                event.getSlotType(),
+                event.getSlot(),
+                event.getClick(),
+                event.getAction()
+            ));
         }
     }
     
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
+        if (!(event.getPlayer() instanceof Player)) return;
+        
         Player player = (Player) event.getPlayer();
         Inventory closedInventory = event.getInventory();
-        NotInvHolder holder = openInventories.get(player.getUniqueId());
+        NotGUI gui = openGUIs.get(player.getUniqueId());
 
-        if (holder != null && holder.getInventory().equals(closedInventory)) {
-            handleInventoryClose(player);
+        if (gui != null && closedInventory.equals(gui.getBuiltInventory())) {
+            openGUIs.remove(player.getUniqueId());
         }
     }
 
@@ -113,18 +70,6 @@ public abstract class NotGUIListener implements Listener {
         return List.of(
 
         );
-    }
-
-    public FileConfiguration getPluginConfig() {
-        return plugin.getConfig();
-    }
-
-    public Server getServer() {
-        return plugin.getServer();
-    }
-
-    public Logger getLogger() {
-        return plugin.getLogger();
     }
 
     public void register() {

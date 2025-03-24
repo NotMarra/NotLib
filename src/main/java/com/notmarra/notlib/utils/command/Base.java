@@ -26,7 +26,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
@@ -117,7 +116,7 @@ public abstract class Base<T extends Base<T>> {
     public NotPlayerArg playerArg(String name, Consumer<NotArgument<Player>> executor) { NotPlayerArg arg = NotPlayerArg.of(name, executor); this.addArg(arg); return arg; }
 
     public NotPlayerProfilesArg playerProfilesArg(String name) { NotPlayerProfilesArg arg = NotPlayerProfilesArg.of(name); this.addArg(arg); return arg; }
-    public NotPlayerProfilesArg playerProfilesArg(String name, Consumer<NotArgument<Collection<PlayerProfile>>> executor) { NotPlayerProfilesArg arg = NotPlayerProfilesArg.of(name, executor); this.addArg(arg); return arg; }
+    public NotPlayerProfilesArg playerProfilesArg(String name, Consumer<NotArgument<List<PlayerProfile>>> executor) { NotPlayerProfilesArg arg = NotPlayerProfilesArg.of(name, executor); this.addArg(arg); return arg; }
 
     public NotPlayersArg playersArg(String name) { NotPlayersArg arg = NotPlayersArg.of(name); this.addArg(arg); return arg; }
     public NotPlayersArg playersArg(String name, Consumer<NotArgument<List<Player>>> executor) { NotPlayersArg arg = NotPlayersArg.of(name, executor); this.addArg(arg); return arg; }
