@@ -83,9 +83,9 @@ public class NotGUIContainer {
     public NotGUIContainer position(int x, int y) { position.set(x, y); return this; }
     public NotGUIContainer position(NotVector2 position) { position.set(position); return this; }
 
-    public NotGUIContainer size(int width) { size.set(width); return this; }
-    public NotGUIContainer size(int width, int height) { size.set(width, height); return this; }
-    public NotGUIContainer size(NotSize size) { size.set(size); return this; }
+    public NotGUIContainer size(int width) { this.size = NotSize.of(width); return this; }
+    public NotGUIContainer size(int width, int height) { this.size = NotSize.of(width, height); return this; }
+    public NotGUIContainer size(NotSize size) { this.size = size; return this; }
 
     public BiConsumer<InventoryClickEvent, NotGUIContainer> getHandler(UUID itemId) {
         BiConsumer<InventoryClickEvent, NotGUIContainer> handler = clickHandlers.get(itemId);

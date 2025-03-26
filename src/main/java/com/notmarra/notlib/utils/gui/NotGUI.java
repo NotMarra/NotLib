@@ -59,12 +59,9 @@ public class NotGUI implements InventoryHolder {
 
     public boolean isChest() { return guiType == InventoryType.CHEST || guiType == null; }
     public NotGUI type(InventoryType type) {
-        if (!inventorySizes.containsKey(type)) {
-            throw new IllegalArgumentException("Invalid InventoryType for NotGUI: " + type);
-        }
+        if (!inventorySizes.containsKey(type)) return this;
         guiType = type;
-        size(inventorySizes.get(type));
-        return this;
+        return size(inventorySizes.get(type));
     }
     public int rowSize() {
         if (guiType == null) return 9;
@@ -76,21 +73,15 @@ public class NotGUI implements InventoryHolder {
     public NotGUI position(int x) { rootContainer.position(x); return this; }
     public NotGUI position(int x, int y) { rootContainer.position(x, y); return this; }
     public NotGUI position(NotVector2 position) { rootContainer.position(position); return this; }
-    public NotGUI size(int width) { rootContainer.size(width); return this; }
-    public NotGUI size(int width, int height) { rootContainer.size(width, height); return this; }
+    public NotGUI size(int width) { return size(NotSize.of(width)); }
+    public NotGUI size(int width, int height) { return size(NotSize.of(width, height)); }
     public NotGUI size(NotSize size) { rootContainer.size(size); return this; }
     public NotGUI rows(int rows) {
-        if (!isChest()) {
-            throw new IllegalArgumentException("Cannot set rows on non-chest GUIs");
-        }
+        if (!isChest()) return this;
         if (guiType == InventoryType.CHEST) {
-            if (rows < 1 || rows > 3) {
-                throw new IllegalArgumentException("Invalid number of rows for chest GUI, must be between 1 and 3");
-            }
+            if (rows < 1 || rows > 3) return this;
         } else { // double-chest
-            if (rows < 1 || rows > 6) {
-                throw new IllegalArgumentException("Invalid number of rows for double-chest GUI, must be between 1 and 6");
-            }
+            if (rows < 1 || rows > 6) return this;
         }
         return size(9, rows);
     }

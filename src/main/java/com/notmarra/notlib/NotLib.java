@@ -8,12 +8,14 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.notmarra.notlib.utils.ChatF;
 import com.notmarra.notlib.utils.command.NotCommand;
 import com.notmarra.notlib.utils.gui.NotGUI;
 import com.notmarra.notlib.utils.gui.NotGUIListener;
+import com.notmarra.notlib.utils.gui.NotGUISlotIDs;
 
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 
@@ -57,24 +59,6 @@ public final class NotLib extends JavaPlugin {
                             Player player = (Player) event.getWhoClicked();
                             player.sendMessage(ChatF.of("Opening shop...").build());
                         })
-                        // NOTE: refresh() updates the GUI with the new position
-                        // .addButton(Material.GOLD_INGOT, "Bank", 6, 0, (event, c) -> {
-                        //     // Player player = (Player) event.getWhoClicked();
-                        //     // player.sendMessage(ChatF.of("Opening bank...").build());
-                        //     c.position(c.getPosition().x + 1, c.getPosition().y);
-                        //     c.gui().refresh();
-                        // })
-                        // NOTE: animate()
-                        // .addButton(Material.GOLD_INGOT, "Bank", 6, 0, (event, c) -> {
-                        //     int startX = c.getPosition().x;
-                        //     int endX = startX + 5;
-                            
-                        //     c.gui().animate(20L, 10, (progress) -> {
-                        //         int currentX = startX + Math.round(progress * (endX - startX));
-                        //         c.position(currentX, c.getPosition().y);
-                        //     }); // 20 ticks (1 second) duration, 10 frames
-                        // })
-                        // NOTE: createAnimation()
                         .addButton(Material.GOLD_INGOT, "Bank", 6, 0, (event, c) -> {
                             Map<UUID, Integer> start = new HashMap<>();
                             c.getRootAndItsChildren().forEach(ch -> start.put(ch.id(), ch.getPosition().x));
@@ -83,15 +67,13 @@ public final class NotLib extends JavaPlugin {
                             c.getRootAndItsChildren().forEach(ch -> end.put(ch.id(), ch.getPosition().x + c.gui().rowSize()));
 
                             c.gui().animate(20L, 10, (progress) -> {
-                                // getLogger().info("Animating... " + (progress * 100) + "%");
                                 c.getRootAndItsChildren().forEach(ch -> {
                                     int startX = start.get(ch.id());
                                     int endX = end.get(ch.id());
                                     int currentX = startX + Math.round(progress * (endX - startX));
                                     ch.position(currentX, ch.getPosition().y);
-                                    // getLogger().info("Animating " + ch.id() + " to " + currentX);
                                 });
-                            }); // 20 ticks (1 second) duration, 10 frames
+                            });
                         })
                     .gui()
                         .createContainer(1, 2, 7, 2)
@@ -142,6 +124,50 @@ public final class NotLib extends JavaPlugin {
             });
 
             commands.registrar().register(testgui.build());
+        });
+
+        this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
+            NotCommand diffgui = NotCommand.of("diffgui", cmd -> {
+                NotGUI.create("Example GUI")
+                    .type(InventoryType.HOPPER)
+                    .addButton(Material.COMPASS, "Navigation", NotGUISlotIDs.HopperSlots.FIRST, (event, c) -> {
+                        Player player = (Player) event.getWhoClicked();
+                        player.sendMessage(ChatF.of("You clicked the navigation button!").build());
+                    })
+                    .createContainer(1, 0, 4, 1)
+                        .addButton(Material.REDSTONE, "Settings", 0, 0, (event, c) -> {
+                            Player player = (Player) event.getWhoClicked();
+                            player.sendMessage(ChatF.of("Opening settings...").build());
+                        })
+                        .addButton(Material.PAPER, "Profile", 1, 0, (event, c) -> {
+                            Player player = (Player) event.getWhoClicked();
+                            player.sendMessage(ChatF.of("Opening profile...").build());
+                        })
+                        .addButton(Material.EMERALD, "Shop", 2, 0, (event, c) -> {
+                            Player player = (Player) event.getWhoClicked();
+                            player.sendMessage(ChatF.of("Opening shop...").build());
+                        })
+                        .addButton(Material.GOLD_INGOT, "Bank", 3, 0, (event, c) -> {
+                            Map<UUID, Integer> start = new HashMap<>();
+                            c.getRootAndItsChildren().forEach(ch -> start.put(ch.id(), ch.getPosition().x));
+
+                            Map<UUID, Integer> end = new HashMap<>();
+                            c.getRootAndItsChildren().forEach(ch -> end.put(ch.id(), ch.getPosition().x + c.gui().rowSize()));
+
+                            c.gui().animate(20L, 10, (progress) -> {
+                                c.getRootAndItsChildren().forEach(ch -> {
+                                    int startX = start.get(ch.id());
+                                    int endX = end.get(ch.id());
+                                    int currentX = startX + Math.round(progress * (endX - startX));
+                                    ch.position(currentX, ch.getPosition().y);
+                                });
+                            });
+                        })
+                    .gui()
+                    .open(cmd.getPlayer());
+            });
+
+            commands.registrar().register(diffgui.build());
         });
     }
 
