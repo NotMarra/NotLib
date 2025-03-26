@@ -115,7 +115,7 @@ public final class NotLib extends JavaPlugin {
                                 .name("Ender Pearl")
                                 .amount(16)
                     .gui()
-                        .createContainer(1, 5, 7, 1)
+                        .createContainer(1, 4, 7, 1)
                             .createItem(Material.PLAYER_HEAD, 3, 0)
                                 .name("Friends List")
                     .gui()

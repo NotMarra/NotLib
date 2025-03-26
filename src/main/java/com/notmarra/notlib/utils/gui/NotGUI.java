@@ -22,7 +22,7 @@ import com.notmarra.notlib.utils.NotVector2;
 import net.kyori.adventure.text.Component;
 
 public class NotGUI implements InventoryHolder {
-    public static final String ITEM_UUID_KEY = "notlib:gui_item_uuid";
+    public static final String ITEM_UUID_KEY = "notlib-gui-item-uuid";
 
     private NotLib plugin;
     @Nullable private InventoryType guiType; // null is double-chest
