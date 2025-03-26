@@ -44,20 +44,20 @@ public final class NotLib extends JavaPlugin {
                     .rows(6)
                     .addButton(Material.COMPASS, "Navigation", 4, (event, c) -> {
                         Player player = (Player) event.getWhoClicked();
-                        player.sendMessage(ChatF.of("You clicked the navigation button!").build());
+                        ChatF.of("You clicked the navigation button!").sendTo(player);
                     })
                     .createContainer(1, 1, 7, 2)
                         .addButton(Material.REDSTONE, "Settings", 0, 0, (event, c) -> {
                             Player player = (Player) event.getWhoClicked();
-                            player.sendMessage(ChatF.of("Opening settings...").build());
+                            ChatF.of("Opening settings...").sendTo(player);
                         })
                         .addButton(Material.PAPER, "Profile", 2, 0, (event, c) -> {
                             Player player = (Player) event.getWhoClicked();
-                            player.sendMessage(ChatF.of("Opening profile...").build());
+                            ChatF.of("Opening profile...").sendTo(player);
                         })
                         .addButton(Material.EMERALD, "Shop", 4, 0, (event, c) -> {
                             Player player = (Player) event.getWhoClicked();
-                            player.sendMessage(ChatF.of("Opening shop...").build());
+                            ChatF.of("Opening shop...").sendTo(player);
                         })
                         .addButton(Material.GOLD_INGOT, "Bank", 6, 0, (event, c) -> {
                             Map<UUID, Integer> start = new HashMap<>();
@@ -132,20 +132,20 @@ public final class NotLib extends JavaPlugin {
                     .type(InventoryType.HOPPER)
                     .addButton(Material.COMPASS, "Navigation", NotGUISlotIDs.HopperSlots.FIRST, (event, c) -> {
                         Player player = (Player) event.getWhoClicked();
-                        player.sendMessage(ChatF.of("You clicked the navigation button!").build());
+                        ChatF.of("You clicked the navigation button!").sendTo(player);
                     })
                     .createContainer(1, 0, 4, 1)
                         .addButton(Material.REDSTONE, "Settings", 0, 0, (event, c) -> {
                             Player player = (Player) event.getWhoClicked();
-                            player.sendMessage(ChatF.of("Opening settings...").build());
+                            ChatF.of("Opening settings...").sendTo(player);
                         })
                         .addButton(Material.PAPER, "Profile", 1, 0, (event, c) -> {
                             Player player = (Player) event.getWhoClicked();
-                            player.sendMessage(ChatF.of("Opening profile...").build());
+                            ChatF.of("Opening profile...").sendTo(player);
                         })
                         .addButton(Material.EMERALD, "Shop", 2, 0, (event, c) -> {
                             Player player = (Player) event.getWhoClicked();
-                            player.sendMessage(ChatF.of("Opening shop...").build());
+                            ChatF.of("Opening shop...").sendTo(player);
                         })
                         .addButton(Material.GOLD_INGOT, "Bank", 3, 0, (event, c) -> {
                             Map<UUID, Integer> start = new HashMap<>();
