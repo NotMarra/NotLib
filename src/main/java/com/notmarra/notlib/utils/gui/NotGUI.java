@@ -182,7 +182,8 @@ public class NotGUI implements InventoryHolder {
     public void open(Player player) {
         NotGUIListener listener = plugin.getGUIListener();
         if (listener == null) {
-            throw new IllegalStateException("GUI listener not registered");
+            getPlugin().getLogger().warning("GUI listener not registered");
+            return;
         }
         listener.openGUI(player, this);
     }
