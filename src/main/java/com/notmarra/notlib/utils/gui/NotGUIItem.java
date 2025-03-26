@@ -103,7 +103,7 @@ public class NotGUIItem {
         return parentGUI;
     }
 
-    public NotGUIContainer container() {
+    public NotGUIContainer parent() {
         return parentContainer;
     }
 }
