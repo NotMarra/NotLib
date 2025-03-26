@@ -80,7 +80,7 @@ public final class NotLib extends JavaPlugin {
                             c.getRootAndItsChildren().forEach(ch -> start.put(ch.id(), ch.getPosition().x));
 
                             Map<UUID, Integer> end = new HashMap<>();
-                            c.getRootAndItsChildren().forEach(ch -> end.put(ch.id(), ch.getPosition().x + 5));
+                            c.getRootAndItsChildren().forEach(ch -> end.put(ch.id(), ch.getPosition().x + c.gui().rowSize()));
 
                             c.gui().animate(20L, 10, (progress) -> {
                                 // getLogger().info("Animating... " + (progress * 100) + "%");
