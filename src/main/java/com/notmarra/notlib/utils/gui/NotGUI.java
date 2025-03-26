@@ -13,7 +13,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 
 import com.notmarra.notlib.NotLib;
 import com.notmarra.notlib.utils.ChatF;
@@ -23,22 +22,54 @@ import com.notmarra.notlib.utils.NotVector2;
 import net.kyori.adventure.text.Component;
 
 public class NotGUI implements InventoryHolder {
+    public static final String ITEM_UUID_KEY = "notlib:gui_item_uuid";
+
     private NotLib plugin;
     @Nullable private InventoryType guiType; // null is double-chest
     private Component guiTitle;
     private NotGUIContainer rootContainer;
-
     private Inventory builtInventory;
-    private Map<Integer, Consumer<InventoryClickEvent>> clickHandlers;
+
+    public final Map<InventoryType, NotSize> inventorySizes = new HashMap<>();
 
     public NotGUI() {
         plugin = NotLib.getInstance();
         guiTitle = ChatF.of("NotGUI").build();
         rootContainer = new NotGUIContainer(this);
-        clickHandlers = new HashMap<>();
+        inventorySizes.put(InventoryType.CHEST, NotSize.of(9, 3));
+        inventorySizes.put(InventoryType.DISPENSER, NotSize.of(3, 3));
+        inventorySizes.put(InventoryType.DROPPER, NotSize.of(3, 3));
+        inventorySizes.put(InventoryType.HOPPER, NotSize.of(5, 1));
+        inventorySizes.put(InventoryType.BARREL, NotSize.of(9, 3));
+        inventorySizes.put(InventoryType.SHULKER_BOX, NotSize.of(9, 3));
+        inventorySizes.put(InventoryType.SMOKER, NotSize.of(3, 1));
+        inventorySizes.put(InventoryType.BLAST_FURNACE, NotSize.of(3, 1));
+        inventorySizes.put(InventoryType.BREWING, NotSize.of(5, 1));
+        inventorySizes.put(InventoryType.ENCHANTING, NotSize.of(2, 1));
+        inventorySizes.put(InventoryType.ANVIL, NotSize.of(3, 1));
+        inventorySizes.put(InventoryType.GRINDSTONE, NotSize.of(3, 1));
+        inventorySizes.put(InventoryType.CARTOGRAPHY, NotSize.of(3, 1));
+        inventorySizes.put(InventoryType.STONECUTTER, NotSize.of(2, 1));
+        inventorySizes.put(InventoryType.LOOM, NotSize.of(4, 1));
+        inventorySizes.put(InventoryType.CRAFTING, NotSize.of(2, 2));
+        inventorySizes.put(InventoryType.FURNACE, NotSize.of(3, 1));
+        inventorySizes.put(InventoryType.WORKBENCH, NotSize.of(3, 3));
+        inventorySizes.put(InventoryType.SMITHING, NotSize.of(4, 1));
     }
 
-    public NotGUI type(InventoryType type) { guiType = type; return this; }
+    public boolean isChest() { return guiType == InventoryType.CHEST || guiType == null; }
+    public NotGUI type(InventoryType type) {
+        if (!inventorySizes.containsKey(type)) {
+            throw new IllegalArgumentException("Invalid InventoryType for NotGUI: " + type);
+        }
+        guiType = type;
+        size(inventorySizes.get(type));
+        return this;
+    }
+    public int rowSize() {
+        if (guiType == null) return 9;
+        return inventorySizes.get(guiType).width;
+    }
     public NotGUI title(String title) { return title(ChatF.of(title)); }
     public NotGUI title(ChatF title) { return title(title.build()); }
     public NotGUI title(Component title) { this.guiTitle = title; return this; }
@@ -49,16 +80,16 @@ public class NotGUI implements InventoryHolder {
     public NotGUI size(int width, int height) { rootContainer.size(width, height); return this; }
     public NotGUI size(NotSize size) { rootContainer.size(size); return this; }
     public NotGUI rows(int rows) {
-        if (guiType != null && guiType != InventoryType.CHEST) {
+        if (!isChest()) {
             throw new IllegalArgumentException("Cannot set rows on non-chest GUIs");
         }
-        if (guiType == null) {
+        if (guiType == InventoryType.CHEST) {
+            if (rows < 1 || rows > 3) {
+                throw new IllegalArgumentException("Invalid number of rows for chest GUI, must be between 1 and 3");
+            }
+        } else { // double-chest
             if (rows < 1 || rows > 6) {
                 throw new IllegalArgumentException("Invalid number of rows for double-chest GUI, must be between 1 and 6");
-            }
-        } else {
-            if (rows < 1 || rows > 3) {
-                throw new IllegalArgumentException("Invalid number of rows for " + guiType + " GUI, must be between 1 and 3");
             }
         }
         return size(9, rows);
@@ -131,96 +162,16 @@ public class NotGUI implements InventoryHolder {
     }
 
     public void refresh() {
-        Inventory newInventory = build();
-
-        if (builtInventory != null) {
-            builtInventory.clear();
-            for (int i = 0; i < newInventory.getSize(); i++) {
-                builtInventory.setItem(i, newInventory.getItem(i));
-            }
-        } else {
-            builtInventory = newInventory;
-        }
+        builtInventory.clear();
+        rootContainer.refresh();
     }
 
     public void animate(long durationTicks, int frames, Consumer<Float> updateFunction) {
         createAnimation(durationTicks, frames).start(updateFunction);
     }
 
-    private void renderContainer(NotGUIContainer container, Inventory inventory, NotVector2 parentOffset) {
-        NotVector2 containerPosition = container.getPosition();
-        
-        NotSize containerSize = container.getSize();
-
-        plugin.getLogger().info("Rendering container with pos: " + containerPosition.toString() + " and size: " + containerSize.toString());
-        
-        NotVector2 absolutePosition = new NotVector2(
-            parentOffset.x + containerPosition.x,
-            parentOffset.y + containerPosition.y
-        );
-        
-        // Render this container's items
-        Map<Integer, ItemStack> items = container.getAllItems();
-        for (Map.Entry<Integer, ItemStack> entry : items.entrySet()) {
-            int localSlot = entry.getKey();
-            ItemStack item = entry.getValue();
-            
-            // Calculate absolute position
-            int x = localSlot % containerSize.width;
-            int y = localSlot / containerSize.width;
-            
-            int absoluteX = absolutePosition.x + x;
-            int absoluteY = absolutePosition.y + y;
-            
-            // Calculate inventory slot
-            int inventorySlot = absoluteY * 9 + absoluteX;
-            
-            // Place item if within bounds
-            if (inventorySlot >= 0 && inventorySlot < inventory.getSize()) {
-                inventory.setItem(inventorySlot, item);
-            }
-        }
-        
-        // Render child containers
-        for (NotGUIContainer child : container.getChildren()) {
-            renderContainer(child, inventory, absolutePosition);
-        }
-    }
-
     public boolean handleClick(InventoryClickEvent event) {
-        int slot = event.getSlot();
-        
-        // Check if we have a direct handler for this slot
-        Consumer<InventoryClickEvent> handler = clickHandlers.get(slot);
-        if (handler != null) {
-            handler.accept(event);
-            return true;
-        }
-        
-        // Convert to root container coordinates
-        int x = slot % 9;
-        int y = slot / 9;
-
-        NotVector2 rootPosition = rootContainer.getPosition();
-        NotSize rootSize = rootContainer.getSize();
-        
-        // Check if this is within the root container
-        if (x >= rootPosition.x && 
-            x < rootPosition.x + rootSize.width &&
-            y >= rootPosition.y && 
-            y < rootPosition.y + rootSize.height
-        ) {
-            
-            // Calculate local slot for root container
-            int localX = x - rootPosition.x;
-            int localY = y - rootPosition.y;
-            int localSlot = localY * rootSize.width + localX;
-            
-            // Handle in root container
-            return rootContainer.handleClick(event, localSlot);
-        }
-        
-        return false;
+        return rootContainer.handleClick(event);
     }
 
     public Inventory build() {
@@ -232,7 +183,7 @@ public class NotGUI implements InventoryHolder {
             inventory = plugin.getServer().createInventory(this, rootContainer.totalSize(), guiTitle);
         }
 
-        renderContainer(rootContainer, inventory, NotVector2.zero());
+        rootContainer.render(inventory, NotVector2.zero());
 
         return inventory;
     }

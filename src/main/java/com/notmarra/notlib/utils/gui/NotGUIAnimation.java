@@ -2,41 +2,44 @@ package com.notmarra.notlib.utils.gui;
 
 import java.util.function.Consumer;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 public class NotGUIAnimation {
     private final NotGUI gui;
-    private final JavaPlugin plugin;
+    private long durationTicks;
+    private long frames;
     private BukkitTask task;
-    private long totalFrames;
-    private long currentFrame;
-    private long frameDelay;
-    private boolean isRunning = false;
     
     public NotGUIAnimation(NotGUI gui, long durationTicks, long frames) {
         this.gui = gui;
-        this.plugin = gui.getPlugin();
-        this.totalFrames = frames;
-        this.frameDelay = Math.max(1, durationTicks / frames);
-        this.currentFrame = 0;
+        this.durationTicks = durationTicks;
+        this.frames = frames;
     }
     
-    public void start(Consumer<Float> frameUpdateFunction) {
-        if (isRunning) return;
-        isRunning = true;
-        task = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
-            float progress = (float) currentFrame / totalFrames;
-            frameUpdateFunction.accept(progress);
-            gui.refresh();
-            currentFrame++;
-            if (currentFrame > totalFrames) stop();
-        }, 0L, frameDelay);
-    }
-    
-    public void stop() {
-        if (!isRunning) return;
+    public void start(Consumer<Float> updateFunction) {
         if (task != null && !task.isCancelled()) task.cancel();
-        isRunning = false;
+
+        final long ticksPerFrame = durationTicks / frames;
+
+        task = new BukkitRunnable() {
+            private long currentFrame = 0;
+            @Override
+            public void run() {
+                if (currentFrame > frames) {
+                    this.cancel();
+                    return;
+                }
+
+                float progress = (float) currentFrame / frames;
+                updateFunction.accept(progress);
+                gui.refresh();
+                currentFrame++;
+            }
+        }.runTaskTimer(gui.getPlugin(), 0L, Math.max(1, ticksPerFrame));
+    }
+
+    public void cancel() {
+        if (task != null && !task.isCancelled()) task.cancel();
     }
 }

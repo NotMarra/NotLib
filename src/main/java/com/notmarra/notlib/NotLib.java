@@ -1,6 +1,9 @@
 package com.notmarra.notlib;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -73,12 +76,21 @@ public final class NotLib extends JavaPlugin {
                         // })
                         // NOTE: createAnimation()
                         .addButton(Material.GOLD_INGOT, "Bank", 6, 0, (event, c) -> {
-                            int startX = c.getPosition().x;
-                            int endX = startX + 5;
-                            
-                            c.gui().createAnimation(20L, 10).start((progress) -> {
-                                int currentX = startX + Math.round(progress * (endX - startX));
-                                c.position(currentX, c.getPosition().y);
+                            Map<UUID, Integer> start = new HashMap<>();
+                            c.getRootAndItsChildren().forEach(ch -> start.put(ch.id(), ch.getPosition().x));
+
+                            Map<UUID, Integer> end = new HashMap<>();
+                            c.getRootAndItsChildren().forEach(ch -> end.put(ch.id(), ch.getPosition().x + 5));
+
+                            c.gui().animate(20L, 10, (progress) -> {
+                                // getLogger().info("Animating... " + (progress * 100) + "%");
+                                c.getRootAndItsChildren().forEach(ch -> {
+                                    int startX = start.get(ch.id());
+                                    int endX = end.get(ch.id());
+                                    int currentX = startX + Math.round(progress * (endX - startX));
+                                    ch.position(currentX, ch.getPosition().y);
+                                    // getLogger().info("Animating " + ch.id() + " to " + currentX);
+                                });
                             }); // 20 ticks (1 second) duration, 10 frames
                         })
                     .gui()

@@ -41,15 +41,9 @@ public class NotGUIListener implements Listener {
         Inventory clickedInventory = event.getClickedInventory();
         NotGUI gui = openGUIs.get(player.getUniqueId());
 
-        if (gui != null && clickedInventory != null && clickedInventory.equals(gui.getBuiltInventory())) {
+        if (gui != null && clickedInventory.equals(gui.getBuiltInventory())) {
+            gui.handleClick(event);
             event.setCancelled(true);
-            gui.handleClick(new InventoryClickEvent(
-                player.getOpenInventory(),
-                event.getSlotType(),
-                event.getSlot(),
-                event.getClick(),
-                event.getAction()
-            ));
         }
     }
     

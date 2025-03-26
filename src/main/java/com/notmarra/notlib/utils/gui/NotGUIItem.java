@@ -2,18 +2,23 @@ package com.notmarra.notlib.utils.gui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import com.notmarra.notlib.utils.ChatF;
 
 import net.kyori.adventure.text.Component;
 
-public class NotGUIItem {
-    public NotGUI parentGUI;
-    public NotGUIContainer parentContainer;
+public class NotGUIItem { 
+    private UUID uuid;
+    private NotGUI parentGUI;
+    private NotGUIContainer parentContainer;
 
     private int itemAmount = 1;
     private Material itemType;
@@ -25,10 +30,17 @@ public class NotGUIItem {
     }
 
     public NotGUIItem(NotGUI gui, NotGUIContainer parentContainer, Material itemType) {
+        this.uuid = UUID.randomUUID();
         this.parentGUI = gui;
         this.parentContainer = parentContainer;
         this.itemType = itemType;
     }
+
+    public UUID id() { return uuid; }
+    public int amount() { return itemAmount; }
+    public Material type() { return itemType; }
+    public Component name() { return itemName; }
+    public List<Component> lore() { return itemLore; }
 
     public NotGUIItem amount(int itemAmount) {
         this.itemAmount = itemAmount;
@@ -77,6 +89,10 @@ public class NotGUIItem {
         ItemMeta meta = stack.getItemMeta();
         meta.displayName(itemName);
         meta.lore(itemLore);
+
+        NamespacedKey key = new NamespacedKey(gui().getPlugin(), NotGUI.ITEM_UUID_KEY);
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        container.set(key, PersistentDataType.STRING, uuid.toString());
 
         stack.setItemMeta(meta);
 
