@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public abstract class Base<T extends Base<T>> {
+    public Base<?> parent;
     public final String name;
     public HashMap<String, NotArgument<Object>> arguments = new HashMap<>();
     public Consumer<T> executor;
@@ -57,15 +58,29 @@ public abstract class Base<T extends Base<T>> {
     }
 
     public Base<T> setContext(CommandContext<CommandSourceStack> ctx) {
+        NotLib.getInstance().getLogger().info("Setting context for " + this.name);
         this.ctx = ctx;
+        for (String arg : this.arguments.keySet()) {
+            this.arguments.get(arg).setContext(ctx);
+        }
         return this;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public Base<T> addArg(NotArgument arg) {
         NotLib.getInstance().getLogger().info("Adding argument: " + arg.name + " to " + this.name);
+        arg.parent = this;
         this.arguments.put(arg.name, arg);
         return this;
+    }
+
+    public NotArgument<?> getArg(String name) {
+        List<String> path = List.of(name.split("\\."));
+        NotArgument<?> arg = this.arguments.get(path.get(0));
+        for (int i = 1; i < path.size(); i++) {
+            arg = arg.arguments.get(path.get(i));
+        }
+        return arg;
     }
 
     public Base<T> onExecute(Consumer<T> executor) {

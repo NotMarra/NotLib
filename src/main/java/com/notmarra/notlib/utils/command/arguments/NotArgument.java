@@ -6,12 +6,19 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.notmarra.notlib.utils.command.Base;
+import com.notmarra.notlib.utils.command.NotCommand;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 
 public abstract class NotArgument<T> extends Base<NotArgument<T>> {
     public NotArgument(String name) {
         super(name);
+    }
+
+    public NotCommand cmd() {
+        Base<?> parent = this;
+        while (parent.parent != null) parent = parent.parent;
+        return (NotCommand)parent;
     }
 
     public abstract ArgumentBuilder<CommandSourceStack, ?> construct();
@@ -49,7 +56,7 @@ public abstract class NotArgument<T> extends Base<NotArgument<T>> {
 
         if (this.executor != null) {
             arg.executes(ctx -> {
-                setContext(ctx);
+                cmd().setContext(ctx);
                 executor.accept(this);
                 return 1;
             });
