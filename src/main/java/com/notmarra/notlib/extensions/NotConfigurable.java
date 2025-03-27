@@ -8,18 +8,17 @@ public abstract class NotConfigurable {
     public final NotPlugin plugin;
     public FileConfiguration config;
 
-    private boolean isInitialized = false;
-
     public NotConfigurable(NotPlugin plugin) {
         this.plugin = plugin;
+        plugin.registerConfigurable(this);
+        initialize();
     }
 
     public void initialize() {
-        if (isInitialized) return;
-        isInitialized = true;
         String path = getConfigPath();
         if (path == null) return;
         this.config = plugin.getSubConfig(path);
+        if (config == null) return;
         loadConfig();
     }
 
@@ -28,17 +27,19 @@ public abstract class NotConfigurable {
 
     public FileConfiguration getPluginConfig() { return plugin.getConfig(); }
 
-    public abstract String getConfigPath();
+    public String getConfigPath() { return plugin.CONFIG_YML; }
 
     public void loadConfig() {}
+
+    public void reloadConfig(FileConfiguration newConfig) {
+        this.config = newConfig;
+        loadConfig();
+    }
 
     public void reloadConfig() {
         String path = getConfigPath();
         if (path == null) return;
-        FileConfiguration newConfig = plugin.reloadConfig(path);
-        if (newConfig == null) return;
-        this.config = newConfig;
-        loadConfig();
+        plugin.reloadConfig(path);
     }
 
     public ComponentLogger getLogger() { return plugin.getComponentLogger(); }
