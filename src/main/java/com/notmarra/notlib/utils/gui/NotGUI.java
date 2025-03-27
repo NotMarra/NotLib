@@ -158,6 +158,9 @@ public class NotGUI implements InventoryHolder {
         return getBuiltInventory();
     }
 
+    public NotSize getSize() { return rootContainer.getSize(); }
+    public int totalSize() { return rootContainer.totalSize(); }
+
     public NotLib getPlugin() {
         return plugin;
     }
