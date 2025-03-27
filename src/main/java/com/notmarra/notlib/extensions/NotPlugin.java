@@ -41,7 +41,7 @@ public abstract class NotPlugin extends JavaPlugin {
         if (configPath == null) return;
         CONFIGURABLES.computeIfAbsent(configPath, k -> new ArrayList<>()).add(configurable);
         saveDefaultConfig(configPath);
-        configurable.onConfigReload(CONFIGS.get(configPath));
+        configurable.setConfig(CONFIGS.get(configPath));
     }
 
     public void saveDefaultConfig(String forConfig) {
