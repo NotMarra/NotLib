@@ -15,6 +15,8 @@ public abstract class NotCommandGroup extends NotConfigurable {
         super(plugin);
     }
 
+    public abstract String getId();
+
     public void onRegister() {}
 
     public abstract List<NotCommand> notCommands();

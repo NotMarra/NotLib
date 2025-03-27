@@ -16,6 +16,8 @@ public abstract class NotListener extends NotConfigurable implements Listener {
         super(plugin);
     }
 
+    public abstract String getId();
+
     public void onRegister() {}
 
     public List<NotCommand> notCommands() { return List.of(); }

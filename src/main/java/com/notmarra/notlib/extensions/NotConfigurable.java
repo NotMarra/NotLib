@@ -21,9 +21,7 @@ public abstract class NotConfigurable {
         loadConfig();
     }
 
-    public abstract String getId();
-
-    // e.g: return getPluginConfig().getBoolean("modules." + getId());
+    // e.g: return getPluginConfig().getBoolean("modules.something");
     public boolean isEnabled() { return true; }
 
     public FileConfiguration getPluginConfig() { return plugin.getConfig(); }
