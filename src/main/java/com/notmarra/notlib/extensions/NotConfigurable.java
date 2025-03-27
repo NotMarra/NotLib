@@ -17,7 +17,8 @@ public abstract class NotConfigurable {
     public void initialize() {
         if (isInitialized) return;
         isInitialized = true;
-        reloadConfig();
+        this.config = plugin.getSubConfig(getConfigPath());
+        loadConfig();
     }
 
     public abstract String getId();
