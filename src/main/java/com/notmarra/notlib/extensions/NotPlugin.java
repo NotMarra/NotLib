@@ -22,9 +22,11 @@ public abstract class NotPlugin extends JavaPlugin {
 
     public void addListener(String id, NotListener listener) { LISTENERS.put(id, listener); }
     public void initListeners() {}; // addListener("listener_id", new Listener(this));
+    public NotListener getListener(String id) { return LISTENERS.get(id); }
 
     public void addCommandGroup(String id, NotCommandGroup cmdGroup) { CMDGROUPS.put(id, cmdGroup); }
     public void initCommandGroups() {}; // addCommandManager("cmdgroup_id", new CommandManager(this));
+    public NotCommandGroup getCommandGroup(String id) { return CMDGROUPS.get(id); }
 
     private void loadConfigFiles() {
         CONFIGS.put("config.yml", this.getConfig());

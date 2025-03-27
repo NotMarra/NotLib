@@ -6,8 +6,8 @@ import com.notmarra.notlib.utils.gui.NotGUIListener;
 
 public final class NotLib extends NotPlugin {
     private static NotLib instance;
-    private static Boolean PlaceholderAPI = false;
-    private NotGUIListener guiListener;
+    private static Boolean hasPlaceholderAPI = false;
+    private static Boolean hasVault = false;
 
     @Override
     public void initListeners() {
@@ -21,10 +21,8 @@ public final class NotLib extends NotPlugin {
 
     @Override
     public void initPluginCallbacks() {
-        addPluginEnabledCallback("PlaceholderAPI", () -> {
-            this.getLogger().info("PlaceholderAPI found, hooking into it");
-            PlaceholderAPI = true;
-        });
+        addPluginEnabledCallback("PlaceholderAPI", () -> hasPlaceholderAPI = true);
+        addPluginEnabledCallback("Vault", () -> hasVault = true);
     }
 
     @Override
@@ -38,13 +36,9 @@ public final class NotLib extends NotPlugin {
         this.getComponentLogger().info(ChatF.of("Disabled!").build());
     }
 
-    public static NotLib getInstance() {
-        return instance;
-    }
+    public NotGUIListener getNotGUIListener() { return (NotGUIListener)getListener(NotGUIListener.ID); }
 
-    public static Boolean hasPAPI() { return PlaceholderAPI; }
-
-    public NotGUIListener getGUIListener() {
-        return guiListener;
-    }
+    public static NotLib getInstance() { return instance; }
+    public static Boolean hasPlaceholderAPI() { return hasPlaceholderAPI; }
+    public static Boolean hasVault() { return hasVault; }
 }

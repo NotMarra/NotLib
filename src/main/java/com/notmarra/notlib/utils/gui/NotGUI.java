@@ -180,9 +180,9 @@ public class NotGUI implements InventoryHolder {
     }
 
     public void open(Player player) {
-        NotGUIListener listener = plugin.getGUIListener();
+        NotGUIListener listener = plugin.getNotGUIListener();
         if (listener == null) {
-            getPlugin().getLogger().warning("GUI listener not registered");
+            getPlugin().getComponentLogger().warn(ChatF.of("GUI listener not registered", ChatF.C_ORANGE).build());
             return;
         }
         listener.openGUI(player, this);

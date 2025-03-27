@@ -87,7 +87,7 @@ public class ChatF {
 
         baseComponent = buildReplacements(baseComponent, this.replacements);
 
-        if (NotLib.hasPAPI()) {
+        if (NotLib.hasPlaceholderAPI()) {
             String message = miniMessage.serialize(baseComponent);
             String placeholded = PlaceholderAPI.setPlaceholders(player, message);
             baseComponent = miniMessage.deserialize(placeholded);
