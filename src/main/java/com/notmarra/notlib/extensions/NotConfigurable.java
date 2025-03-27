@@ -12,6 +12,7 @@ public abstract class NotConfigurable {
         this.plugin = plugin;
         this.config = plugin.getSubConfig(getConfigPath());
         plugin.registerConfigurable(this);
+        if (config != null) onConfigReload();
     }
 
     // e.g: return getPluginConfig().getBoolean("modules.something");

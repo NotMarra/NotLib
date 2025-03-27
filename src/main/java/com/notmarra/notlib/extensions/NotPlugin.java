@@ -28,17 +28,11 @@ public abstract class NotPlugin extends JavaPlugin {
     public void addPluginEnabledCallback(String pluginId, Runnable callback) { ON_PLUGIN_ENABLED_CALLBACKS.put(pluginId, callback); }
     public void initPluginCallbacks() {}
 
-    public void addListener(String id, NotListener listener) {
-        registerConfigurable(listener);
-        LISTENERS.put(id, listener);
-    }
+    public void addListener(String id, NotListener listener) { LISTENERS.put(id, listener); }
     public void initListeners() {}; // addListener("listener_id", new Listener(this));
     public NotListener getListener(String id) { return LISTENERS.get(id); }
 
-    public void addCommandGroup(String id, NotCommandGroup cmdGroup) {
-        registerConfigurable(cmdGroup);
-        CMDGROUPS.put(id, cmdGroup);
-    }
+    public void addCommandGroup(String id, NotCommandGroup cmdGroup) { CMDGROUPS.put(id, cmdGroup); }
     public void initCommandGroups() {}; // addCommandManager("cmdgroup_id", new CommandManager(this));
     public NotCommandGroup getCommandGroup(String id) { return CMDGROUPS.get(id); }
 
@@ -46,24 +40,19 @@ public abstract class NotPlugin extends JavaPlugin {
         String configPath = configurable.getConfigPath();
         if (configPath == null) return;
         CONFIGURABLES.computeIfAbsent(configPath, k -> new ArrayList<>()).add(configurable);
+        saveDefaultConfig(configPath);
+        configurable.reloadConfig(CONFIGS.get(configPath));
     }
 
-    private void loadConfigFiles() {
-        CONFIGS.put(CONFIG_YML, this.getConfig());
-
-        for (NotListener listener : LISTENERS.values()) {
-            String configPath = listener.getConfigPath();
-            if (configPath == null) continue;
-            if (CONFIGS.containsKey(configPath)) continue;
-            reloadConfig(configPath);
+    public void saveDefaultConfig(String forConfig) {
+        if (forConfig == null) return;
+        File configFile = new File(getDataFolder(), forConfig);
+        InputStream resource = getResource(forConfig);
+        if (!configFile.exists() && resource != null) {
+            getLogger().info("Saving default " + forConfig);
+            saveResource(forConfig, false);
         }
-
-        for (NotCommandGroup cmdGroup : CMDGROUPS.values()) {
-            String configPath = cmdGroup.getConfigPath();
-            if (configPath == null) continue;
-            if (CONFIGS.containsKey(configPath)) continue;
-            reloadConfig(configPath);
-        }
+        CONFIGS.put(forConfig, YamlConfiguration.loadConfiguration(configFile));
     }
 
     @Override
@@ -71,28 +60,12 @@ public abstract class NotPlugin extends JavaPlugin {
         InputStream mainResource = getResource(CONFIG_YML);
         if (mainResource != null) super.saveDefaultConfig();
 
-        for (NotListener listener : LISTENERS.values()) {
-            String configPath = listener.getConfigPath();
-            if (configPath == null) continue;
-            File configFile = new File(getDataFolder(), configPath);
-            InputStream resource = getResource(configPath);
-            if (!configFile.exists() && resource != null) {
-                saveResource(configPath, false);
-            }
-        }
-
-        for (NotCommandGroup cmdGroup : CMDGROUPS.values()) {
-            String configPath = cmdGroup.getConfigPath();
-            if (configPath == null) continue;
-            File configFile = new File(getDataFolder(), configPath);
-            InputStream resource = getResource(configPath);
-            if (!configFile.exists() && resource != null) {
-                saveResource(configPath, false);
+        for (List<NotConfigurable> configurables : CONFIGURABLES.values()) {
+            for (NotConfigurable configurable : configurables) {
+                saveDefaultConfig(configurable.getConfigPath());
             }
         }
     }
-
-    public abstract void onNotPluginEnable();
 
     @Override
     public void onEnable() {
@@ -103,7 +76,6 @@ public abstract class NotPlugin extends JavaPlugin {
         this.initCommandGroups();
         this.initPluginCallbacks();
         this.saveDefaultConfig();
-        this.loadConfigFiles();
 
         for (String pluginId : ON_PLUGIN_ENABLED_CALLBACKS.keySet()) {
             if (Bukkit.getPluginManager().isPluginEnabled(pluginId)) {
@@ -113,15 +85,6 @@ public abstract class NotPlugin extends JavaPlugin {
 
         LISTENERS.values().forEach(l -> l.register());
         CMDGROUPS.values().forEach(c -> c.register());
-
-        onNotPluginEnable();
-
-        // ensure all configurables have loaded their configs
-        for (Map.Entry<String, List<NotConfigurable>> entry : CONFIGURABLES.entrySet()) {
-            FileConfiguration config = CONFIGS.get(entry.getKey());
-            if (config == null) continue;
-            entry.getValue().forEach(c -> c.reloadConfig(config));
-        }
     }
 
     public FileConfiguration getSubConfig(String file) { return CONFIGS.get(file); }
