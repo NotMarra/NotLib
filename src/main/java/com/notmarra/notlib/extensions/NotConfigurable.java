@@ -10,6 +10,7 @@ public abstract class NotConfigurable {
 
     public NotConfigurable(NotPlugin plugin) {
         this.plugin = plugin;
+        this.config = plugin.getSubConfig(getConfigPath());
         plugin.registerConfigurable(this);
     }
 
