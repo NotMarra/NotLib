@@ -92,6 +92,8 @@ public abstract class NotPlugin extends JavaPlugin {
         }
     }
 
+    public abstract void onNotPluginEnable();
+
     @Override
     public void onEnable() {
         NotMinecraftStuff.getInstance().initialize();
@@ -111,6 +113,15 @@ public abstract class NotPlugin extends JavaPlugin {
 
         LISTENERS.values().forEach(l -> l.register());
         CMDGROUPS.values().forEach(c -> c.register());
+
+        onNotPluginEnable();
+
+        // ensure all configurables have loaded their configs
+        for (Map.Entry<String, List<NotConfigurable>> entry : CONFIGURABLES.entrySet()) {
+            FileConfiguration config = CONFIGS.get(entry.getKey());
+            if (config == null) continue;
+            entry.getValue().forEach(c -> c.reloadConfig(config));
+        }
     }
 
     public FileConfiguration getSubConfig(String file) { return CONFIGS.get(file); }

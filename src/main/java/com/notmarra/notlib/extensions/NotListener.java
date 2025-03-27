@@ -31,13 +31,10 @@ public abstract class NotListener extends NotConfigurable implements Listener {
         if (isRegistered) return;
         isRegistered = true;
 
-        initialize();
-
         if (!isEnabled()) return;
-
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.onRegister();
 
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
         plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
             notCommands().forEach(cmd -> commands.registrar().register(cmd.build()));
         });

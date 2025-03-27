@@ -11,15 +11,6 @@ public abstract class NotConfigurable {
     public NotConfigurable(NotPlugin plugin) {
         this.plugin = plugin;
         plugin.registerConfigurable(this);
-        initialize();
-    }
-
-    public void initialize() {
-        String path = getConfigPath();
-        if (path == null) return;
-        this.config = plugin.getSubConfig(path);
-        if (config == null) return;
-        loadConfig();
     }
 
     // e.g: return getPluginConfig().getBoolean("modules.something");
@@ -29,11 +20,11 @@ public abstract class NotConfigurable {
 
     public String getConfigPath() { return plugin.CONFIG_YML; }
 
-    public void loadConfig() {}
+    public void onConfigReload() {}
 
     public void reloadConfig(FileConfiguration newConfig) {
         this.config = newConfig;
-        loadConfig();
+        onConfigReload();
     }
 
     public void reloadConfig() {

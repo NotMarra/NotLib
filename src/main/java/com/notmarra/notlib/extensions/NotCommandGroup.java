@@ -30,7 +30,6 @@ public abstract class NotCommandGroup extends NotConfigurable {
         if (isRegistered) return;
         isRegistered = true;
 
-        initialize();
         if (!isEnabled()) return;
         this.onRegister();
 
