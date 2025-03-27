@@ -118,12 +118,22 @@ public class NotGUI implements InventoryHolder {
         return this;
     }
     
+    public NotGUI addButton(Material material, ChatF name, int slot, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
+        rootContainer.addButton(material, name, slot, action);
+        return this;
+    }
+
     public NotGUI addButton(Material material, String name, int slot, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
         rootContainer.addButton(material, name, slot, action);
         return this;
     }
     
     public NotGUI addButton(Material material, String name, int x, int y, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
+        rootContainer.addButton(material, name, x, y, action);
+        return this;
+    }
+
+    public NotGUI addButton(Material material, ChatF name, int x, int y, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
         rootContainer.addButton(material, name, x, y, action);
         return this;
     }

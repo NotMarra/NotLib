@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import com.notmarra.notlib.utils.ChatF;
 import com.notmarra.notlib.utils.NotSize;
 import com.notmarra.notlib.utils.NotVector2;
 
@@ -158,16 +159,23 @@ public class NotGUIContainer {
         return this;
     }
     
-    public NotGUIContainer addButton(Material material, String name, int slot, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
+    public NotGUIContainer addButton(Material material, ChatF name, int slot, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
         NotGUIItem item = new NotGUIItem(parentGUI, this, material).name(name);
         addItem(item, slot);
         registerClickHandler(item.id(), action);
         return this;
     }
+
+    public NotGUIContainer addButton(Material material, String name, int slot, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
+        return addButton(material, ChatF.of(name), slot, action);
+    }
     
     public NotGUIContainer addButton(Material material, String name, int x, int y, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
-        int slot = y * size.width + x;
-        return addButton(material, name, slot, action);
+        return addButton(material, name, y * size.width + x, action);
+    }
+
+    public NotGUIContainer addButton(Material material, ChatF name, int x, int y, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
+        return addButton(material, name, y * size.width + x, action);
     }
     
     public ItemStack getItem(int slot) { return items.get(slot); }
