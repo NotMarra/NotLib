@@ -16,6 +16,8 @@ public abstract class NotPlugin extends JavaPlugin {
     private static final Map<String, NotListener> LISTENERS = new HashMap<>();
     private static final Map<String, NotCommandGroup> CMDGROUPS = new HashMap<>();
 
+    public final String CONFIG_YML = "config.yml";
+
     public void addPluginEnabledCallback(String pluginId, Runnable callback) { ON_PLUGIN_ENABLED_CALLBACKS.put(pluginId, callback); }
     public void initPluginCallbacks() {}
 
@@ -28,7 +30,7 @@ public abstract class NotPlugin extends JavaPlugin {
     public NotCommandGroup getCommandGroup(String id) { return CMDGROUPS.get(id); }
 
     private void loadConfigFiles() {
-        CONFIGS.put("config.yml", this.getConfig());
+        CONFIGS.put(CONFIG_YML, this.getConfig());
 
         for (NotListener listener : LISTENERS.values()) {
             String configPath = listener.getConfigPath();
@@ -45,7 +47,7 @@ public abstract class NotPlugin extends JavaPlugin {
 
     @Override
     public void saveDefaultConfig() {
-        InputStream mainResource = getResource("config.yml");
+        InputStream mainResource = getResource(CONFIG_YML);
         if (mainResource != null) super.saveDefaultConfig();
 
         for (NotListener listener : LISTENERS.values()) {
