@@ -31,11 +31,15 @@ public abstract class NotPlugin extends JavaPlugin {
         CONFIGS.put("config.yml", this.getConfig());
 
         for (NotListener listener : LISTENERS.values()) {
-            reloadConfig(listener.getConfigPath());
+            String configPath = listener.getConfigPath();
+            if (configPath == null) continue;
+            reloadConfig(configPath);
         }
 
         for (NotCommandGroup cmdGroup : CMDGROUPS.values()) {
-            reloadConfig(cmdGroup.getConfigPath());
+            String configPath = cmdGroup.getConfigPath();
+            if (configPath == null) continue;
+            reloadConfig(configPath);
         }
     }
 
@@ -45,18 +49,22 @@ public abstract class NotPlugin extends JavaPlugin {
         if (mainResource != null) super.saveDefaultConfig();
 
         for (NotListener listener : LISTENERS.values()) {
-            File configFile = new File(getDataFolder(), listener.getConfigPath());
-            InputStream resource = getResource(listener.getConfigPath());
+            String configPath = listener.getConfigPath();
+            if (configPath == null) continue;
+            File configFile = new File(getDataFolder(), configPath);
+            InputStream resource = getResource(configPath);
             if (!configFile.exists() && resource != null) {
-                saveResource(listener.getConfigPath(), false);
+                saveResource(configPath, false);
             }
         }
 
         for (NotCommandGroup cmdGroup : CMDGROUPS.values()) {
-            File configFile = new File(getDataFolder(), cmdGroup.getConfigPath());
-            InputStream resource = getResource(cmdGroup.getConfigPath());
+            String configPath = cmdGroup.getConfigPath();
+            if (configPath == null) continue;
+            File configFile = new File(getDataFolder(), configPath);
+            InputStream resource = getResource(configPath);
             if (!configFile.exists() && resource != null) {
-                saveResource(cmdGroup.getConfigPath(), false);
+                saveResource(configPath, false);
             }
         }
     }
