@@ -20,7 +20,7 @@ public abstract class Database {
      */
     public Connection getConnection() throws SQLException {
         if (dataSource == null || dataSource.isClosed()) {
-            throw new SQLException("DataSource není inicializován nebo byl uzavřen");
+            throw new SQLException("DataSource is not initialized or closed");
         }
         return dataSource.getConnection();
     }
