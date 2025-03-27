@@ -23,6 +23,9 @@ public abstract class NotCommandGroup extends NotConfigurable {
 
     public Server getServer() { return plugin.getServer(); }
 
+    @Override
+    public String getConfigPath() { return null; }
+
     public void register() {
         if (isRegistered) return;
         isRegistered = true;

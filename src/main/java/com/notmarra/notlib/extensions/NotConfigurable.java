@@ -17,7 +17,9 @@ public abstract class NotConfigurable {
     public void initialize() {
         if (isInitialized) return;
         isInitialized = true;
-        this.config = plugin.getSubConfig(getConfigPath());
+        String path = getConfigPath();
+        if (path == null) return;
+        this.config = plugin.getSubConfig(path);
         loadConfig();
     }
 
@@ -26,7 +28,7 @@ public abstract class NotConfigurable {
 
     public FileConfiguration getPluginConfig() { return plugin.getConfig(); }
 
-    public String getConfigPath() { return null; }
+    public abstract String getConfigPath();
 
     public void loadConfig() {}
 
