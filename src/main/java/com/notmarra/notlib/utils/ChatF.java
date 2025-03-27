@@ -143,6 +143,25 @@ public class ChatF {
         return this;
     }
 
+    public ChatF appendListChatF(List<ChatF> formatters) {
+        for (ChatF formatter : formatters) {
+            this.appendComponents.add(formatter.build());
+        }
+        return this;
+    }
+
+    public ChatF appendListComponent(List<Component> components) {
+        this.appendComponents.addAll(components);
+        return this;
+    }
+
+    public ChatF appendListString(List<String> strings) {
+        for (String string : strings) {
+            this.appendComponents.add(Component.text(string));
+        }
+        return this;
+    }
+
     public ChatF nl() {
         this.appendComponents.add(Component.newline());
         return this;
