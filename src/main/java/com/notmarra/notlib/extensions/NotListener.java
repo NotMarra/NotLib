@@ -6,6 +6,7 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 
 import java.util.List;
 
+import org.bukkit.Server;
 import org.bukkit.event.Listener;
 
 public abstract class NotListener extends NotConfigurable implements Listener {
@@ -18,6 +19,8 @@ public abstract class NotListener extends NotConfigurable implements Listener {
     public void onRegister() {}
 
     public List<NotCommand> notCommands() { return List.of(); }
+
+    public Server getServer() { return plugin.getServer(); }
 
     public void register() {
         if (isRegistered) return;

@@ -6,6 +6,8 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 
 import java.util.List;
 
+import org.bukkit.Server;
+
 public abstract class NotCommandGroup extends NotConfigurable {
     private boolean isRegistered = false;
 
@@ -16,6 +18,8 @@ public abstract class NotCommandGroup extends NotConfigurable {
     public void onRegister() {}
 
     public abstract List<NotCommand> notCommands();
+
+    public Server getServer() { return plugin.getServer(); }
 
     public void register() {
         if (isRegistered) return;

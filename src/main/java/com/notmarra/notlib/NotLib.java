@@ -27,6 +27,7 @@ public final class NotLib extends NotPlugin {
 
     @Override
     public void onEnable() {
+        instance = this;
         super.onEnable();
         this.getComponentLogger().info(ChatF.of("Enabled!").build());
     }

@@ -11,7 +11,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class NotPlugin extends JavaPlugin {
-    private static NotPlugin instance;
     private static final Map<String, Runnable> ON_PLUGIN_ENABLED_CALLBACKS = new HashMap<>();
     private static final Map<String, FileConfiguration> CONFIGS = new HashMap<>();
     private static final Map<String, NotListener> LISTENERS = new HashMap<>();
@@ -64,8 +63,6 @@ public abstract class NotPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        instance = this;
-
         NotMinecraftStuff.getInstance().initialize();
 
         // NOTE: this order is important
@@ -85,7 +82,6 @@ public abstract class NotPlugin extends JavaPlugin {
         CMDGROUPS.values().forEach(c -> c.register());
     }
 
-    public static NotPlugin getInstance() { return instance; }
     public FileConfiguration getSubConfig(String file) { return CONFIGS.get(file); }
     public FileConfiguration reloadConfig(String file) {
         File configFile = new File(getDataFolder(), file);
