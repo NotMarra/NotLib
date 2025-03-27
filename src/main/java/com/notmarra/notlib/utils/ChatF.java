@@ -47,8 +47,8 @@ public class ChatF {
     private final List<Component> appendComponents = new ArrayList<>();
     private final HashMap<String, Object> replacements = new HashMap<>();
 
-    private Player player;
-    private Player targetPlayer;
+    private Entity entity;
+    private Entity targetEntity;
 
     public ChatF(Component baseComponent) {
         this.baseComponent = baseComponent;
@@ -87,40 +87,40 @@ public class ChatF {
 
         baseComponent = buildReplacements(baseComponent, this.replacements);
 
-        if (NotLib.hasPlaceholderAPI()) {
+        if (NotLib.hasPlaceholderAPI() && entity instanceof Player player) {
             String message = miniMessage.serialize(baseComponent);
             String placeholded = PlaceholderAPI.setPlaceholders(player, message);
             baseComponent = miniMessage.deserialize(placeholded);
         } else {
-            if (player != null) {
+            if (entity != null) {
                 HashMap<String, Object> builtInReplacements = new HashMap<>();
-                builtInReplacements.put("%player_name%", player.getName());
-                builtInReplacements.put("%player_x%", player.getLocation().getBlockX());
-                builtInReplacements.put("%player_y%", player.getLocation().getBlockY());
-                builtInReplacements.put("%player_z%", player.getLocation().getBlockZ());
+                builtInReplacements.put("%player_name%", entity.getName());
+                builtInReplacements.put("%player_x%", entity.getLocation().getBlockX());
+                builtInReplacements.put("%player_y%", entity.getLocation().getBlockY());
+                builtInReplacements.put("%player_z%", entity.getLocation().getBlockZ());
                 baseComponent = buildReplacements(baseComponent, builtInReplacements);
             }
         }
 
-        if (targetPlayer != null) {
+        if (targetEntity != null) {
             HashMap<String, Object> builtInReplacements = new HashMap<>();
-            builtInReplacements.put("%target_name%", targetPlayer.getName());
-            builtInReplacements.put("%target_x%", targetPlayer.getLocation().getBlockX());
-            builtInReplacements.put("%target_y%", targetPlayer.getLocation().getBlockY());
-            builtInReplacements.put("%target_z%", targetPlayer.getLocation().getBlockZ());
+            builtInReplacements.put("%target_name%", targetEntity.getName());
+            builtInReplacements.put("%target_x%", targetEntity.getLocation().getBlockX());
+            builtInReplacements.put("%target_y%", targetEntity.getLocation().getBlockY());
+            builtInReplacements.put("%target_z%", targetEntity.getLocation().getBlockZ());
             baseComponent = buildReplacements(baseComponent, builtInReplacements);
         }
 
         return baseComponent;
     }
 
-    public ChatF withPlayer(Player player) {
-        this.player = player;
+    public ChatF withEntity(Entity entity) {
+        this.entity = entity;
         return this;
     }
 
-    public ChatF withTargetPlayer(Player targetPlayer) {
-        this.targetPlayer = targetPlayer;
+    public ChatF withTargetEntity(Entity targetEntity) {
+        this.targetEntity = targetEntity;
         return this;
     }
 
@@ -262,11 +262,11 @@ public class ChatF {
     // shorthands
 
     public void sendTo(Player player) {
-        if (this.player == null) {
-            this.player = player;
+        if (this.entity == null) {
+            this.entity = player;
         }
 
-        player.sendMessage(build());
+        entity.sendMessage(build());
     }
 
     public void sendTo(Entity entity) {
