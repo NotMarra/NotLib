@@ -6,13 +6,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public abstract class NotConfigurable {
     public final NotPlugin plugin;
-    public FileConfiguration config;
 
     public NotConfigurable(NotPlugin plugin) {
         this.plugin = plugin;
-        this.config = plugin.getSubConfig(getConfigPath());
         plugin.registerConfigurable(this);
-        if (config != null) onConfigReload();
     }
 
     // e.g: return getPluginConfig().getBoolean("modules.something");
@@ -22,12 +19,7 @@ public abstract class NotConfigurable {
 
     public String getConfigPath() { return plugin.CONFIG_YML; }
 
-    public void onConfigReload() {}
-
-    public void reloadConfig(FileConfiguration newConfig) {
-        this.config = newConfig;
-        onConfigReload();
-    }
+    public void onConfigReload(FileConfiguration config) {}
 
     public void reloadConfig() {
         String path = getConfigPath();

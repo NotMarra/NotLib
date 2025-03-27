@@ -41,11 +41,12 @@ public abstract class NotPlugin extends JavaPlugin {
         if (configPath == null) return;
         CONFIGURABLES.computeIfAbsent(configPath, k -> new ArrayList<>()).add(configurable);
         saveDefaultConfig(configPath);
-        configurable.reloadConfig(CONFIGS.get(configPath));
+        configurable.onConfigReload(CONFIGS.get(configPath));
     }
 
     public void saveDefaultConfig(String forConfig) {
         if (forConfig == null) return;
+        if (CONFIGS.containsKey(forConfig)) return;
         File configFile = new File(getDataFolder(), forConfig);
         InputStream resource = getResource(forConfig);
         if (!configFile.exists() && resource != null) {
@@ -94,7 +95,7 @@ public abstract class NotPlugin extends JavaPlugin {
         FileConfiguration newConfig = YamlConfiguration.loadConfiguration(configFile);
         CONFIGS.put(file, newConfig);
         if (CONFIGURABLES.containsKey(file)) {
-            CONFIGURABLES.get(file).forEach(c -> c.reloadConfig(newConfig));
+            CONFIGURABLES.get(file).forEach(c -> c.onConfigReload(newConfig));
         }
         return newConfig;
     }
