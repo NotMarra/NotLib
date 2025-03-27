@@ -25,36 +25,14 @@ public abstract class NotArgument<T> extends Base<NotArgument<T>> {
 
     @SuppressWarnings({ "unchecked" })
     public CommandNode<CommandSourceStack> build() {
-        ArgumentBuilder<CommandSourceStack, ?> cmd = construct();
+        ArgumentBuilder<CommandSourceStack, ?> arg = construct();
 
-        for (String arg : this.arguments.keySet()) {
-            NotArgument<Object> argument = this.arguments.get(arg);
-
-            ArgumentBuilder<CommandSourceStack, ?> argBuilder = argument.construct();
-
-            if (argBuilder instanceof RequiredArgumentBuilder && !argument.suggestions.isEmpty()) {
-                argBuilder = ((RequiredArgumentBuilder<CommandSourceStack, ?>) argBuilder).suggests(
-                    (ctx, suggestionsBuilder) -> {
-                        argument.suggestions.forEach(suggestionsBuilder::suggest);
-                        return suggestionsBuilder.buildFuture();
-                    }
-                );
-            }
-
-            if (argument.executor != null) {
-                argBuilder = argBuilder.executes(ctx -> {
-                    argument.setContext(ctx);
-                    argument.executor.accept(argument);
-                    return 1;
-                });
-            }
-
-            cmd = cmd.then(argBuilder.build());
+        for (String subArg : this.arguments.keySet()) {
+            arg.then(this.arguments.get(subArg).build());
         }
 
-
-        if (cmd instanceof RequiredArgumentBuilder && !this.suggestions.isEmpty()) {
-            cmd = ((RequiredArgumentBuilder<CommandSourceStack, ?>) cmd).suggests(
+        if (arg instanceof RequiredArgumentBuilder && !this.suggestions.isEmpty()) {
+            ((RequiredArgumentBuilder<CommandSourceStack, ?>) arg).suggests(
                 (ctx, suggestionsBuilder) -> {
                     this.suggestions.forEach(suggestionsBuilder::suggest);
                     return suggestionsBuilder.buildFuture();
@@ -62,7 +40,7 @@ public abstract class NotArgument<T> extends Base<NotArgument<T>> {
             );
         }
 
-        cmd = cmd.requires(source -> {
+        arg.requires(source -> {
             if (this.permission != null) {
                 return source.getSender().hasPermission(this.permission);
             }
@@ -70,14 +48,14 @@ public abstract class NotArgument<T> extends Base<NotArgument<T>> {
         });
 
         if (this.executor != null) {
-            cmd = cmd.executes(ctx -> {
+            arg.executes(ctx -> {
                 setContext(ctx);
                 executor.accept(this);
                 return 1;
             });
         }
 
-        return cmd.build();
+        return arg.build();
     }
 }
 
