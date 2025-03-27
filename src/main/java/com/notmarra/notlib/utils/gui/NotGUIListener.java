@@ -1,32 +1,27 @@
 package com.notmarra.notlib.utils.gui;
 
-import com.notmarra.notlib.utils.command.NotCommand;
-
-import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import com.notmarra.notlib.extensions.NotListener;
+import com.notmarra.notlib.extensions.NotPlugin;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.plugin.java.JavaPlugin;
 
-public class NotGUIListener implements Listener {
-    public final JavaPlugin plugin;
+public class NotGUIListener extends NotListener {
+    public static final String ID = "notguilistener";
 
     private final Map<UUID, NotGUI> openGUIs = new HashMap<>();
 
-    private boolean isRegistered = false;
+    public NotGUIListener(NotPlugin plugin) { super(plugin); }
 
-    public NotGUIListener(JavaPlugin plugin) {
-        this.plugin = plugin;
-    }
+    @Override
+    public String getId() { return ID; }
 
     public void openGUI(Player player, NotGUI gui) {
         openGUIs.put(player.getUniqueId(), gui);
@@ -58,23 +53,5 @@ public class NotGUIListener implements Listener {
         if (gui != null && closedInventory.equals(gui.getBuiltInventory())) {
             openGUIs.remove(player.getUniqueId());
         }
-    }
-
-    private List<NotCommand> getNotCommands() {
-        return List.of(
-
-        );
-    }
-
-    public void register() {
-        if (isRegistered) return;
-        isRegistered = true;
-
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
-            for (NotCommand cmd : getNotCommands()) {
-                commands.registrar().register(cmd.build());
-            }
-        });
     }
 }
