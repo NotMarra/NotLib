@@ -3,7 +3,6 @@ package com.notmarra.notlib.utils.command;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.CommandNode;
-import com.notmarra.notlib.NotLib;
 import com.notmarra.notlib.utils.command.arguments.NotArgument;
 import com.notmarra.notlib.utils.command.arguments.NotBoolArg;
 import com.notmarra.notlib.utils.command.arguments.NotDoubleArg;
@@ -58,7 +57,6 @@ public abstract class Base<T extends Base<T>> {
     }
 
     public Base<T> setContext(CommandContext<CommandSourceStack> ctx) {
-        NotLib.getInstance().getLogger().info("Setting context for " + this.name);
         this.ctx = ctx;
         for (String arg : this.arguments.keySet()) {
             this.arguments.get(arg).setContext(ctx);
@@ -68,7 +66,6 @@ public abstract class Base<T extends Base<T>> {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public Base<T> addArg(NotArgument arg) {
-        NotLib.getInstance().getLogger().info("Adding argument: " + arg.name + " to " + this.name);
         arg.parent = this;
         this.arguments.put(arg.name, arg);
         return this;
