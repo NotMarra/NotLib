@@ -23,11 +23,11 @@ public abstract class NotConfigurable {
 
     public String getConfigPath() { return plugin.CONFIG_YML; }
 
-    public void onConfigReload(FileConfiguration config) {}
+    public void onConfigReload() {}
 
     public void reloadConfig(FileConfiguration newConfig) {
         setConfig(newConfig);
-        onConfigReload(config);
+        onConfigReload();
     }
 
     public void reloadConfig() {

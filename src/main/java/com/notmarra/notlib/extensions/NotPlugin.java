@@ -95,7 +95,7 @@ public abstract class NotPlugin extends JavaPlugin {
         FileConfiguration newConfig = YamlConfiguration.loadConfiguration(configFile);
         CONFIGS.put(file, newConfig);
         if (CONFIGURABLES.containsKey(file)) {
-            CONFIGURABLES.get(file).forEach(c -> c.onConfigReload(newConfig));
+            CONFIGURABLES.get(file).forEach(c -> c.reloadConfig(newConfig));
         }
         return newConfig;
     }
