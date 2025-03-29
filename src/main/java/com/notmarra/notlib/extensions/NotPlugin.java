@@ -24,6 +24,8 @@ public abstract class NotPlugin extends JavaPlugin {
 
     private NotTranslationManager translationManager;
     public NotTranslationManager tm() { return translationManager; }
+    public String tm(String key) { return tm().get(key); }
+    public List<String> tmList(String key) { return tm().getList(key); }
 
     public final String CONFIG_YML = "config.yml";
 

@@ -33,6 +33,8 @@ public abstract class NotConfigurable {
     public ComponentLogger getLogger() { return plugin.getComponentLogger(); }
 
     public NotTranslationManager tm() { return plugin.tm(); }
+    public String tm(String key) { return plugin.tm(key); }
+    public List<String> tmList(String key) { return plugin.tmList(key); }
 
     public NotConfigurable registerConfigurable() {
         plugin.registerConfigurable(this);
