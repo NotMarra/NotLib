@@ -11,6 +11,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.notmarra.notlib.database.NotDatabase;
+import com.notmarra.notlib.database.NotDatabaseManager;
+
 public abstract class NotPlugin extends JavaPlugin {
     private final Map<String, Runnable> ON_PLUGIN_ENABLED_CALLBACKS = new HashMap<>();
     // <path, config>
@@ -26,6 +29,10 @@ public abstract class NotPlugin extends JavaPlugin {
     public NotTranslationManager tm() { return translationManager; }
     public String tm(String key) { return tm().get(key); }
     public List<String> tmList(String key) { return tm().getList(key); }
+
+    private NotDatabaseManager databaseManager;
+    public NotDatabaseManager db() { return databaseManager; }
+    public NotDatabase db(String dbId) { return databaseManager.getDatabase(dbId); }
 
     public final String CONFIG_YML = "config.yml";
 
@@ -85,10 +92,11 @@ public abstract class NotPlugin extends JavaPlugin {
         NotMinecraftStuff.getInstance().initialize();
 
         this.translationManager = new NotTranslationManager(this);
+        this.databaseManager = new NotDatabaseManager(this);
 
         saveDefaultConfig(CONFIG_YML);
         loadConfigFile(CONFIG_YML);
-        this.initNotPlugin();
+        initNotPlugin();
 
         for (String pluginId : ON_PLUGIN_ENABLED_CALLBACKS.keySet()) {
             if (Bukkit.getPluginManager().isPluginEnabled(pluginId)) {
