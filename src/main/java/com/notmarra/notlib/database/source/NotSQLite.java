@@ -9,7 +9,7 @@ import java.io.File;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-public class NotSQLite extends NotDatabase {
+public abstract class NotSQLite extends NotDatabase {
     public static final String ID = "SQLite";
 
     public NotSQLite(NotPlugin plugin, String defaultConfig) { super(plugin, defaultConfig); }
@@ -45,7 +45,4 @@ public class NotSQLite extends NotDatabase {
 
         dataSource = new HikariDataSource(hikariConfig);
     }
-
-    @Override
-    public void setup() {}
 }

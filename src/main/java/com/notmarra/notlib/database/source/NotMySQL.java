@@ -7,7 +7,7 @@ import com.notmarra.notlib.extensions.NotPlugin;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-public class NotMySQL extends NotDatabase {
+public abstract class NotMySQL extends NotDatabase {
     public static final String ID = "MySQL";
 
     public NotMySQL(NotPlugin plugin, String defaultConfig) { super(plugin, defaultConfig); }
@@ -51,16 +51,5 @@ public class NotMySQL extends NotDatabase {
         hikariConfig.setConnectionTimeout(10000);
         
         dataSource = new HikariDataSource(hikariConfig);
-    }
-
-    @Override
-    public void setup() {
-        String table = getDatabaseConfig().getString("table");
-        if (table == null) {
-            plugin.getLogger().warning("Table name not specified in the configuration.");
-            return;
-        }
-
-        processQuery("CREATE TABLE IF NOT EXISTS " + table + " (uuid VARCHAR(36) PRIMARY KEY, player_name VARCHAR(36), balance DOUBLE)");
     }
 }
