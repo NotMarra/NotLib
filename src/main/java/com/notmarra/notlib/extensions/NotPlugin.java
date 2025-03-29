@@ -23,7 +23,7 @@ public abstract class NotPlugin extends JavaPlugin {
     private final Map<String, List<NotConfigurable>> CONFIGURABLES = new HashMap<>();
 
     private NotTranslationManager translationManager;
-    public NotTranslationManager getTranslationManager() { return translationManager; }
+    public NotTranslationManager tm() { return translationManager; }
 
     public final String CONFIG_YML = "config.yml";
 
