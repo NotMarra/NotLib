@@ -1,7 +1,6 @@
 package com.notmarra.notlib.extensions;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,70 +12,97 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class NotPlugin extends JavaPlugin {
-    private static final Map<String, Runnable> ON_PLUGIN_ENABLED_CALLBACKS = new HashMap<>();
+    private final Map<String, Runnable> ON_PLUGIN_ENABLED_CALLBACKS = new HashMap<>();
     // <path, config>
-    private static final Map<String, FileConfiguration> CONFIGS = new HashMap<>();
+    private final Map<String, FileConfiguration> CONFIGS = new HashMap<>();
     // <id, listener>
-    private static final Map<String, NotListener> LISTENERS = new HashMap<>();
+    private final Map<String, NotListener> LISTENERS = new HashMap<>();
     // <id, cmdGroup>
-    private static final Map<String, NotCommandGroup> CMDGROUPS = new HashMap<>();
+    private final Map<String, NotCommandGroup> CMDGROUPS = new HashMap<>();
     // <path, [configurable]>
-    private static final Map<String, List<NotConfigurable>> CONFIGURABLES = new HashMap<>();
+    private final Map<String, List<NotConfigurable>> CONFIGURABLES = new HashMap<>();
+
+    private NotTranslationManager translationManager;
+    public NotTranslationManager getTranslationManager() { return translationManager; }
 
     public final String CONFIG_YML = "config.yml";
 
     public void addPluginEnabledCallback(String pluginId, Runnable callback) { ON_PLUGIN_ENABLED_CALLBACKS.put(pluginId, callback); }
-    public void initPluginCallbacks() {}
 
+    // addListener("listener_id", new Listener(this));
     public void addListener(String id, NotListener listener) { LISTENERS.put(id, listener); }
-    public void initListeners() {}; // addListener("listener_id", new Listener(this));
     public NotListener getListener(String id) { return LISTENERS.get(id); }
 
+    // addCommandManager("cmdgroup_id", new CommandManager(this));
     public void addCommandGroup(String id, NotCommandGroup cmdGroup) { CMDGROUPS.put(id, cmdGroup); }
-    public void initCommandGroups() {}; // addCommandManager("cmdgroup_id", new CommandManager(this));
     public NotCommandGroup getCommandGroup(String id) { return CMDGROUPS.get(id); }
 
-    public void registerConfigurable(NotConfigurable configurable) {
-        String configPath = configurable.getConfigPath();
-        if (configPath == null) return;
+    public void registerConfigurable(NotConfigurable configurable, String configPath) {
         CONFIGURABLES.computeIfAbsent(configPath, k -> new ArrayList<>()).add(configurable);
         saveDefaultConfig(configPath);
-        configurable.setConfig(CONFIGS.get(configPath));
+        if (CONFIGS.containsKey(configPath)) configurable.setConfig(configPath, CONFIGS.get(configPath));
+    }
+
+    public void registerConfigurable(NotConfigurable configurable) {
+        List<String> configPaths = configurable.getConfigPaths();
+        if (configPaths.isEmpty()) return;
+        for (String configPath : configPaths) {
+            registerConfigurable(configurable, configPath);
+        }
     }
 
     public void saveDefaultConfig(String forConfig) {
+        getLogger().info("SAVING DEFAULT CONFIG: " + forConfig);
         if (forConfig == null) return;
         if (CONFIGS.containsKey(forConfig)) return;
         File configFile = new File(getDataFolder(), forConfig);
-        InputStream resource = getResource(forConfig);
-        if (!configFile.exists() && resource != null) {
-            getLogger().info("Saving default " + forConfig);
-            saveResource(forConfig, false);
-        }
-        CONFIGS.put(forConfig, YamlConfiguration.loadConfiguration(configFile));
+        if (configFile.exists()) return;
+        if (getResource(forConfig) == null) return;
+        configFile.getParentFile().mkdirs();
+        saveResource(forConfig, false);
     }
 
     @Override
     public void saveDefaultConfig() {
-        InputStream mainResource = getResource(CONFIG_YML);
-        if (mainResource != null) super.saveDefaultConfig();
+        saveDefaultConfig(CONFIG_YML);
 
-        for (List<NotConfigurable> configurables : CONFIGURABLES.values()) {
-            for (NotConfigurable configurable : configurables) {
-                saveDefaultConfig(configurable.getConfigPath());
-            }
+        for (String configPath : CONFIGURABLES.keySet()) {
+            saveDefaultConfig(configPath);
         }
     }
+
+    private FileConfiguration loadConfigFile(String configPath) {
+        getLogger().info("LOADING CONFIG: " + configPath);
+        if (configPath == null) return null;
+        if (CONFIGS.containsKey(configPath)) return null;
+        File configFile = new File(getDataFolder(), configPath);
+        if (!configFile.exists()) return null;
+        CONFIGS.put(configPath, YamlConfiguration.loadConfiguration(configFile));
+        return CONFIGS.get(configPath);
+    }
+
+    private void loadConfigFiles() {
+        loadConfigFile(CONFIG_YML);
+
+        for (List<NotConfigurable> configurables : CONFIGURABLES.values()) {
+            configurables.forEach(c -> {
+                c.getConfigPaths().forEach(configPath -> loadConfigFile(configPath));
+            });
+        }
+    }
+
+    public abstract void initNotPlugin();
 
     @Override
     public void onEnable() {
         NotMinecraftStuff.getInstance().initialize();
 
+        this.translationManager = new NotTranslationManager(this);
+
         // NOTE: this order is important
-        this.initListeners();
-        this.initCommandGroups();
-        this.initPluginCallbacks();
+        this.initNotPlugin();
         this.saveDefaultConfig();
+        this.loadConfigFiles();
 
         for (String pluginId : ON_PLUGIN_ENABLED_CALLBACKS.keySet()) {
             if (Bukkit.getPluginManager().isPluginEnabled(pluginId)) {
@@ -92,11 +118,10 @@ public abstract class NotPlugin extends JavaPlugin {
     public FileConfiguration reloadConfig(String file) {
         File configFile = new File(getDataFolder(), file);
         if (!configFile.exists()) return null;
-        FileConfiguration newConfig = YamlConfiguration.loadConfiguration(configFile);
-        CONFIGS.put(file, newConfig);
+        CONFIGS.put(file, YamlConfiguration.loadConfiguration(configFile));
         if (CONFIGURABLES.containsKey(file)) {
-            CONFIGURABLES.get(file).forEach(c -> c.reloadConfig(newConfig));
+            CONFIGURABLES.get(file).forEach(c -> c.onConfigReload(List.of(file)));
         }
-        return newConfig;
+        return CONFIGS.get(file);
     }
 }

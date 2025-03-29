@@ -10,17 +10,14 @@ public final class NotLib extends NotPlugin {
     private static Boolean hasVault = false;
 
     @Override
-    public void initListeners() {
+    public void initNotPlugin() {
+        // listeners
         addListener(NotGUIListener.ID, new NotGUIListener(this));
-    }
 
-    @Override
-    public void initCommandGroups() {
+        // commands
         addCommandGroup(NotDevCommandGroup.ID, new NotDevCommandGroup(this));
-    }
 
-    @Override
-    public void initPluginCallbacks() {
+        // plugin callbacks
         addPluginEnabledCallback("PlaceholderAPI", () -> hasPlaceholderAPI = true);
         addPluginEnabledCallback("Vault", () -> hasVault = true);
     }
