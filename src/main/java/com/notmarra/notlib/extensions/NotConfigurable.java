@@ -9,14 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 public abstract class NotConfigurable {
     public final NotPlugin plugin;
 
-    public NotConfigurable(NotPlugin plugin) {
-        this(plugin, null);
-    }
-
-    public NotConfigurable(NotPlugin plugin, String defaultConfigPath) {
-        this.plugin = plugin;
-        plugin.registerConfigurable(this);
-    }
+    public NotConfigurable(NotPlugin plugin) { this.plugin = plugin; }
 
     public FileConfiguration getConfig(String path) { return plugin.getSubConfig(path); }
 
@@ -38,4 +31,9 @@ public abstract class NotConfigurable {
     }
 
     public ComponentLogger getLogger() { return plugin.getComponentLogger(); }
+
+    public NotConfigurable registerConfigurable() {
+        plugin.registerConfigurable(this);
+        return this;
+    }
 }

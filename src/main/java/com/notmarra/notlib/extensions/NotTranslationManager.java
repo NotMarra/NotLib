@@ -13,6 +13,7 @@ public class NotTranslationManager extends NotConfigurable {
 
     public NotTranslationManager(NotPlugin plugin) {
         super(plugin);
+        registerConfigurable();
         registerLang(NotLangId.EN);
     }
 

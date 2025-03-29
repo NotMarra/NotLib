@@ -13,6 +13,7 @@ public abstract class NotCommandGroup extends NotConfigurable {
 
     public NotCommandGroup(NotPlugin plugin) {
         super(plugin);
+        registerConfigurable();
     }
 
     public abstract String getId();

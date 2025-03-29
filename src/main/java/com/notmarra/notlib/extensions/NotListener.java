@@ -14,6 +14,7 @@ public abstract class NotListener extends NotConfigurable implements Listener {
 
     public NotListener(NotPlugin plugin) {
         super(plugin);
+        registerConfigurable();
     }
 
     public abstract String getId();
