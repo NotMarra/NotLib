@@ -11,10 +11,7 @@ import org.bukkit.Server;
 public abstract class NotCommandGroup extends NotConfigurable {
     private boolean isRegistered = false;
 
-    public NotCommandGroup(NotPlugin plugin) {
-        super(plugin);
-        registerConfigurable();
-    }
+    public NotCommandGroup(NotPlugin plugin) { super(plugin); }
 
     public abstract String getId();
 

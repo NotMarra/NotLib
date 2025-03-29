@@ -12,10 +12,7 @@ import org.bukkit.event.Listener;
 public abstract class NotListener extends NotConfigurable implements Listener {
     private boolean isRegistered = false;
 
-    public NotListener(NotPlugin plugin) {
-        super(plugin);
-        registerConfigurable();
-    }
+    public NotListener(NotPlugin plugin) { super(plugin); }
 
     public abstract String getId();
 
