@@ -38,19 +38,27 @@ public abstract class NotPlugin extends JavaPlugin {
     public NotCommandGroup getCommandGroup(String id) { return CMDGROUPS.get(id); }
 
     public void registerConfigurable(NotConfigurable configurable, String configPath) {
-        CONFIGURABLES.computeIfAbsent(configPath, k -> new ArrayList<>()).add(configurable);
+        if (!CONFIGURABLES.containsKey(configPath)) {
+            CONFIGURABLES.computeIfAbsent(configPath, k -> new ArrayList<>());
+        } else {
+            if (!CONFIGURABLES.get(configPath).contains(configurable)) {
+                CONFIGURABLES.get(configPath).add(configurable);
+            }
+        }
         saveDefaultConfig(configPath);
     }
 
     public void registerConfigurable(NotConfigurable configurable) {
         List<String> configPaths = configurable.getConfigPaths();
         if (configPaths.isEmpty()) return;
-        configPaths.forEach(path -> registerConfigurable(configurable, path));
+        configPaths.forEach(path -> {
+            registerConfigurable(configurable, path);
+            loadConfigFile(path);
+        });
         configurable.reload();
     }
 
     public void saveDefaultConfig(String forConfig) {
-        getLogger().info("SAVING DEFAULT CONFIG: " + forConfig);
         if (forConfig == null) return;
         if (CONFIGS.containsKey(forConfig)) return;
         File configFile = new File(getDataFolder(), forConfig);
@@ -60,33 +68,12 @@ public abstract class NotPlugin extends JavaPlugin {
         saveResource(forConfig, false);
     }
 
-    @Override
-    public void saveDefaultConfig() {
-        saveDefaultConfig(CONFIG_YML);
-
-        for (String configPath : CONFIGURABLES.keySet()) {
-            saveDefaultConfig(configPath);
-        }
-    }
-
-    private FileConfiguration loadConfigFile(String configPath) {
-        getLogger().info("LOADING CONFIG: " + configPath);
-        if (configPath == null) return null;
-        if (CONFIGS.containsKey(configPath)) return null;
+    private void loadConfigFile(String configPath) {
+        if (configPath == null) return;
+        if (CONFIGS.containsKey(configPath)) return;
         File configFile = new File(getDataFolder(), configPath);
-        if (!configFile.exists()) return null;
+        if (!configFile.exists()) return;
         CONFIGS.put(configPath, YamlConfiguration.loadConfiguration(configFile));
-        return CONFIGS.get(configPath);
-    }
-
-    private void loadConfigFiles() {
-        loadConfigFile(CONFIG_YML);
-
-        for (List<NotConfigurable> configurables : CONFIGURABLES.values()) {
-            configurables.forEach(c -> {
-                c.getConfigPaths().forEach(configPath -> loadConfigFile(configPath));
-            });
-        }
     }
 
     public abstract void initNotPlugin();
@@ -97,10 +84,9 @@ public abstract class NotPlugin extends JavaPlugin {
 
         this.translationManager = new NotTranslationManager(this);
 
-        // NOTE: this order is important
+        saveDefaultConfig(CONFIG_YML);
+        loadConfigFile(CONFIG_YML);
         this.initNotPlugin();
-        this.saveDefaultConfig();
-        this.loadConfigFiles();
 
         for (String pluginId : ON_PLUGIN_ENABLED_CALLBACKS.keySet()) {
             if (Bukkit.getPluginManager().isPluginEnabled(pluginId)) {
