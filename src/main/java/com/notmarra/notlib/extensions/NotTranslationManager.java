@@ -23,13 +23,14 @@ public class NotTranslationManager extends NotConfigurable {
 
     public NotTranslationManager registerLangs(NotLangId... langs) {
         List.of(langs).forEach(lang -> registerLang(lang));
-        return this;
+        return reloadLangFiles();
     }
 
     public NotTranslationManager registerLang(NotLangId lang) {
         if (lang == null) return this;
         if (registeredLangs.contains(lang)) return this;
         registeredLangs.add(lang);
+        reloadLangFile(getLangConfigPath(lang));
         return this;
     }
 
@@ -47,11 +48,22 @@ public class NotTranslationManager extends NotConfigurable {
         return configPaths;
     }
 
-    public NotTranslationManager reloadLangFiles() {
-        List<String> langFiles = getRegisteredLanguagePaths();
-        langFiles.forEach(path -> plugin.reloadConfig(path));
-        onConfigReload(langFiles);
+    public NotTranslationManager reloadLangFile(String path) {
+        if (path == null) return this;
+        if (!getRegisteredLanguagePaths().contains(path)) return this;
+        plugin.reloadConfig(path);
+        onConfigReload(List.of(path));
         return this;
+    }
+
+    public NotTranslationManager reloadLangFiles(List<String> paths) {
+        paths.forEach(path -> plugin.reloadConfig(path));
+        onConfigReload(paths);
+        return this;
+    }
+
+    public NotTranslationManager reloadLangFiles() {
+        return reloadLangFiles(getRegisteredLanguagePaths());
     }
 
     @Override
