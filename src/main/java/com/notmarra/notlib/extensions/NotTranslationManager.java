@@ -28,6 +28,9 @@ public class NotTranslationManager extends NotConfigurable {
         return this;
     }
 
+    public List<NotLangId> getRegisteredLanguages() { return registeredLangs; }
+    public List<String> getRegisteredLanguageCodes() { return registeredLangs.stream().map(lang -> lang.getLangCode()).toList(); }
+
     private String getLangConfigPath(NotLangId lang) { return defaultLangFolder + "/" + lang.getLangCode() + ".yml"; }
 
     @Override
