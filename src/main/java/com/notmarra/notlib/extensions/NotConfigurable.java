@@ -2,15 +2,12 @@ package com.notmarra.notlib.extensions;
 
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
 public abstract class NotConfigurable {
     public final NotPlugin plugin;
-    public Map<String, FileConfiguration> configs = new HashMap<>();
 
     public NotConfigurable(NotPlugin plugin) {
         this(plugin, null);
@@ -21,9 +18,7 @@ public abstract class NotConfigurable {
         plugin.registerConfigurable(this);
     }
 
-    public FileConfiguration getConfig(String path) { return configs.get(path); }
-
-    public void setConfig(String path, FileConfiguration config) { configs.put(path, config); }
+    public FileConfiguration getConfig(String path) { return plugin.getSubConfig(path); }
 
     // e.g: return getPluginConfig().getBoolean("modules.something");
     public boolean isEnabled() { return true; }
@@ -34,16 +29,13 @@ public abstract class NotConfigurable {
 
     public void onConfigReload(List<String> reloadedConfigs) {}
 
-    public void reloadConfig(String path, FileConfiguration newConfig) {
-        setConfig(path, newConfig);
-        onConfigReload(List.of(path));
-    }
-
-    public void reloadConfig(String path) {
-        plugin.reloadConfig(path);
-    }
-
     public NotConfigurable reload() { onConfigReload(getConfigPaths()); return this; }
+    
+    public NotConfigurable reloadWithFiles() {
+        getConfigPaths().forEach(path -> plugin.reloadConfig(path));
+        onConfigReload(getConfigPaths());
+        return this;
+    }
 
     public ComponentLogger getLogger() { return plugin.getComponentLogger(); }
 }

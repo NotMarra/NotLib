@@ -40,7 +40,6 @@ public abstract class NotPlugin extends JavaPlugin {
     public void registerConfigurable(NotConfigurable configurable, String configPath) {
         CONFIGURABLES.computeIfAbsent(configPath, k -> new ArrayList<>()).add(configurable);
         saveDefaultConfig(configPath);
-        if (CONFIGS.containsKey(configPath)) configurable.setConfig(configPath, CONFIGS.get(configPath));
     }
 
     public void registerConfigurable(NotConfigurable configurable) {

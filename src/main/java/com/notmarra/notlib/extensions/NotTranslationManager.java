@@ -39,8 +39,8 @@ public class NotTranslationManager extends NotConfigurable {
     }
 
     private FileConfiguration getTranslationConfig() {
-        FileConfiguration tConfig = configs.get(getLangConfigPath(currentLang));
-        if (tConfig == null) tConfig = configs.get(getLangConfigPath(defaultLang));
+        FileConfiguration tConfig = getConfig(getLangConfigPath(currentLang));
+        if (tConfig == null) tConfig = getConfig(getLangConfigPath(defaultLang));
         return tConfig;
     }
 
