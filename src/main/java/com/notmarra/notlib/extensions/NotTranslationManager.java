@@ -35,11 +35,24 @@ public class NotTranslationManager extends NotConfigurable {
 
     public List<NotLangId> getRegisteredLanguages() { return registeredLangs; }
     public List<String> getRegisteredLanguageCodes() { return registeredLangs.stream().map(lang -> lang.getLangCode()).toList(); }
+    public List<String> getRegisteredLanguagePaths() { return registeredLangs.stream().map(lang -> getLangConfigPath(lang)).toList(); }
 
     public String getLangConfigPath(NotLangId lang) { return defaultLangFolder + "/" + lang.getLangCode() + ".yml"; }
 
     @Override
-    public List<String> getConfigPaths() { return registeredLangs.stream().map(lang -> getLangConfigPath(lang)).toList(); }
+    public List<String> getConfigPaths() {
+        List<String> configPaths = new ArrayList<>();
+        configPaths.add(plugin.CONFIG_YML);
+        configPaths.addAll(getRegisteredLanguagePaths());
+        return configPaths;
+    }
+
+    public NotTranslationManager reloadLangFiles() {
+        List<String> langFiles = getRegisteredLanguagePaths();
+        langFiles.forEach(path -> plugin.reloadConfig(path));
+        onConfigReload(langFiles);
+        return this;
+    }
 
     @Override
     public void onConfigReload(List<String> reloadedConfigs) {
