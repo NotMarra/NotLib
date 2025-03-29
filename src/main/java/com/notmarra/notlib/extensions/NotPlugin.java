@@ -45,9 +45,8 @@ public abstract class NotPlugin extends JavaPlugin {
     public void registerConfigurable(NotConfigurable configurable) {
         List<String> configPaths = configurable.getConfigPaths();
         if (configPaths.isEmpty()) return;
-        for (String configPath : configPaths) {
-            registerConfigurable(configurable, configPath);
-        }
+        configPaths.forEach(path -> registerConfigurable(configurable, path));
+        configurable.reload();
     }
 
     public void saveDefaultConfig(String forConfig) {
