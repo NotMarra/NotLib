@@ -34,6 +34,27 @@ public class NotTranslationManager extends NotConfigurable {
         return this;
     }
 
+    public boolean isLanguageRegistered(NotLangId lang) {
+        if (lang == null) return false;
+        return registeredLangs.contains(lang);
+    }
+    public boolean isLanguageCodeRegistered(String langCode) {
+        if (langCode == null) return false;
+        return registeredLangs.stream().anyMatch(lang -> lang.getLangCode().equalsIgnoreCase(langCode));
+    }
+
+    public void setLanguage(NotLangId lang) {
+        if (lang == null) return;
+        if (!registeredLangs.contains(lang)) return;
+        currentLang = lang;
+    }
+    public void setLanguage(String langCode) {
+        if (langCode == null) return;
+        NotLangId lang = registeredLangs.stream().filter(l -> l.getLangCode().equalsIgnoreCase(langCode)).findFirst().orElse(null);
+        if (lang == null) return;
+        currentLang = lang;
+    }
+
     public List<NotLangId> getRegisteredLanguages() { return registeredLangs; }
     public List<String> getRegisteredLanguageCodes() { return registeredLangs.stream().map(lang -> lang.getLangCode()).toList(); }
     public List<String> getRegisteredLanguagePaths() { return registeredLangs.stream().map(lang -> getLangConfigPath(lang)).toList(); }
