@@ -21,6 +21,8 @@ public abstract class NotConfigurable {
         plugin.registerConfigurable(this);
     }
 
+    public FileConfiguration getConfig(String path) { return configs.get(path); }
+
     public void setConfig(String path, FileConfiguration config) { configs.put(path, config); }
 
     // e.g: return getPluginConfig().getBoolean("modules.something");
