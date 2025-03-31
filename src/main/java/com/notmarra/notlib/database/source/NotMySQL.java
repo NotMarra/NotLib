@@ -1,5 +1,7 @@
 package com.notmarra.notlib.database.source;
 
+import java.sql.ResultSet;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 import com.notmarra.notlib.database.NotDatabase;
@@ -17,6 +19,17 @@ public abstract class NotMySQL extends NotDatabase {
 
     @Override
     public String getDriver() { return "com.mysql.cj.jdbc.Driver"; }
+
+    @Override
+    public String getDatabaseName() {
+        try {
+            ResultSet result = processPreparedResult("SELECT DATABASE()");
+            if (result.next()) return result.getString(1);
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting database name: " + e.getMessage(), e);
+        }
+        return null;
+    }
 
     @Override
     public void connect() {

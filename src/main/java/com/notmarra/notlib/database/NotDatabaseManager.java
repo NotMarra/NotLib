@@ -3,8 +3,10 @@ package com.notmarra.notlib.database;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.notmarra.notlib.database.structure.NotTable;
 import com.notmarra.notlib.extensions.NotPlugin;
 
 public class NotDatabaseManager {
@@ -27,7 +29,16 @@ public class NotDatabaseManager {
         try {
             database.close();
             database.connect();
-            database.setup();
+
+            List<NotTable> tables = database.setup();
+            for (NotTable table : tables) {
+                if (!table.exists(database)) {
+                    table.create(database);
+                    for (List<Object> values : table.getInsertList()) {
+                        table.insert(database, values);
+                    }
+                }
+            }
         } catch (Exception e) {
             plugin.getLogger().severe("Failed to set up database: " + e.getMessage());
         }

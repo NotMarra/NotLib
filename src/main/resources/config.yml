@@ -1,0 +1,28 @@
+database:
+  # Set "enabled" to true for the database you want to use
+  # Yes you can use multiple databases at the same time (but not recommended)
+
+  # Configuration for SQLite
+  SQLite:
+    enabled: true
+
+    # name of the file with the saved data
+    file: "notlibtest"
+    # name of the table with the saved data
+    table: 'NotCredits'
+
+  MySQL:
+    enabled: true
+
+    # host of the MySQL server
+    host: ''
+    # port of the MySQL server
+    port: 3306
+    # username of the MySQL server
+    username: ''
+    # password of the MySQL server
+    password: ''
+    # database of the MySQL server
+    database: ''
+    # table of the MySQL server
+    table: 'NotCredits'

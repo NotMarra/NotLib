@@ -6,6 +6,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.io.File;
+import java.sql.ResultSet;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -21,18 +22,29 @@ public abstract class NotSQLite extends NotDatabase {
     public String getDriver() { return "org.sqlite.JDBC"; }
 
     @Override
+    public String getDatabaseName() {
+        try {
+            ResultSet result = processPreparedResult("SELECT name FROM sqlite_master WHERE type='table' LIMIT 1");
+            if (result.next()) return result.getString(1);
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting database name: " + e.getMessage(), e);
+        }
+        return null;
+    }
+
+    @Override
     public void connect() {
         ConfigurationSection configSection = getDatabaseConfig();
         HikariConfig hikariConfig = createHikariConfig();
         
         String databasePath = configSection.getString("file");
-
-        File databaseFile = new File(databasePath);
-        if (!databaseFile.getParentFile().exists()) {
-            databaseFile.getParentFile().mkdirs();
+        if (databasePath == null) {
+            throw new IllegalArgumentException("Database file path is not specified in the configuration.");
         }
-        
-        hikariConfig.setJdbcUrl("jdbc:sqlite:" + databasePath);
+
+        File databaseFile = new File(plugin.getDataFolder(), databasePath);
+        plugin.getLogger().info("Connecting to SQLite database at: " + databaseFile.getAbsolutePath());
+        hikariConfig.setJdbcUrl("jdbc:sqlite:" + databaseFile.getAbsolutePath());
         
         hikariConfig.addDataSourceProperty("cachePrepStmts", "true");
         hikariConfig.addDataSourceProperty("prepStmtCacheSize", "250");

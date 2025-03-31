@@ -20,6 +20,8 @@ public final class NotLib extends NotPlugin {
         // plugin callbacks
         addPluginEnabledCallback("PlaceholderAPI", () -> hasPlaceholderAPI = true);
         addPluginEnabledCallback("Vault", () -> hasVault = true);
+
+        db().registerDatabase(new NotDevSQLite(this, "config.yml"));
     }
 
     @Override
