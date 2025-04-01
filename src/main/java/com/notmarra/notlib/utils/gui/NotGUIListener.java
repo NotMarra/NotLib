@@ -35,8 +35,11 @@ public class NotGUIListener extends NotListener {
         Player player = (Player) event.getWhoClicked();
         Inventory clickedInventory = event.getClickedInventory();
         NotGUI gui = openGUIs.get(player.getUniqueId());
+        
+        if (gui == null) return;
+        if (clickedInventory == null) return;
 
-        if (gui != null && clickedInventory != null && clickedInventory.equals(gui.getBuiltInventory())) {
+        if (clickedInventory.getHolder() == gui) {
             gui.handleClick(event);
             event.setCancelled(true);
         }

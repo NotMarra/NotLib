@@ -3,7 +3,6 @@ package com.notmarra.notlib.database;
 import com.notmarra.notlib.database.structure.NotTable;
 import com.notmarra.notlib.extensions.NotConfigurable;
 import com.notmarra.notlib.extensions.NotPlugin;
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,7 +23,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public abstract class NotDatabase extends NotConfigurable {
     private final String defaultConfig;
-    protected HikariDataSource dataSource;
+    protected HikariDataSource source;
+    private Map<String, NotTable> tables = new HashMap<>();
 
     public NotDatabase(NotPlugin plugin, String defaultConfig) {
         super(plugin);
@@ -32,22 +32,52 @@ public abstract class NotDatabase extends NotConfigurable {
     }
 
     @Override
+    public NotConfigurable registerConfigurable() {
+        super.registerConfigurable();
+        registerTables();
+        return this;
+    }
+
+    @Override
     public List<String> getConfigPaths() { return List.of(defaultConfig); }
-
+    
     public abstract String getId();
+    
+    public abstract List<NotTable> setupTables();
 
-    public abstract String getDriver();
+    public abstract void connect();
 
+    public abstract void createTable(NotTable table);
+
+    public abstract void insertRow(NotTable table, List<Object> row);
+
+    public boolean tableExists(NotTable table) { return tableExists(table.getName()); }
+
+    public abstract boolean tableExists(String tableName);
+
+    private void registerTables() {
+        for (NotTable table : setupTables()) {
+            tables.put(table.getName(), table);
+        }
+    }
+
+    public Map<String, NotTable> getTables() { return tables; }
+    public NotTable getTable(String tableName) { return tables.get(tableName); }
+
+    public void setup() {
+        for (NotTable table : setupTables()) {
+            createTable(table);
+
+            for (List<Object> row : table.getInsertList()) {
+                insertRow(table, row);
+            }
+        }
+    }
+    
     @Override
     public void onConfigReload(List<String> reloadedConfigs) {
         close();
         connect();
-    }
-
-    public HikariConfig createHikariConfig() {
-        HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setDriverClassName(getDriver());
-        return hikariConfig;
     }
 
     public ConfigurationSection getDatabaseConfig() {
@@ -57,55 +87,21 @@ public abstract class NotDatabase extends NotConfigurable {
         return section;
     }
     
-    /**
-     * Initialization of the database and setting up the connection pool
-     */
-    public abstract void connect();
-
-    public abstract String getDatabaseName();
+    public void setSource(HikariDataSource source) { this.source = source; }
     
-    /**
-     * Obtaining a connection from the connection pool
-     * @return Connection to the database
-     * @throws SQLException If an error occurs while obtaining the connection
-     */
     public Connection getConnection() throws SQLException {
-        if (dataSource == null || dataSource.isClosed()) {
+        if (source == null || source.isClosed()) {
             throw new SQLException("DataSource is not initialized or closed");
         }
-        return dataSource.getConnection();
+        return source.getConnection();
     }
 
-    public void setSource(HikariDataSource dataSource) { this.dataSource = dataSource; }
-    
-    /**
-     * Closing the connection pool
-     */
     public void close() {
-        if (dataSource != null && !dataSource.isClosed()) {
-            dataSource.close();
-        }
-    }
-    
-    /**
-     * Check if the connection is active
-     * @return true if the connection is active, otherwise false
-     */
-    public boolean isConnected() {
-        return dataSource != null && !dataSource.isClosed();
+        if (source != null && !source.isClosed()) source.close();
     }
 
-    /**
-     * Creates tables and prepares the database for use
-     * @param sql SQL query for creating tables
-     */
-    public void createTables(String sql) {
-        try (Statement statement = dataSource.getConnection().createStatement()) {
-            statement.execute(sql);
-        } catch (Exception e) {
-            plugin.getLogger().severe("Error creating tables: " + e.getMessage());
-            e.printStackTrace();
-        }
+    public boolean isConnected() {
+        return source != null && !source.isClosed();
     }
 
     public void process(Consumer<Connection> consumer) {
@@ -139,7 +135,7 @@ public abstract class NotDatabase extends NotConfigurable {
 
     public ResultSet processPreparedResult(String sql) {
         if (sql == null || sql.isEmpty()) return null;
-        try (Connection connection = dataSource.getConnection()) {
+        try (Connection connection = source.getConnection()) {
             plugin.getLogger().info("Executing SQL: " + sql);
             return connection.prepareStatement(sql).executeQuery();
         } catch (SQLException e) {
@@ -150,7 +146,7 @@ public abstract class NotDatabase extends NotConfigurable {
 
     public ResultSet processPreparedResult(String sql, Object... params) {
         if (sql == null || sql.isEmpty() || params == null) return null;
-        try (Connection connection = dataSource.getConnection()) {
+        try (Connection connection = source.getConnection()) {
             plugin.getLogger().info("Executing SQL: " + sql);
             PreparedStatement stmt = connection.prepareStatement(sql);
             for (int i = 0; i < params.length; i++) {
@@ -196,5 +192,4 @@ public abstract class NotDatabase extends NotConfigurable {
         return result.get(0);
     }
 
-    public abstract List<NotTable> setup();
 }
