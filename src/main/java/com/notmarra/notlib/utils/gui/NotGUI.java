@@ -1,6 +1,8 @@
 package com.notmarra.notlib.utils.gui;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -10,6 +12,7 @@ import javax.annotation.Nullable;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -18,6 +21,15 @@ import com.notmarra.notlib.NotLib;
 import com.notmarra.notlib.utils.ChatF;
 import com.notmarra.notlib.utils.NotSize;
 import com.notmarra.notlib.utils.NotVector2;
+import com.notmarra.notlib.utils.gui.animations.NotGUIAnimation;
+import com.notmarra.notlib.utils.gui.animations.NotGUIBackAndForthAnimation;
+import com.notmarra.notlib.utils.gui.animations.NotGUIBounceAnimation;
+import com.notmarra.notlib.utils.gui.animations.NotGUIEaseInOutAnimation;
+import com.notmarra.notlib.utils.gui.animations.NotGUIElasticAnimation;
+import com.notmarra.notlib.utils.gui.animations.NotGUIInfiniteAnimation;
+import com.notmarra.notlib.utils.gui.animations.NotGUIProgressAnimation;
+import com.notmarra.notlib.utils.gui.animations.NotGUIPulseAnimation;
+import com.notmarra.notlib.utils.gui.animations.NotGUIStepAnimation;
 
 import net.kyori.adventure.text.Component;
 
@@ -29,7 +41,9 @@ public class NotGUI implements InventoryHolder {
     private Component guiTitle;
     private NotGUIContainer rootContainer;
     private Inventory builtInventory;
+    public Consumer<InventoryCloseEvent> onClose;
 
+    public final List<NotGUIAnimation> animations = new ArrayList<>();
     public final Map<InventoryType, NotSize> inventorySizes = new HashMap<>();
 
     public NotGUI() {
@@ -142,8 +156,22 @@ public class NotGUI implements InventoryHolder {
         return new NotGUIItem(this, rootContainer, material);
     }
 
-    public NotGUIAnimation createAnimation(long durationTicks, long frames) {
-        return new NotGUIAnimation(this, durationTicks, frames);
+    public NotGUIAnimation registerAnimation(NotGUIAnimation animation) {
+        animations.add(animation);
+        return animation;
+    }
+
+    public void cancelAllAnimations() {
+        for (NotGUIAnimation animation : animations) animation.cancel();
+        animations.clear();
+    }
+
+    public void removeAnimation(NotGUIAnimation animation) {
+        animations.remove(animation);
+    }
+
+    public List<NotGUIAnimation> getAnimations() {
+        return animations;
     }
 
     public Inventory getBuiltInventory() {
@@ -158,7 +186,7 @@ public class NotGUI implements InventoryHolder {
         return getBuiltInventory();
     }
 
-    public NotSize getSize() { return rootContainer.getSize(); }
+    public NotSize size() { return rootContainer.size(); }
     public int totalSize() { return rootContainer.totalSize(); }
 
     public NotLib getPlugin() {
@@ -168,10 +196,6 @@ public class NotGUI implements InventoryHolder {
     public void refresh() {
         builtInventory.clear();
         rootContainer.refresh();
-    }
-
-    public void animate(long durationTicks, int frames, Consumer<Float> updateFunction) {
-        createAnimation(durationTicks, frames).start(updateFunction);
     }
 
     public boolean handleClick(InventoryClickEvent event) {
@@ -199,6 +223,45 @@ public class NotGUI implements InventoryHolder {
             return;
         }
         listener.openGUI(player, this);
+    }
+
+    public void close(Player player) {
+        Inventory inventory = player.getOpenInventory().getTopInventory();
+        if (inventory != null && inventory.getHolder() == this) {
+            player.closeInventory();
+        }
+    }
+
+    public NotGUI onClose(Consumer<InventoryCloseEvent> onClose) {
+        this.onClose = onClose;
+        return this;
+    }
+
+    // Animations
+
+    public NotGUIAnimation aBackAndForth(long durationTicks, long frames) {
+        return registerAnimation(new NotGUIBackAndForthAnimation(this, durationTicks, frames));
+    }
+    public NotGUIAnimation aBounce(long durationTicks, long frames) {
+        return registerAnimation(new NotGUIBounceAnimation(this, durationTicks, frames));
+    }
+    public NotGUIAnimation easeInOut(long durationTicks, long frames) {
+        return registerAnimation(new NotGUIEaseInOutAnimation(this, durationTicks, frames));
+    }
+    public NotGUIAnimation aElastic(long durationTicks, long frames) {
+        return registerAnimation(new NotGUIElasticAnimation(this, durationTicks, frames));
+    }
+    public NotGUIAnimation aInfinite(long durationTicks, long frames) {
+        return registerAnimation(new NotGUIInfiniteAnimation(this, durationTicks, frames));
+    }
+    public NotGUIAnimation aProgress(long durationTicks, long frames) {
+        return registerAnimation(new NotGUIProgressAnimation(this, durationTicks, frames));
+    }
+    public NotGUIAnimation aPulse(long durationTicks, long frames) {
+        return registerAnimation(new NotGUIPulseAnimation(this, durationTicks, frames));
+    }
+    public NotGUIAnimation aStep(long durationTicks, long frames) {
+        return registerAnimation(new NotGUIStepAnimation(this, durationTicks, frames));
     }
 
     public static NotGUI create() { return new NotGUI(); }

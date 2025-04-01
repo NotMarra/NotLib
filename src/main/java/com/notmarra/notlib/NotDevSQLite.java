@@ -6,6 +6,7 @@ import com.notmarra.notlib.database.source.NotSQLite;
 import com.notmarra.notlib.database.structure.NotColumn;
 import com.notmarra.notlib.database.structure.NotTable;
 import com.notmarra.notlib.extensions.NotPlugin;
+import com.notmarra.notlib.utils.ChatF;
 
 public class NotDevSQLite extends NotSQLite {
     public NotDevSQLite(NotPlugin plugin, String defaultConfig) {
@@ -17,7 +18,7 @@ public class NotDevSQLite extends NotSQLite {
     public List<NotTable> setup() {
         String table = getDatabaseConfig().getString("table");
         if (table == null) {
-            plugin.getLogger().severe("Table name not found in config for database: " + getId());
+            getLogger().debug(ChatF.of("Table name not found in config for database: " + getId()).build());
             return List.of();
         }
 

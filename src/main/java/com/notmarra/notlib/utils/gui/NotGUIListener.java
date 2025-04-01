@@ -51,6 +51,7 @@ public class NotGUIListener extends NotListener {
         NotGUI gui = openGUIs.get(player.getUniqueId());
 
         if (gui != null && closedInventory.equals(gui.getBuiltInventory())) {
+            if (gui.onClose != null) gui.onClose.accept(event);
             openGUIs.remove(player.getUniqueId());
         }
     }

@@ -1,18 +1,17 @@
 package com.notmarra.notlib.utils;
 
-import com.notmarra.notlib.NotLib;
+import com.notmarra.notlib.extensions.NotPlugin;
 
 public class NotScheduler implements Runnable {
 
-    private final NotLib notLib;
+    private final NotPlugin plugin;
 
-    public NotScheduler(NotLib notLib) {
-        this.notLib = notLib;
+    public NotScheduler(NotPlugin plugin) {
+        this.plugin = plugin;
     }
     
     @Override
     public void run() { //TODO: some type of taskmanager and autorunnable?
 
     }
-    
 }

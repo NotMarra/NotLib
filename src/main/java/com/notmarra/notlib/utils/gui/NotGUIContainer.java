@@ -24,7 +24,7 @@ import com.notmarra.notlib.utils.NotVector2;
 
 public class NotGUIContainer {
     private UUID uid;
-    private NotGUI parentGUI;
+    private NotGUI gui;
     @Nullable private NotGUIContainer parentContainer;
     private NotVector2 position;
     private NotSize size;
@@ -32,7 +32,6 @@ public class NotGUIContainer {
 
     private Map<UUID, NotGUIItem> notItems;
     private Map<Integer, ItemStack> items;
-    private Map<Integer, UUID> slotToItemId;
 
     private Map<UUID, BiConsumer<InventoryClickEvent, NotGUIContainer>> clickHandlers;
     private boolean wrapped;
@@ -43,7 +42,7 @@ public class NotGUIContainer {
 
     public NotGUIContainer(NotGUI gui, NotGUIContainer parent) {
         this.uid = UUID.randomUUID();
-        this.parentGUI = gui;
+        this.gui = gui;
         this.parentContainer = parent;
         position = NotVector2.zero();
         size = NotSize.zero();
@@ -51,14 +50,13 @@ public class NotGUIContainer {
 
         notItems = new HashMap<>();
         items = new HashMap<>();
-        slotToItemId = new HashMap<>();
         
         clickHandlers = new HashMap<>();
         wrapped = true;
     }
 
-    public NotVector2 getPosition() { return position; }
-    public NotSize getSize() { return size; }
+    public NotVector2 pos() { return position; }
+    public NotSize size() { return size; }
     public List<NotGUIContainer> getChildren() { return children; }
     public List<NotGUIContainer> getMeAndChildren() {
         List<NotGUIContainer> allChildren = new ArrayList<>();
@@ -74,7 +72,7 @@ public class NotGUIContainer {
     public List<NotGUIContainer> getRootAndItsChildren() { return root().getMeAndChildren(); }
 
     public UUID id() { return uid; }
-    public NotGUI gui() { return parentGUI; }
+    public NotGUI gui() { return gui; }
     public NotGUIContainer parent() { return parentContainer; }
 
     public NotGUIContainer notWrapped() { this.wrapped = false; return this; }
@@ -126,7 +124,7 @@ public class NotGUIContainer {
     public int totalSize() { return size.width * size.height; }
 
     public NotGUIItem createItem(Material material, int x, int y) {
-        NotGUIItem item = new NotGUIItem(parentGUI, this, material);
+        NotGUIItem item = new NotGUIItem(gui, this, material);
         addItem(item, x, y);
         return item;
     }
@@ -142,8 +140,6 @@ public class NotGUIContainer {
     
     public NotGUIContainer addItem(NotGUIItem item, int slot) {
         if (slot < 0 || slot >= totalSize()) {
-            gui().getPlugin().getLogger().info("Slot: " + slot + " Total: " + totalSize());
-            gui().getPlugin().getLogger().info("Item: " + item.type());
             throw new IllegalArgumentException("Slot out of bounds for container");
         }
         
@@ -152,7 +148,6 @@ public class NotGUIContainer {
 
         notItems.put(itemId, item);
         items.put(slot, builtItem);
-        slotToItemId.put(slot, itemId);
 
         setItemToSlot(slot, builtItem);
         
@@ -160,7 +155,7 @@ public class NotGUIContainer {
     }
     
     public NotGUIContainer addButton(Material material, ChatF name, int slot, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
-        NotGUIItem item = new NotGUIItem(parentGUI, this, material).name(name);
+        NotGUIItem item = new NotGUIItem(gui, this, material).name(name);
         addItem(item, slot);
         registerClickHandler(item.id(), action);
         return this;
@@ -181,7 +176,7 @@ public class NotGUIContainer {
     public ItemStack getItem(int slot) { return items.get(slot); }
     
     private void setItemToSlot(int slot, ItemStack item) {
-        Inventory builtInventory = parentGUI.getBuiltInventory();
+        Inventory builtInventory = gui.getBuiltInventory();
         if (builtInventory != null) {
             int x = slot % size.width;
             int y = slot / size.width;
@@ -191,14 +186,10 @@ public class NotGUIContainer {
             int inventorySlot = absoluteY * gui().rowSize() + absoluteX;
             
             if (inventorySlot >= 0 && inventorySlot < builtInventory.getSize()) {
-                UUID itemId = getItemIdFromItemStack(item);
-                if (itemId != null) slotToItemId.put(slot, itemId);
                 builtInventory.setItem(inventorySlot, item);
             } else if (wrapped) {
                 int wrappedSlot = inventorySlot % builtInventory.getSize();
                 if (wrappedSlot < 0) wrappedSlot += builtInventory.getSize();
-                UUID itemId = getItemIdFromItemStack(item);
-                if (itemId != null) slotToItemId.put(wrappedSlot, itemId);
                 builtInventory.setItem(wrappedSlot, item);             
             }
         }
@@ -235,7 +226,6 @@ public class NotGUIContainer {
         if (clickedItem == null) return false;
         
         UUID itemId = getItemIdFromItemStack(clickedItem);
-        if (itemId == null) itemId = slotToItemId.get(localSlot);
 
         if (itemId != null) {
             BiConsumer<InventoryClickEvent, NotGUIContainer> handler = clickHandlers.get(itemId);
@@ -265,19 +255,15 @@ public class NotGUIContainer {
         if (!items.containsKey(fromSlot)) return;
         
         ItemStack item = items.get(fromSlot);
-        UUID itemId = slotToItemId.get(fromSlot);
 
-        items.remove(fromSlot);
-        slotToItemId.remove(fromSlot);
-        
+        items.remove(fromSlot);        
         items.put(toSlot, item);
-        slotToItemId.put(toSlot, itemId);
         
         setItemToSlot(toSlot, item);
     }
 
     public void refresh() {
-        if (parentGUI.getBuiltInventory() == null) return;
+        if (gui.getBuiltInventory() == null) return;
 
         for (Map.Entry<Integer, ItemStack> entry : items.entrySet()) {
             setItemToSlot(entry.getKey(), entry.getValue());

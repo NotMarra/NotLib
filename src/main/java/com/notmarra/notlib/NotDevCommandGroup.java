@@ -28,7 +28,8 @@ public final class NotDevCommandGroup extends NotCommandGroup {
     public List<NotCommand> notCommands() {
         return List.of(
             testGui(),
-            diffgui()
+            diffgui(),
+            testanimationsgui()
         );
     }
 
@@ -55,17 +56,17 @@ public final class NotDevCommandGroup extends NotCommandGroup {
                     })
                     .addButton(Material.GOLD_INGOT, "Bank", 6, 0, (event, c) -> {
                         Map<UUID, Integer> start = new HashMap<>();
-                        c.getRootAndItsChildren().forEach(ch -> start.put(ch.id(), ch.getPosition().x));
+                        c.getRootAndItsChildren().forEach(ch -> start.put(ch.id(), ch.pos().x));
 
                         Map<UUID, Integer> end = new HashMap<>();
-                        c.getRootAndItsChildren().forEach(ch -> end.put(ch.id(), ch.getPosition().x + c.gui().rowSize()));
+                        c.getRootAndItsChildren().forEach(ch -> end.put(ch.id(), ch.pos().x + c.gui().rowSize()));
 
-                        c.gui().animate(20L, 10, (progress) -> {
+                        c.gui().aProgress(20L, 10).start((progress) -> {
                             c.getRootAndItsChildren().forEach(ch -> {
                                 int startX = start.get(ch.id());
                                 int endX = end.get(ch.id());
                                 int currentX = startX + Math.round(progress * (endX - startX));
-                                ch.position(currentX, ch.getPosition().y);
+                                ch.position(currentX, ch.pos().y);
                             });
                         });
                     })
@@ -133,25 +134,56 @@ public final class NotDevCommandGroup extends NotCommandGroup {
                     })
                     .addButton(Material.EMERALD, "Shop", 2, 0, (event, c) -> {
                         Player player = (Player) event.getWhoClicked();
-                        ChatF.of("Opening shop...").sendTo(player);
+                        ChatF.of("Closing GUI...").sendTo(player);
+                        c.gui().close(player);
                     })
                     .addButton(Material.GOLD_INGOT, "Bank", 3, 0, (event, c) -> {
                         Map<UUID, Integer> start = new HashMap<>();
-                        c.getRootAndItsChildren().forEach(ch -> start.put(ch.id(), ch.getPosition().x));
+                        c.getRootAndItsChildren().forEach(ch -> start.put(ch.id(), ch.pos().x));
 
                         Map<UUID, Integer> end = new HashMap<>();
-                        c.getRootAndItsChildren().forEach(ch -> end.put(ch.id(), ch.getPosition().x + c.gui().rowSize()));
+                        c.getRootAndItsChildren().forEach(ch -> end.put(ch.id(), ch.pos().x + c.gui().rowSize()));
 
-                        c.gui().animate(20L, 10, (progress) -> {
+                        c.gui().aInfinite(20L, 10).start((progress) -> {
                             c.getRootAndItsChildren().forEach(ch -> {
                                 int startX = start.get(ch.id());
                                 int endX = end.get(ch.id());
                                 int currentX = startX + Math.round(progress * (endX - startX));
-                                ch.position(currentX, ch.getPosition().y);
+                                ch.position(currentX, ch.pos().y);
                             });
                         });
                     })
                 .gui()
+                .onClose(event -> {
+                    Player player = (Player) event.getPlayer();
+                    ChatF.of("You closed the GUI!").sendTo(player);
+                })
+                .open(cmd.getPlayer());
+        });
+    }
+
+    private NotCommand testanimationsgui() {
+        return NotCommand.of("testanimationsgui", cmd -> {
+            NotGUI.create("Example GUI")
+                .rows(1)
+                .addButton(Material.COMPASS, "Navigation", 0, (event, c) -> {
+                    int start = c.pos().x;
+                    int end = start + c.gui().rowSize();
+
+                    c.gui().aPulse(20L, 50).inf().start(progress -> {
+                        int newX = start + Math.round(progress * (end - start));
+                        c.position(newX, c.pos().y);
+                    });
+
+                    // c.gui().aBounce(20L, 50, 5, (progress) -> {
+                    //     int newX = start + Math.round(progress * (end - start));
+                    //     c.position(newX, c.pos().y);
+                    // });
+                })
+                .onClose(event -> {
+                    Player player = (Player) event.getPlayer();
+                    ChatF.of("You closed the GUI!").sendTo(player);
+                })
                 .open(cmd.getPlayer());
         });
     }

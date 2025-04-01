@@ -16,7 +16,7 @@ import com.notmarra.notlib.utils.ChatF;
 import net.kyori.adventure.text.Component;
 
 public class NotGUIItem { 
-    private UUID uuid;
+    private UUID uid;
     private NotGUI parentGUI;
     private NotGUIContainer parentContainer;
 
@@ -30,13 +30,13 @@ public class NotGUIItem {
     }
 
     public NotGUIItem(NotGUI gui, NotGUIContainer parentContainer, Material itemType) {
-        this.uuid = UUID.randomUUID();
+        this.uid = UUID.randomUUID();
         this.parentGUI = gui;
         this.parentContainer = parentContainer;
         this.itemType = itemType;
     }
 
-    public UUID id() { return uuid; }
+    public UUID id() { return uid; }
     public int amount() { return itemAmount; }
     public Material type() { return itemType; }
     public Component name() { return itemName; }
@@ -92,7 +92,7 @@ public class NotGUIItem {
 
         NamespacedKey key = new NamespacedKey(gui().getPlugin(), NotGUI.ITEM_UUID_KEY);
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.set(key, PersistentDataType.STRING, uuid.toString());
+        container.set(key, PersistentDataType.STRING, uid.toString());
 
         stack.setItemMeta(meta);
 
