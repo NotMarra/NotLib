@@ -11,6 +11,8 @@ public abstract class NotConfigurable {
 
     public NotConfigurable(NotPlugin plugin) { this.plugin = plugin; }
 
+    public NotPlugin getPlugin() { return plugin; }
+
     public FileConfiguration getConfig(String path) { return plugin.getSubConfig(path); }
 
     // e.g: return getPluginConfig().getBoolean("modules.something");

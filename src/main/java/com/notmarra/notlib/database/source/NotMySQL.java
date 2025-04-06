@@ -1,6 +1,8 @@
 package com.notmarra.notlib.database.source;
 
-import java.sql.ResultSet;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -54,18 +56,7 @@ public abstract class NotMySQL extends NotDatabase {
     }
 
     @Override
-    public boolean tableExists(String tableName) {
-        try {
-            ResultSet result = processPreparedResult("SHOW TABLES LIKE '?'", tableName);
-            if (result.next()) return result.getString(1).equalsIgnoreCase(tableName);
-        } catch (Exception e) {
-            getLogger().info("Error checking if table exists: " + e.getMessage());
-        }
-        return false;
-    }
-
-    @Override
-    public void createTable(NotTable table) {
+    public boolean createTable(NotTable table) {
         StringBuilder sql = new StringBuilder("CREATE TABLE IF NOT EXISTS " + table.getName() + " (");
         for (int i = 0; i < table.getColumns().size(); i++) {
             NotColumn column = table.getColumns().get(i);
@@ -78,9 +69,10 @@ public abstract class NotMySQL extends NotDatabase {
         }
         sql.append(");");
 
-        processQuery(sql.toString());
+        return processQuery(sql.toString());
     }
 
+    @Override
     public void insertRow(NotTable table, List<Object> row) {
         StringBuilder sql = new StringBuilder("INSERT INTO " + table.getName() + " (");
         for (int i = 0; i < table.getColumns().size(); i++) {
@@ -90,11 +82,22 @@ public abstract class NotMySQL extends NotDatabase {
         }
         sql.append(") VALUES (");
         for (int i = 0; i < row.size(); i++) {
-            sql.append("'").append(row.get(i)).append("'");
+            sql.append("?");
             if (i < row.size() - 1) sql.append(", ");
         }
-        sql.append(");");
+        sql.append(")");
         
-        processQuery(sql.toString());
+        try (Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+            
+            for (int i = 0; i < row.size(); i++) {
+                stmt.setObject(i + 1, row.get(i));
+            }
+            
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error inserting row: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

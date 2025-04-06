@@ -2,6 +2,7 @@ package com.notmarra.notlib;
 
 import com.notmarra.notlib.extensions.NotPlugin;
 import com.notmarra.notlib.utils.ChatF;
+import com.notmarra.notlib.utils.NotDebugger;
 import com.notmarra.notlib.utils.gui.NotGUIListener;
 
 public final class NotLib extends NotPlugin {
@@ -9,31 +10,33 @@ public final class NotLib extends NotPlugin {
     private static Boolean hasPlaceholderAPI = false;
     private static Boolean hasVault = false;
 
+    public static final String DEBUG_DB = "debug_db";
+
     @Override
     public void initNotPlugin() {
+        NotDebugger.register(DEBUG_DB);
+
         // listeners
-        addListener(NotGUIListener.ID, new NotGUIListener(this));
+        addListener(new NotGUIListener(this));
 
         // commands
-        addCommandGroup(NotDevCommandGroup.ID, new NotDevCommandGroup(this));
+        addCommandGroup(new NotDevCommandGroup(this));
 
         // plugin callbacks
         addPluginEnabledCallback("PlaceholderAPI", () -> hasPlaceholderAPI = true);
         addPluginEnabledCallback("Vault", () -> hasVault = true);
-
-        db().registerDatabase(new NotDevSQLite(this, "config.yml"));
     }
 
     @Override
     public void onEnable() {
         instance = this;
         super.onEnable();
-        this.getComponentLogger().info(ChatF.of("Enabled!").build());
+        log().info(ChatF.of("Enabled!").build());
     }
 
     @Override
     public void onDisable() {
-        this.getComponentLogger().info(ChatF.of("Disabled!").build());
+        log().info(ChatF.of("Disabled!").build());
     }
 
     public NotGUIListener getNotGUIListener() { return (NotGUIListener)getListener(NotGUIListener.ID); }

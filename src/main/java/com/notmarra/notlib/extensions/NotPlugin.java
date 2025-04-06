@@ -14,6 +14,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.notmarra.notlib.database.NotDatabase;
 import com.notmarra.notlib.database.NotDatabaseManager;
 
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+
 public abstract class NotPlugin extends JavaPlugin {
     private final Map<String, Runnable> ON_PLUGIN_ENABLED_CALLBACKS = new HashMap<>();
     // <path, config>
@@ -39,11 +41,11 @@ public abstract class NotPlugin extends JavaPlugin {
     public void addPluginEnabledCallback(String pluginId, Runnable callback) { ON_PLUGIN_ENABLED_CALLBACKS.put(pluginId, callback); }
 
     // addListener("listener_id", new Listener(this));
-    public void addListener(String id, NotListener listener) { LISTENERS.put(id, listener); }
+    public void addListener(NotListener listener) { LISTENERS.put(listener.getId(), listener); }
     public NotListener getListener(String id) { return LISTENERS.get(id); }
 
     // addCommandManager("cmdgroup_id", new CommandManager(this));
-    public void addCommandGroup(String id, NotCommandGroup cmdGroup) { CMDGROUPS.put(id, cmdGroup); }
+    public void addCommandGroup(NotCommandGroup cmdGroup) { CMDGROUPS.put(cmdGroup.getId(), cmdGroup); }
     public NotCommandGroup getCommandGroup(String id) { return CMDGROUPS.get(id); }
 
     public void registerConfigurable(NotConfigurable configurable, String configPath) {
@@ -86,6 +88,8 @@ public abstract class NotPlugin extends JavaPlugin {
     }
 
     public abstract void initNotPlugin();
+
+    public ComponentLogger log() { return getComponentLogger(); }
 
     @Override
     public void onEnable() {

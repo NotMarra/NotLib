@@ -1,8 +1,12 @@
 package com.notmarra.notlib.database;
 
+import com.notmarra.notlib.NotLib;
+import com.notmarra.notlib.database.query.NotSqlBuilder;
+import com.notmarra.notlib.database.query.NotSqlQueryExecutor;
 import com.notmarra.notlib.database.structure.NotTable;
 import com.notmarra.notlib.extensions.NotConfigurable;
 import com.notmarra.notlib.extensions.NotPlugin;
+import com.notmarra.notlib.utils.NotDebugger;
 import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,11 +28,13 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public abstract class NotDatabase extends NotConfigurable {
     private final String defaultConfig;
     protected HikariDataSource source;
+    private NotSqlQueryExecutor queryExecutor;
     private Map<String, NotTable> tables = new HashMap<>();
 
     public NotDatabase(NotPlugin plugin, String defaultConfig) {
         super(plugin);
         this.defaultConfig = defaultConfig;
+        this.queryExecutor = new NotSqlQueryExecutor(this);
     }
 
     @Override
@@ -47,13 +53,25 @@ public abstract class NotDatabase extends NotConfigurable {
 
     public abstract void connect();
 
-    public abstract void createTable(NotTable table);
+    public abstract boolean createTable(NotTable table);
 
     public abstract void insertRow(NotTable table, List<Object> row);
 
-    public boolean tableExists(NotTable table) { return tableExists(table.getName()); }
+    // sql builder
+    public NotSqlBuilder select(String table) { return NotSqlBuilder.select(table); }
+    public NotSqlBuilder select(String table, List<String> columns) { return NotSqlBuilder.select(table, columns); }
+    public NotSqlBuilder insertInto(String table) { return NotSqlBuilder.insertInto(table); }
+    public NotSqlBuilder update(String table) { return NotSqlBuilder.update(table); }
+    public NotSqlBuilder deleteFrom(String table) { return NotSqlBuilder.deleteFrom(table); }
+    public boolean exists(NotSqlBuilder builder) { return queryExecutor.exists(builder); }
+    public List<Map<String, Object>> query(NotSqlBuilder builder) { return queryExecutor.executeQuery(builder); }
+    public int execute(NotSqlBuilder builder) { return queryExecutor.executeUpdate(builder); }
+    public List<Map<String, Object>> executeQuery(NotSqlBuilder builder) { return queryExecutor.executeQuery(builder); }
+    public Map<String, Object> fetchOne(NotSqlBuilder builder) { return queryExecutor.fetchOne(builder); }
 
-    public abstract boolean tableExists(String tableName);
+    public NotSqlQueryExecutor getQueryExecutor() {
+        return queryExecutor;
+    }
 
     private void registerTables() {
         for (NotTable table : setupTables()) {
@@ -66,10 +84,10 @@ public abstract class NotDatabase extends NotConfigurable {
 
     public void setup() {
         for (NotTable table : setupTables()) {
-            createTable(table);
-
-            for (List<Object> row : table.getInsertList()) {
-                insertRow(table, row);
+            if (createTable(table)) {
+                for (List<Object> row : table.getInsertList()) {
+                    insertRow(table, row);
+                }
             }
         }
     }
@@ -104,6 +122,23 @@ public abstract class NotDatabase extends NotConfigurable {
         return source != null && !source.isClosed();
     }
 
+    public Object convertValue(String columnType, Object value) {
+        switch (columnType) {
+            case "TEXT":
+                return String.valueOf(value);
+            case "INTEGER":
+                return Integer.valueOf(String.valueOf(value));
+            case "REAL":
+                return Double.valueOf(String.valueOf(value));
+            case "DOUBLE":
+                return Double.valueOf(String.valueOf(value));
+            case "FLOAT":
+                return Float.valueOf(String.valueOf(value));
+            default:
+                throw new IllegalArgumentException("Unsupported column type: " + columnType);
+        }
+    }
+
     public void process(Consumer<Connection> consumer) {
         try (Connection connection = getConnection()) {
             consumer.accept(connection);
@@ -133,63 +168,47 @@ public abstract class NotDatabase extends NotConfigurable {
         }
     }
 
-    public ResultSet processPreparedResult(String sql) {
+    public List<Map<String, Object>> processResult(String sql) { return processResult(sql, null); }
+
+    public List<Map<String, Object>> processResult(String sql, List<Object> params) {
         if (sql == null || sql.isEmpty()) return null;
-        try (Connection connection = source.getConnection()) {
-            plugin.getLogger().info("Executing SQL: " + sql);
-            return connection.prepareStatement(sql).executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+        
+
+        if (NotDebugger.should(NotLib.DEBUG_DB)) {
+            getLogger().info("Executing SQL: " + sql);
         }
-    }
 
-    public ResultSet processPreparedResult(String sql, Object... params) {
-        if (sql == null || sql.isEmpty() || params == null) return null;
-        try (Connection connection = source.getConnection()) {
-            plugin.getLogger().info("Executing SQL: " + sql);
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            for (int i = 0; i < params.length; i++) {
-                stmt.setObject(i + 1, params[i]);
-            }
-            return stmt.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public List<Map<String, String>> processPrepared(String sql, Object... params) {
-        if (sql == null || sql.isEmpty() || params == null) return null;
-        List<Map<String, String>> resultList = new ArrayList<>();
-
-        ResultSet result = processPreparedResult(sql, params);
-        if (result == null) return List.of();
-
-        try {
-            ResultSetMetaData metaData = result.getMetaData();
-            int columnCount = metaData.getColumnCount();
-
-            while (result.next()) {
-                Map<String, String> row = new HashMap<>();
-                for (int i = 1; i <= columnCount; i++) {
-                    String columnName = metaData.getColumnName(i);
-                    String value = result.getString(i);
-                    row.put(columnName, value);
+        try (Connection connection = getConnection();
+            PreparedStatement stmt = connection.prepareStatement(sql)) {
+            
+            if (params != null) {
+                for (int i = 0; i < params.size(); i++) {
+                    stmt.setObject(i, params.get(i));
                 }
-                resultList.add(row);
+            }
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                ResultSetMetaData metaData = rs.getMetaData();
+                int columnCount = metaData.getColumnCount();
+                List<Map<String, Object>> resultList = new ArrayList<>();
+                
+                while (rs.next()) {
+                    Map<String, Object> row = new HashMap<>();
+                    for (int i = 1; i <= columnCount; i++) {
+                        String columnName = metaData.getColumnName(i);
+                        String columnType = metaData.getColumnTypeName(i);
+                        Object columnValue = rs.getObject(i);
+                        row.put(columnName, convertValue(columnType, columnValue));
+                    }
+                    resultList.add(row);
+                }
+                
+                return resultList;
             }
         } catch (SQLException e) {
+            plugin.getLogger().severe("Error processing query: " + e.getMessage());
             e.printStackTrace();
+            return List.of();
         }
-
-        return resultList.isEmpty() ? null : resultList;
     }
-
-    public Map<String, String> processPreparedFirst(String sql, Object... params) {
-        List<Map<String, String>> result = processPrepared(sql, params);
-        if (result.isEmpty()) return null;
-        return result.get(0);
-    }
-
 }

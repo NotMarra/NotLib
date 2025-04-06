@@ -8,7 +8,9 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.io.File;
-import java.sql.ResultSet;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -35,7 +37,7 @@ public abstract class NotSQLite extends NotDatabase {
 
         File databaseFile = new File(plugin.getDataFolder(), databasePath);
         hikariConfig.setJdbcUrl("jdbc:sqlite:" + databaseFile.getAbsolutePath());
-        hikariConfig.setDataSourceClassName("org.sqlite.SQLiteDataSource");
+        // hikariConfig.setDataSourceClassName("org.sqlite.SQLiteDataSource");
         hikariConfig.addDataSourceProperty("cachePrepStmts", "true");
         hikariConfig.addDataSourceProperty("prepStmtCacheSize", "250");
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
@@ -49,18 +51,7 @@ public abstract class NotSQLite extends NotDatabase {
     }
 
     @Override
-    public boolean tableExists(String tableName) {
-        try {
-            ResultSet result = processPreparedResult("SELECT name FROM sqlite_master WHERE type='table' AND name=?", tableName);
-            if (result.next()) return result.getString("name").equalsIgnoreCase(tableName);
-        } catch (Exception e) {
-            plugin.getLogger().severe("Error checking if table exists: " + e.getMessage());
-        }
-        return false;
-    }
-
-    @Override
-    public void createTable(NotTable table) {
+    public boolean createTable(NotTable table) {
         StringBuilder sql = new StringBuilder("CREATE TABLE IF NOT EXISTS " + table.getName() + " (");
         for (int i = 0; i < table.getColumns().size(); i++) {
             NotColumn column = table.getColumns().get(i);
@@ -73,9 +64,10 @@ public abstract class NotSQLite extends NotDatabase {
         }
         sql.append(");");
 
-        processQuery(sql.toString());
+        return processQuery(sql.toString());
     }
 
+    @Override
     public void insertRow(NotTable table, List<Object> row) {
         StringBuilder sql = new StringBuilder("INSERT INTO " + table.getName() + " (");
         for (int i = 0; i < table.getColumns().size(); i++) {
@@ -85,11 +77,22 @@ public abstract class NotSQLite extends NotDatabase {
         }
         sql.append(") VALUES (");
         for (int i = 0; i < row.size(); i++) {
-            sql.append("'").append(row.get(i)).append("'");
+            sql.append("?");
             if (i < row.size() - 1) sql.append(", ");
         }
-        sql.append(");");
-
-        processQuery(sql.toString());
+        sql.append(")");
+        
+        try (Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+            
+            for (int i = 0; i < row.size(); i++) {
+                stmt.setObject(i + 1, row.get(i));
+            }
+            
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error inserting row: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
