@@ -36,7 +36,7 @@ public class NotColumn {
     public String getDefaultValue() { return defaultValue; }
 
     public static NotColumn string(String name) { return new NotColumn(name).type(NotColumnType.STRING); }
-    public static NotColumn varchar(String name, int length) { return new NotColumn(name).type(NotColumnType.STRING).length(length); }
+    public static NotColumn varchar(String name, int length) { return new NotColumn(name).type(NotColumnType.VARCHAR).length(length); }
     public static NotColumn integer(String name) { return new NotColumn(name).type(NotColumnType.INTEGER).length(11); }
     public static NotColumn integer(String name, int length) { return new NotColumn(name).type(NotColumnType.INTEGER).length(length); }
     public static NotColumn longType(String name) { return new NotColumn(name).type(NotColumnType.LONG); }

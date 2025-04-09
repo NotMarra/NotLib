@@ -2,6 +2,7 @@ package com.notmarra.notlib.database.structure;
 
 public enum NotColumnType {
     STRING("TEXT"),
+    VARCHAR("VARCHAR"),
     INTEGER("INTEGER"),
     LONG("BIGINT"),
     FLOAT("FLOAT"),
