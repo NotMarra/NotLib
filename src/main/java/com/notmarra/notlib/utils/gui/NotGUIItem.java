@@ -1,16 +1,22 @@
 package com.notmarra.notlib.utils.gui;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.profile.PlayerTextures;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
 import com.notmarra.notlib.utils.ChatF;
 
 import net.kyori.adventure.text.Component;
@@ -24,6 +30,7 @@ public class NotGUIItem {
     private Material itemType;
     private Component itemName;
     private List<Component> itemLore;
+    private String skullTexture;
 
     public NotGUIItem(NotGUI gui, Material itemType) {
         this(gui, null, itemType);
@@ -34,6 +41,11 @@ public class NotGUIItem {
         this.parentGUI = gui;
         this.parentContainer = parentContainer;
         this.itemType = itemType;
+    }
+
+    public NotGUIItem withSkullTexture(String textureValue) {
+        this.skullTexture = textureValue;
+        return this;
     }
 
     public UUID id() { return uid; }
@@ -83,21 +95,38 @@ public class NotGUIItem {
     }
 
     public ItemStack build() {
-        ItemStack stack = new ItemStack(itemType);
-        stack.setAmount(itemAmount);
+    ItemStack stack = new ItemStack(itemType);
+    stack.setAmount(itemAmount);
 
-        ItemMeta meta = stack.getItemMeta();
-        meta.displayName(itemName);
-        meta.lore(itemLore);
+    ItemMeta meta = stack.getItemMeta();
+    meta.displayName(itemName);
+    meta.lore(itemLore);
 
-        NamespacedKey key = new NamespacedKey(gui().getPlugin(), NotGUI.ITEM_UUID_KEY);
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.set(key, PersistentDataType.STRING, uid.toString());
-
-        stack.setItemMeta(meta);
-
-        return stack;
+    if (itemType == Material.PLAYER_HEAD && skullTexture != null) {
+        try {
+            SkullMeta skullMeta = (SkullMeta) meta;
+            PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
+            
+            PlayerTextures textures = profile.getTextures();
+            URL url = new URI("http://textures.minecraft.net/texture/" + skullTexture).toURL();
+            textures.setSkin(url);
+            profile.setTextures(textures);
+            
+            skullMeta.setPlayerProfile(profile);
+            meta = skullMeta;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    NamespacedKey key = new NamespacedKey(gui().getPlugin(), NotGUI.ITEM_UUID_KEY);
+    PersistentDataContainer container = meta.getPersistentDataContainer();
+    container.set(key, PersistentDataType.STRING, uid.toString());
+
+    stack.setItemMeta(meta);
+
+    return stack;
+}
 
     public NotGUI gui() {
         return parentGUI;
