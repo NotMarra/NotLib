@@ -46,6 +46,10 @@ class NotDevListener extends NotListener {
                     .withSkullTexture("1aec2a159f62d2ace9e1d3e5057a7f8d1ec3ffdfe92433e0a09a9837cadf2083")
                     .addToGUI(0)
                 .createItem(Material.DIAMOND_AXE)
+                    .onClick((event, c) -> {
+                        event.setCancelled(true);
+                        ChatF.of("Clicked on skull texture!").sendTo(cmd.getPlayer());
+                    })
                     .addToGUI(1)
                 .open(cmd.getPlayer());
         });

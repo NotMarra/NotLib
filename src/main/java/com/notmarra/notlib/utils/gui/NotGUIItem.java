@@ -5,10 +5,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -31,7 +33,7 @@ public class NotGUIItem {
     private Component itemName;
     private List<Component> itemLore;
     private String skullTexture;
-    private boolean isButton = false;
+    private BiConsumer<InventoryClickEvent, NotGUIContainer> action = null;
 
     public NotGUIItem(NotGUI gui, Material itemType) {
         this(gui, null, itemType);
@@ -44,12 +46,6 @@ public class NotGUIItem {
         this.itemType = itemType;
     }
 
-    public boolean isButton() { return isButton; }
-    public NotGUIItem asButton() {
-        this.isButton = true;
-        return this;
-    }
-
     public NotGUIItem withSkullTexture(String textureValue) {
         this.skullTexture = textureValue;
         return this;
@@ -60,6 +56,7 @@ public class NotGUIItem {
     public Material type() { return itemType; }
     public Component name() { return itemName; }
     public List<Component> lore() { return itemLore; }
+    public BiConsumer<InventoryClickEvent, NotGUIContainer> action() { return action; }
 
     public NotGUIItem amount(int itemAmount) {
         this.itemAmount = itemAmount;
@@ -100,6 +97,9 @@ public class NotGUIItem {
         this.itemLore = lore;
         return this;
     }
+
+    public NotGUIItem action(BiConsumer<InventoryClickEvent, NotGUIContainer> action) { this.action = action; return this; }
+    public NotGUIItem onClick(BiConsumer<InventoryClickEvent, NotGUIContainer> action) { return action(action); }
 
     public ItemStack build() {
         ItemStack stack = new ItemStack(itemType);

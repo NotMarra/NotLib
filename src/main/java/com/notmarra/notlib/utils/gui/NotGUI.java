@@ -158,7 +158,7 @@ public class NotGUI implements InventoryHolder {
         rootContainer.addButton(material, name, x, y, action);
         return this;
     }
-    
+
     public NotGUIItem createItem(Material material) {
         return new NotGUIItem(this, rootContainer, material);
     }

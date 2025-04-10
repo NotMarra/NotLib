@@ -458,13 +458,12 @@ public class NotQuestGUI {
                     lore.add(ChatF.of("One-time quest completed", ChatF.C_GRAY).toString());
                 }
                 
-                NotGUIItem item = content.createItem(MATERIAL_COMPLETED_QUEST, slot % 9, slot / 9)
+                content.createItem(MATERIAL_COMPLETED_QUEST, slot % 9, slot / 9)
                     .name(ChatF.empty().append(quest.getTitle(), ChatF.C_YELLOW))
-                    .lore(lore);
-                
-                content.registerClickHandler(item.id(), (event, container) -> {
-                    openQuestDetails(player, questId);
-                });
+                    .lore(lore)
+                    .onClick((event, container) -> {
+                        openQuestDetails(player, questId);
+                    });
             }
         }
         
@@ -822,11 +821,10 @@ public class NotQuestGUI {
         lore.add(ChatF.newline());
         lore.add(ChatF.of("Click to view details", ChatF.C_DARKGRAY));
         
-        NotGUIItem item = container.createItem(material, slot % 9, slot / 9)
+        container.createItem(material, slot % 9, slot / 9)
             .name(ChatF.empty().append(quest.getTitle(), nameColor))
-            .lore(lore);
-        
-        container.registerClickHandler(item.id(), clickAction);
+            .lore(lore)
+            .onClick(clickAction);
     }
     
     private void fillBackground(NotGUIContainer container, Material material) {

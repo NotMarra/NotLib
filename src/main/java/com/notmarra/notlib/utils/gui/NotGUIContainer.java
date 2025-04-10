@@ -33,7 +33,7 @@ public class NotGUIContainer {
     private Map<UUID, NotGUIItem> notItems;
     private Map<Integer, ItemStack> items;
 
-    private Map<UUID, BiConsumer<InventoryClickEvent, NotGUIContainer>> clickHandlers;
+    // private Map<UUID, BiConsumer<InventoryClickEvent, NotGUIContainer>> clickHandlers;
     private boolean wrapped;
 
     public NotGUIContainer(NotGUI gui) {
@@ -51,7 +51,7 @@ public class NotGUIContainer {
         notItems = new HashMap<>();
         items = new HashMap<>();
         
-        clickHandlers = new HashMap<>();
+        // clickHandlers = new HashMap<>();
         wrapped = true;
     }
 
@@ -87,15 +87,9 @@ public class NotGUIContainer {
     public NotGUIContainer size(NotSize size) { this.size = size; return this; }
 
     public BiConsumer<InventoryClickEvent, NotGUIContainer> getHandler(UUID itemId) {
-        BiConsumer<InventoryClickEvent, NotGUIContainer> handler = clickHandlers.get(itemId);
-        if (handler != null) return handler;
-
-        for (NotGUIContainer child : children) {
-            handler = child.getHandler(itemId);
-            if (handler != null) return handler;
-        }
-
-        return null;
+        NotGUIItem item = getNotItem(itemId);
+        if (item != null) return item.action();
+        return (BiConsumer<InventoryClickEvent, NotGUIContainer>) (event, container) -> {};
     }
 
     public NotGUIContainer createContainer() {
@@ -155,15 +149,18 @@ public class NotGUIContainer {
     }
 
     public NotGUIContainer addButton(NotGUIItem item, int slot, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
-        addItem(item, slot);
-        registerClickHandler(item.id(), action);
+        addItem(item.action(action), slot);
+        return this;
+    }
+
+    public NotGUIContainer addButton(NotGUIItem item, int x, int y, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
+        addItem(item.action(action), x, y);
         return this;
     }
     
     public NotGUIContainer addButton(Material material, ChatF name, int slot, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
-        NotGUIItem item = new NotGUIItem(gui, this, material).name(name).asButton();
+        NotGUIItem item = new NotGUIItem(gui, this, material).name(name).action(action);
         addItem(item, slot);
-        registerClickHandler(item.id(), action);
         return this;
     }
 
@@ -218,11 +215,6 @@ public class NotGUIContainer {
         }
     }
     
-    public NotGUIContainer registerClickHandler(UUID itemId, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
-        clickHandlers.put(itemId, action);
-        return this;
-    }
-
     public UUID getItemIdFromItemStack(ItemStack item) {
         if (item == null || !item.hasItemMeta()) return null;
 
@@ -251,7 +243,7 @@ public class NotGUIContainer {
         UUID itemId = getItemIdFromItemStack(clickedItem);
 
         if (itemId != null) {
-            BiConsumer<InventoryClickEvent, NotGUIContainer> handler = clickHandlers.get(itemId);
+            BiConsumer<InventoryClickEvent, NotGUIContainer> handler = getHandler(itemId);
             if (handler != null) {
                 handler.accept(event, this);
                 return true;
