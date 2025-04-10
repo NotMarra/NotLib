@@ -1,6 +1,4 @@
 database:
-  use: "SQLite"
-
   # Configuration for SQLite
   SQLite:
     # name of the file with the saved data
@@ -10,14 +8,25 @@ database:
 
   MySQL:
     # host of the MySQL server
-    host: ''
+    host: '127.0.0.1'
     # port of the MySQL server
     port: 3306
     # username of the MySQL server
-    username: ''
+    username: 'root'
     # password of the MySQL server
     password: ''
     # database of the MySQL server
-    database: ''
-    # table of the MySQL server
-    table: 'NotCredits'
+    database: 'notlib'
+
+  NotDevTestMySQL:
+    MySQL:
+    # host of the MySQL server
+    host: '127.0.0.1'
+    # port of the MySQL server
+    port: 3306
+    # username of the MySQL server
+    username: 'root'
+    # password of the MySQL server
+    password: ''
+    # database of the MySQL server
+    database: 'notlib'

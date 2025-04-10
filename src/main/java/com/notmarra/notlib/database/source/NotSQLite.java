@@ -2,6 +2,7 @@ package com.notmarra.notlib.database.source;
 
 import com.notmarra.notlib.database.NotDatabase;
 import com.notmarra.notlib.database.structure.NotColumn;
+import com.notmarra.notlib.database.structure.NotColumnType;
 import com.notmarra.notlib.database.structure.NotTable;
 import com.notmarra.notlib.extensions.NotPlugin;
 import com.zaxxer.hikari.HikariConfig;
@@ -56,7 +57,17 @@ public abstract class NotSQLite extends NotDatabase {
         StringBuilder sql = new StringBuilder("CREATE TABLE IF NOT EXISTS " + table.getName() + " (");
         for (int i = 0; i < table.getColumns().size(); i++) {
             NotColumn column = table.getColumns().get(i);
-            sql.append(column.getName()).append(" ").append(column.getType().getSqlType());
+            NotColumnType type = column.getType();
+            sql.append(column.getName()).append(" ").append(type.getSqlType());
+            
+            if (type == NotColumnType.VARCHAR || type == NotColumnType.CHAR || 
+                type == NotColumnType.BIT || type == NotColumnType.BINARY || 
+                type == NotColumnType.VARBINARY) {
+                sql.append("(").append(column.getLength()).append(")");
+            } else if (type == NotColumnType.DECIMAL) {
+                sql.append("(").append(column.getPrecision()).append(",").append(column.getScale()).append(")");
+            }
+
             if (column.isPrimaryKey()) sql.append(" PRIMARY KEY");
             if (column.isAutoIncrement()) sql.append(" AUTOINCREMENT");
             if (column.isNotNull()) sql.append(" NOT NULL");
@@ -69,7 +80,7 @@ public abstract class NotSQLite extends NotDatabase {
     }
 
     @Override
-    public void insertRow(NotTable table, List<Object> row) {
+    public boolean insertRow(NotTable table, List<Object> row) {
         StringBuilder sql = new StringBuilder("INSERT INTO " + table.getName() + " (");
         for (int i = 0; i < table.getColumns().size(); i++) {
             NotColumn column = table.getColumns().get(i);
@@ -90,10 +101,11 @@ public abstract class NotSQLite extends NotDatabase {
                 stmt.setObject(i + 1, row.get(i));
             }
             
-            stmt.executeUpdate();
+            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             plugin.getLogger().severe("Error inserting row: " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
     }
 }

@@ -112,6 +112,11 @@ public abstract class NotPlugin extends JavaPlugin {
         CMDGROUPS.values().forEach(c -> c.register());
     }
 
+    @Override
+    public void onDisable() {
+        db().close();
+    }
+
     public FileConfiguration getSubConfig(String file) { return CONFIGS.get(file); }
     public FileConfiguration reloadConfig(String file) {
         File configFile = new File(getDataFolder(), file);

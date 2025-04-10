@@ -1,6 +1,7 @@
 package com.notmarra.notlib;
 
 import com.notmarra.notlib.extensions.NotPlugin;
+import com.notmarra.notlib.quests.NotQuestListener;
 import com.notmarra.notlib.utils.ChatF;
 import com.notmarra.notlib.utils.NotDebugger;
 import com.notmarra.notlib.utils.gui.NotGUIListener;
@@ -19,8 +20,14 @@ public final class NotLib extends NotPlugin {
         // listeners
         addListener(new NotGUIListener(this));
 
+        addListener(new NotQuestListener(this));
+
         // commands
         addCommandGroup(new NotDevCommandGroup(this));
+
+        // TODO: test stuff, remove
+        addListener(new NotDevListener(this));
+        // db().registerDatabase(new NotDevTestMySQL(this, CONFIG_YML));
 
         // plugin callbacks
         addPluginEnabledCallback("PlaceholderAPI", () -> hasPlaceholderAPI = true);

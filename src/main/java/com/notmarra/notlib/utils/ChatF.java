@@ -40,6 +40,10 @@ public class ChatF {
     public static final TextColor C_LIME = TextColor.color(0, 255, 0);
     public static final TextColor C_BROWN = TextColor.color(165, 42, 42);
     public static final TextColor C_GOLD = TextColor.color(255, 215, 0);
+    public static final TextColor C_AQUA = TextColor.color(0, 255, 255);
+    public static final TextColor C_LIGHTPURPLE = TextColor.color(255, 182, 193);
+    public static final TextColor C_LIGHTBLUE = TextColor.color(173, 216, 230);
+    public static final TextColor C_LIGHTRED = TextColor.color(255, 182, 193);
 
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
 
@@ -209,6 +213,10 @@ public class ChatF {
 
     public static ChatF empty() {
         return new ChatF(Component.empty());
+    }
+
+    public static ChatF newline() {
+        return new ChatF(Component.newline());
     }
 
     public static ChatF of(Component inputComponent) {

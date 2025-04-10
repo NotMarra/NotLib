@@ -1,39 +1,35 @@
-Base example of a NotDatabase for SQLite
+package com.notmarra.notlib;
 
-## config.yml
-```yml
-database:
-  <id>:
-    # name of the file with the saved data
-    file: "notlibtest"
-```
+import java.util.List;
 
-## NotPlugin.java
-```java
-@Override
-public void initNotPlugin() {
-    db().registerDatabase(new MySQLite(this, "config.yml"));
-}
-```
+import org.bukkit.entity.Player;
 
-## MySQLite.java
-```java
-public class MySQLite extends NotSQLite {
-    public static final String ID = "SQLite";
+import com.notmarra.notlib.database.query.NotSqlWhereBuilder;
+import com.notmarra.notlib.database.source.NotMySQL;
+import com.notmarra.notlib.database.structure.NotColumn;
+import com.notmarra.notlib.database.structure.NotRecord;
+import com.notmarra.notlib.database.structure.NotTable;
+import com.notmarra.notlib.extensions.NotPlugin;
+
+class NotDevTestMySQL extends NotMySQL {
+    public static final String ID = "NotDevTestMySQL";
 
     public final String T_USERS = "users";
     public final String T_USERS_C_UUID = "uuid";
     public final String T_USERS_C_PLAYER_NAME = "player_name";
     public final String T_USERS_C_BALANCE = "balance";
 
-    public MySQLite(NotPlugin plugin, String defaultConfig) {
+    public NotDevTestMySQL(NotPlugin plugin, String defaultConfig) {
         super(plugin, defaultConfig);
         registerConfigurable();
     }
 
-    // NOTE: This is the id of the database in the config at path "database.<id>"
     @Override
     public String getId() { return ID; }
+
+    public List<NotRecord> getPlayersWhere(NotSqlWhereBuilder where) {
+        return getTable(T_USERS).recordsGet(where);
+    }
 
     public double getPlayerBalance(Player player) {
         return getTable(T_USERS)
@@ -75,4 +71,3 @@ public class MySQLite extends NotSQLite {
         );
     }
 }
-```

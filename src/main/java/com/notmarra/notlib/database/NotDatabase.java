@@ -3,6 +3,7 @@ package com.notmarra.notlib.database;
 import com.notmarra.notlib.NotLib;
 import com.notmarra.notlib.database.query.NotSqlBuilder;
 import com.notmarra.notlib.database.query.NotSqlQueryExecutor;
+import com.notmarra.notlib.database.structure.NotRecord;
 import com.notmarra.notlib.database.structure.NotTable;
 import com.notmarra.notlib.extensions.NotConfigurable;
 import com.notmarra.notlib.extensions.NotPlugin;
@@ -38,13 +39,6 @@ public abstract class NotDatabase extends NotConfigurable {
     }
 
     @Override
-    public NotConfigurable registerConfigurable() {
-        super.registerConfigurable();
-        registerTables();
-        return this;
-    }
-
-    @Override
     public List<String> getConfigPaths() { return List.of(defaultConfig); }
     
     public abstract String getId();
@@ -55,28 +49,21 @@ public abstract class NotDatabase extends NotConfigurable {
 
     public abstract boolean createTable(NotTable table);
 
-    public abstract void insertRow(NotTable table, List<Object> row);
+    public abstract boolean insertRow(NotTable table, List<Object> row);
 
-    // sql builder
     public NotSqlBuilder select(String table) { return NotSqlBuilder.select(table); }
     public NotSqlBuilder select(String table, List<String> columns) { return NotSqlBuilder.select(table, columns); }
     public NotSqlBuilder insertInto(String table) { return NotSqlBuilder.insertInto(table); }
     public NotSqlBuilder update(String table) { return NotSqlBuilder.update(table); }
     public NotSqlBuilder deleteFrom(String table) { return NotSqlBuilder.deleteFrom(table); }
     public boolean exists(NotSqlBuilder builder) { return queryExecutor.exists(builder); }
-    public List<Map<String, Object>> query(NotSqlBuilder builder) { return queryExecutor.executeQuery(builder); }
+    public List<NotRecord> query(NotSqlBuilder builder) { return queryExecutor.executeQuery(builder); }
     public int execute(NotSqlBuilder builder) { return queryExecutor.executeUpdate(builder); }
-    public List<Map<String, Object>> executeQuery(NotSqlBuilder builder) { return queryExecutor.executeQuery(builder); }
-    public Map<String, Object> fetchOne(NotSqlBuilder builder) { return queryExecutor.fetchOne(builder); }
+    public List<NotRecord> executeQuery(NotSqlBuilder builder) { return queryExecutor.executeQuery(builder); }
+    public NotRecord fetchOne(NotSqlBuilder builder) { return queryExecutor.fetchOne(builder); }
 
     public NotSqlQueryExecutor getQueryExecutor() {
         return queryExecutor;
-    }
-
-    private void registerTables() {
-        for (NotTable table : setupTables()) {
-            tables.put(table.getName(), table);
-        }
     }
 
     public Map<String, NotTable> getTables() { return tables; }
@@ -84,11 +71,9 @@ public abstract class NotDatabase extends NotConfigurable {
 
     public void setup() {
         for (NotTable table : setupTables()) {
-            if (createTable(table)) {
-                for (List<Object> row : table.getInsertList()) {
-                    insertRow(table, row);
-                }
-            }
+            table.setDbCtx(this);
+            table.createDb();
+            tables.put(table.getName(), table);
         }
     }
     
@@ -123,46 +108,42 @@ public abstract class NotDatabase extends NotConfigurable {
     }
 
     public Object convertValue(String columnType, Object value) {
-    if (value == null) {
-        return null;
-    }
+        if (value == null) {
+            return null;
+        }
 
-    // Normalize the type name to uppercase for case-insensitive comparison
-    String normalizedType = columnType.toUpperCase();
-
-    switch (normalizedType) {
-        case "TEXT":
-        case "VARCHAR":
-        case "CHAR":
-        case "LONGTEXT":
-        case "MEDIUMTEXT":
-        case "TINYTEXT":
-        case "STRING":
-            return String.valueOf(value);
-        case "INT":
-        case "INTEGER":
-        case "SMALLINT":
-        case "TINYINT":
-        case "MEDIUMINT":
-        case "BIGINT":
-            return Integer.valueOf(String.valueOf(value));
-        case "REAL":
-        case "DOUBLE":
-            return Double.valueOf(String.valueOf(value));
-        case "FLOAT":
-            return Float.valueOf(String.valueOf(value));
-        case "BOOLEAN":
-        case "BOOL":
-            return Boolean.valueOf(String.valueOf(value));
-        case "DATE":
-        case "TIME":
-        case "DATETIME":
-        case "TIMESTAMP":
-            return String.valueOf(value);
-        default:
-            plugin.getLogger().warning("Unsupported column type: " + columnType + 
-                                     ". Returning as string.");
-            return String.valueOf(value); 
+        switch (columnType.toUpperCase()) {
+            case "TEXT":
+            case "VARCHAR":
+            case "CHAR":
+            case "LONGTEXT":
+            case "MEDIUMTEXT":
+            case "TINYTEXT":
+            case "STRING":
+                return String.valueOf(value);
+            case "INT":
+            case "INTEGER":
+            case "SMALLINT":
+            case "TINYINT":
+            case "MEDIUMINT":
+            case "BIGINT":
+                return Integer.valueOf(String.valueOf(value));
+            case "REAL":
+            case "DOUBLE":
+                return Double.valueOf(String.valueOf(value));
+            case "FLOAT":
+                return Float.valueOf(String.valueOf(value));
+            case "BOOLEAN":
+            case "BOOL":
+                return Boolean.valueOf(String.valueOf(value));
+            case "DATE":
+            case "TIME":
+            case "DATETIME":
+            case "TIMESTAMP":
+                return String.valueOf(value);
+            default:
+                getLogger().error("Unsupported column type: " + columnType + ". Returning as string.");
+                return String.valueOf(value); 
     }
 }
 
@@ -170,7 +151,7 @@ public abstract class NotDatabase extends NotConfigurable {
         try (Connection connection = getConnection()) {
             consumer.accept(connection);
         } catch (Exception e) {
-            plugin.getLogger().severe("Error processing connection: " + e.getMessage());
+            getLogger().error("Error processing connection: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -179,30 +160,31 @@ public abstract class NotDatabase extends NotConfigurable {
         try (Connection connection = getConnection()) {
             consumer.accept(connection, connection.createStatement());
         } catch (Exception e) {
-            plugin.getLogger().severe("Error processing statement: " + e.getMessage());
+            getLogger().error("Error processing statement: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     public boolean processQuery(String sql) {
         try (Connection connection = getConnection()) {
-            plugin.getLogger().info("Executing SQL: " + sql);
+            if (NotDebugger.should(NotLib.DEBUG_DB)) {
+                getLogger().info("[processQuery] SQL: " + sql);
+            }
             return connection.createStatement().execute(sql);
         } catch (Exception e) {
-            plugin.getLogger().severe("Error processing query: " + e.getMessage());
+            getLogger().error("Error processing query: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
 
-    public List<Map<String, Object>> processResult(String sql) { return processResult(sql, null); }
-
-    public List<Map<String, Object>> processResult(String sql, List<Object> params) {
-        if (sql == null || sql.isEmpty()) return null;
+    public List<NotRecord> processResult(String sql, List<Object> params) {
+        if (sql == null || sql.isEmpty()) return List.of();
         
 
         if (NotDebugger.should(NotLib.DEBUG_DB)) {
-            getLogger().info("Executing SQL: " + sql);
+            getLogger().info("[processResult] SQL: " + sql);
+            getLogger().info("[processResult] Params: " + params);
         }
 
         try (Connection connection = getConnection();
@@ -217,7 +199,7 @@ public abstract class NotDatabase extends NotConfigurable {
             try (ResultSet rs = stmt.executeQuery()) {
                 ResultSetMetaData metaData = rs.getMetaData();
                 int columnCount = metaData.getColumnCount();
-                List<Map<String, Object>> resultList = new ArrayList<>();
+                List<NotRecord> resultList = new ArrayList<>();
                 
                 while (rs.next()) {
                     Map<String, Object> row = new HashMap<>();
@@ -227,13 +209,13 @@ public abstract class NotDatabase extends NotConfigurable {
                         Object columnValue = rs.getObject(i);
                         row.put(columnName, convertValue(columnType, columnValue));
                     }
-                    resultList.add(row);
+                    resultList.add(new NotRecord(row));
                 }
                 
                 return resultList;
             }
         } catch (SQLException e) {
-            plugin.getLogger().severe("Error processing query: " + e.getMessage());
+            getLogger().error("Error processing query: " + e.getMessage());
             e.printStackTrace();
             return List.of();
         }

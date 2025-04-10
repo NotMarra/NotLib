@@ -8,7 +8,7 @@ import java.util.Map;
 public class NotSqlBuilder {
     private String table;
     private List<String> columns = new ArrayList<>();
-    private List<WhereClause> whereClauses = new ArrayList<>();
+    private NotSqlWhereBuilder whereBuilder = NotSqlWhereBuilder.create();
     private List<String> joinClauses = new ArrayList<>();
     private List<String> orderByClauses = new ArrayList<>();
     private List<String> groupByClauses = new ArrayList<>();
@@ -63,23 +63,28 @@ public class NotSqlBuilder {
     }
 
     // WHERE clauses
+    public NotSqlBuilder where(NotSqlWhereBuilder where) {
+        this.whereBuilder = where;
+        return this;
+    }
+
     public NotSqlBuilder where(String column, String operator, Object value) {
-        this.whereClauses.add(new WhereClause(column, operator, value, "AND"));
+        this.whereBuilder.and(column, operator, value);
         return this;
     }
 
     public NotSqlBuilder where(String rawCondition) {
-        this.whereClauses.add(new WhereClause(rawCondition, "AND"));
+        this.whereBuilder.and(rawCondition);
         return this;
     }
 
     public NotSqlBuilder orWhere(String column, String operator, Object value) {
-        this.whereClauses.add(new WhereClause(column, operator, value, "OR"));
+        this.whereBuilder.or(column, operator, value);
         return this;
     }
 
     public NotSqlBuilder orWhere(String rawCondition) {
-        this.whereClauses.add(new WhereClause(rawCondition, "OR"));
+        this.whereBuilder.or(rawCondition);
         return this;
     }
 
@@ -184,7 +189,7 @@ public class NotSqlBuilder {
             query.append(" ").append(String.join(" ", joinClauses));
         }
 
-        appendWhereClauses(query);
+        whereBuilder.build(query);
         appendGroupByClause(query);
         appendOrderByClause(query);
         appendLimitOffset(query);
@@ -225,7 +230,7 @@ public class NotSqlBuilder {
 
         query.append(String.join(", ", setStatements));
 
-        appendWhereClauses(query);
+        whereBuilder.build(query);
 
         return query.toString();
     }
@@ -233,34 +238,9 @@ public class NotSqlBuilder {
     private String buildDeleteQuery() {
         StringBuilder query = new StringBuilder("DELETE FROM ").append(table);
 
-        appendWhereClauses(query);
+        whereBuilder.build(query);
 
         return query.toString();
-    }
-
-    private void appendWhereClauses(StringBuilder query) {
-        if (!whereClauses.isEmpty()) {
-            query.append(" WHERE ");
-            boolean isFirst = true;
-
-            for (WhereClause clause : whereClauses) {
-                if (!isFirst) {
-                    query.append(" ").append(clause.getLogicalOperator()).append(" ");
-                }
-                
-                if (clause.isRaw()) {
-                    query.append(clause.getRawCondition());
-                } else {
-                    query.append(clause.getColumn())
-                        .append(" ")
-                        .append(clause.getOperator())
-                        .append(" ")
-                        .append(formatValue(clause.getValue()));
-                }
-                
-                isFirst = false;
-            }
-        }
     }
 
     private void appendGroupByClause(StringBuilder query) {
@@ -285,18 +265,6 @@ public class NotSqlBuilder {
         }
     }
 
-    // private String formatValue(Object value) {
-    //     if (value == null) {
-    //         return "NULL";
-    //     } else if (value instanceof String) {
-    //         return "'" + ((String) value).replace("'", "''") + "'";
-    //     } else if (value instanceof Number || value instanceof Boolean) {
-    //         return value.toString();
-    //     } else {
-    //         return "'" + value.toString().replace("'", "''") + "'";
-    //     }
-    // }
-
     private String formatValue(Object value) {
         if (value == null) return "NULL";
         return "?";
@@ -305,11 +273,7 @@ public class NotSqlBuilder {
     public List<Object> getParameters() {
         List<Object> params = new ArrayList<>();
         
-        for (WhereClause clause : whereClauses) {
-            if (!clause.isRaw()) {
-                params.add(clause.getValue());
-            }
-        }
+        params.addAll(whereBuilder.getParameters());
         
         if (queryType == QueryType.UPDATE) {
             for (Object value : updateValues.values()) {
@@ -324,35 +288,5 @@ public class NotSqlBuilder {
         }
         
         return params;
-    }
-
-    private static class WhereClause {
-        private String column;
-        private String operator;
-        private Object value;
-        private String logicalOperator;
-        private boolean isRaw;
-        private String rawCondition;
-
-        public WhereClause(String column, String operator, Object value, String logicalOperator) {
-            this.column = column;
-            this.operator = operator;
-            this.value = value;
-            this.logicalOperator = logicalOperator;
-            this.isRaw = false;
-        }
-
-        public WhereClause(String rawCondition, String logicalOperator) {
-            this.rawCondition = rawCondition;
-            this.logicalOperator = logicalOperator;
-            this.isRaw = true;
-        }
-
-        public String getColumn() { return column; }
-        public String getOperator() { return operator; }
-        public Object getValue() { return value; }
-        public String getLogicalOperator() { return logicalOperator; }
-        public boolean isRaw() { return isRaw; }
-        public String getRawCondition() { return rawCondition; }
     }
 }

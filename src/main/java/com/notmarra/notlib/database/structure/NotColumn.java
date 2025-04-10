@@ -4,6 +4,8 @@ public class NotColumn {
     private final String name;
     private NotColumnType type;
     private int length;
+    private int precision;  // For DECIMAL type
+    private int scale;      // For DECIMAL type
     private boolean primaryKey;
     private boolean autoIncrement;
     private boolean notNull;
@@ -24,11 +26,18 @@ public class NotColumn {
     public NotColumn notNull() { this.notNull = true; return this; }
     public NotColumn unique() { this.unique = true; return this; }
     public NotColumn length(int length) { this.length = length; return this; }
+    public NotColumn precision(int precision, int scale) { 
+        this.precision = precision; 
+        this.scale = scale; 
+        return this; 
+    }
     public NotColumn defaultValue(String defaultValue) { this.defaultValue = defaultValue; return this; }
 
     public String getName() { return name; }
     public NotColumnType getType() { return type; }
     public int getLength() { return length; }
+    public int getPrecision() { return precision; }
+    public int getScale() { return scale; }
     public boolean isPrimaryKey() { return primaryKey; }
     public boolean isAutoIncrement() { return autoIncrement; }
     public boolean isNotNull() { return notNull; }
@@ -47,4 +56,10 @@ public class NotColumn {
     public static NotColumn time(String name) { return new NotColumn(name).type(NotColumnType.TIME); }
     public static NotColumn dateTime(String name) { return new NotColumn(name).type(NotColumnType.DATETIME); }
     public static NotColumn timeStamp(String name) { return new NotColumn(name).type(NotColumnType.TIMESTAMP); }
+    
+    public static NotColumn char_(String name, int length) { return new NotColumn(name).type(NotColumnType.CHAR).length(length); }
+    public static NotColumn decimal(String name, int precision, int scale) { return new NotColumn(name).type(NotColumnType.DECIMAL).precision(precision, scale); }
+    public static NotColumn bit(String name, int length) { return new NotColumn(name).type(NotColumnType.BIT).length(length); }
+    public static NotColumn binary(String name, int length) { return new NotColumn(name).type(NotColumnType.BINARY).length(length); }
+    public static NotColumn varbinary(String name, int length) { return new NotColumn(name).type(NotColumnType.VARBINARY).length(length); }
 }

@@ -63,13 +63,20 @@ public abstract class NotMySQL extends NotDatabase {
             NotColumn column = table.getColumns().get(i);
             NotColumnType type = column.getType();
             sql.append(column.getName()).append(" ").append(type.getSqlType());
-            if (type == NotColumnType.VARCHAR) {
+            
+            if (type == NotColumnType.VARCHAR || type == NotColumnType.CHAR || 
+                type == NotColumnType.BIT || type == NotColumnType.BINARY || 
+                type == NotColumnType.VARBINARY) {
                 sql.append("(").append(column.getLength()).append(")");
+            } else if (type == NotColumnType.DECIMAL) {
+                sql.append("(").append(column.getPrecision()).append(",").append(column.getScale()).append(")");
             }
+            
             if (column.isPrimaryKey()) sql.append(" PRIMARY KEY");
             if (column.isAutoIncrement()) sql.append(" AUTO_INCREMENT");
             if (column.isNotNull()) sql.append(" NOT NULL");
             if (column.isUnique()) sql.append(" UNIQUE");
+            if (column.getDefaultValue() != null) sql.append(" DEFAULT '").append(column.getDefaultValue()).append("'");
             if (i < table.getColumns().size() - 1) sql.append(", ");
         }
         sql.append(");");
@@ -78,7 +85,7 @@ public abstract class NotMySQL extends NotDatabase {
     }
 
     @Override
-    public void insertRow(NotTable table, List<Object> row) {
+    public boolean insertRow(NotTable table, List<Object> row) {
         StringBuilder sql = new StringBuilder("INSERT INTO " + table.getName() + " (");
         for (int i = 0; i < table.getColumns().size(); i++) {
             NotColumn column = table.getColumns().get(i);
@@ -99,10 +106,11 @@ public abstract class NotMySQL extends NotDatabase {
                 stmt.setObject(i + 1, row.get(i));
             }
             
-            stmt.executeUpdate();
+            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             plugin.getLogger().severe("Error inserting row: " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
     }
 }
