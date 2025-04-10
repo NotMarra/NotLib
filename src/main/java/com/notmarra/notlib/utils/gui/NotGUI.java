@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -16,6 +17,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 
 import com.notmarra.notlib.NotLib;
 import com.notmarra.notlib.utils.ChatF;
@@ -126,9 +128,14 @@ public class NotGUI implements InventoryHolder {
         rootContainer.addItem(item, slot);
         return this;
     }
-    
+
     public NotGUI addItem(NotGUIItem item, int x, int y) {
         rootContainer.addItem(item, x, y);
+        return this;
+    }
+
+    public NotGUI addButton(NotGUIItem item, int slot, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
+        rootContainer.addButton(item, slot, action);
         return this;
     }
     
@@ -236,6 +243,10 @@ public class NotGUI implements InventoryHolder {
         this.onClose = onClose;
         return this;
     }
+
+    public UUID getItemIdFromItemStack(ItemStack item) { return rootContainer.getItemIdFromItemStack(item); }
+    public NotGUIItem getNotItem(UUID itemId) { return rootContainer.getNotItem(itemId); }
+    public ItemStack getItem(int slot) { return rootContainer.getItem(slot); }
 
     // Animations
 

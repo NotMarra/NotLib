@@ -31,6 +31,7 @@ public class NotGUIItem {
     private Component itemName;
     private List<Component> itemLore;
     private String skullTexture;
+    private boolean isButton = false;
 
     public NotGUIItem(NotGUI gui, Material itemType) {
         this(gui, null, itemType);
@@ -41,6 +42,12 @@ public class NotGUIItem {
         this.parentGUI = gui;
         this.parentContainer = parentContainer;
         this.itemType = itemType;
+    }
+
+    public boolean isButton() { return isButton; }
+    public NotGUIItem asButton() {
+        this.isButton = true;
+        return this;
     }
 
     public NotGUIItem withSkullTexture(String textureValue) {
@@ -95,38 +102,38 @@ public class NotGUIItem {
     }
 
     public ItemStack build() {
-    ItemStack stack = new ItemStack(itemType);
-    stack.setAmount(itemAmount);
+        ItemStack stack = new ItemStack(itemType);
+        stack.setAmount(itemAmount);
 
-    ItemMeta meta = stack.getItemMeta();
-    meta.displayName(itemName);
-    meta.lore(itemLore);
+        ItemMeta meta = stack.getItemMeta();
+        if (itemName != null) meta.displayName(itemName);
+        if (itemLore != null) meta.lore(itemLore);
 
-    if (itemType == Material.PLAYER_HEAD && skullTexture != null) {
-        try {
-            SkullMeta skullMeta = (SkullMeta) meta;
-            PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
-            
-            PlayerTextures textures = profile.getTextures();
-            URL url = new URI("http://textures.minecraft.net/texture/" + skullTexture).toURL();
-            textures.setSkin(url);
-            profile.setTextures(textures);
-            
-            skullMeta.setPlayerProfile(profile);
-            meta = skullMeta;
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (itemType == Material.PLAYER_HEAD && skullTexture != null) {
+            try {
+                SkullMeta skullMeta = (SkullMeta) meta;
+                PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
+                
+                PlayerTextures textures = profile.getTextures();
+                URL url = new URI("http://textures.minecraft.net/texture/" + skullTexture).toURL();
+                textures.setSkin(url);
+                profile.setTextures(textures);
+                
+                skullMeta.setPlayerProfile(profile);
+                meta = skullMeta;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
+        NamespacedKey key = new NamespacedKey(gui().getPlugin(), NotGUI.ITEM_UUID_KEY);
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        container.set(key, PersistentDataType.STRING, uid.toString());
+
+        stack.setItemMeta(meta);
+
+        return stack;
     }
-
-    NamespacedKey key = new NamespacedKey(gui().getPlugin(), NotGUI.ITEM_UUID_KEY);
-    PersistentDataContainer container = meta.getPersistentDataContainer();
-    container.set(key, PersistentDataType.STRING, uid.toString());
-
-    stack.setItemMeta(meta);
-
-    return stack;
-}
 
     public NotGUI gui() {
         return parentGUI;
@@ -135,4 +142,7 @@ public class NotGUIItem {
     public NotGUIContainer parent() {
         return parentContainer;
     }
+
+    public NotGUI addToGUI(int slot) { return gui().addItem(this, slot); }
+    public NotGUI addToGUI(int x, int y) { return gui().addItem(this, x, y); }
 }

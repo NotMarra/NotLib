@@ -153,9 +153,15 @@ public class NotGUIContainer {
         
         return this;
     }
+
+    public NotGUIContainer addButton(NotGUIItem item, int slot, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
+        addItem(item, slot);
+        registerClickHandler(item.id(), action);
+        return this;
+    }
     
     public NotGUIContainer addButton(Material material, ChatF name, int slot, BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
-        NotGUIItem item = new NotGUIItem(gui, this, material).name(name);
+        NotGUIItem item = new NotGUIItem(gui, this, material).name(name).asButton();
         addItem(item, slot);
         registerClickHandler(item.id(), action);
         return this;
@@ -173,7 +179,24 @@ public class NotGUIContainer {
         return addButton(material, name, y * size.width + x, action);
     }
     
-    public ItemStack getItem(int slot) { return items.get(slot); }
+    public NotGUIItem getNotItem(UUID itemId) {
+        NotGUIItem item = notItems.get(itemId);
+        if (item != null) return item;
+        for (NotGUIContainer child : children) {
+            item = child.getNotItem(itemId);
+            if (item != null) return item;
+        }
+        return null;
+    }
+    public ItemStack getItem(int slot) {
+        ItemStack item = items.get(slot);
+        if (item != null) return item;
+        for (NotGUIContainer child : children) {
+            item = child.getItem(slot);
+            if (item != null) return item;
+        }
+        return null;
+    }
     
     private void setItemToSlot(int slot, ItemStack item) {
         Inventory builtInventory = gui.getBuiltInventory();

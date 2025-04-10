@@ -2,16 +2,19 @@ package com.notmarra.notlib;
 
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.notmarra.notlib.database.NotDatabase;
-import com.notmarra.notlib.database.query.NotSqlWhereBuilder;
 import com.notmarra.notlib.database.source.NotMySQL;
 import com.notmarra.notlib.database.source.NotSQLite;
 import com.notmarra.notlib.database.structure.NotRecord;
 import com.notmarra.notlib.extensions.NotListener;
+import com.notmarra.notlib.utils.gui.NotGUI;
+import com.notmarra.notlib.utils.gui.NotGUISlotIDs;
+import com.notmarra.notlib.utils.gui.animations.NotGUIInfiniteAnimation;
 import com.notmarra.notlib.utils.ChatF;
 import com.notmarra.notlib.utils.command.NotCommand;
 import com.notmarra.notlib.utils.command.arguments.NotLiteralArg;
@@ -30,8 +33,22 @@ class NotDevListener extends NotListener {
     @Override
     public List<NotCommand> notCommands() {
         return List.of(
+            testSkullTextureCommand(),
             notLibDbTestCommand()
         );
+    }
+
+    private NotCommand testSkullTextureCommand() {
+        return NotCommand.of("testskulltexture", cmd -> {
+            NotGUI.create("Skull Texture Test")
+                .rows(1)
+                .createItem(Material.PLAYER_HEAD)
+                    .withSkullTexture("1aec2a159f62d2ace9e1d3e5057a7f8d1ec3ffdfe92433e0a09a9837cadf2083")
+                    .addToGUI(0)
+                .createItem(Material.DIAMOND_AXE)
+                    .addToGUI(1)
+                .open(cmd.getPlayer());
+        });
     }
 
     private NotDevTestMySQL getTestMySQLDB() { return (NotDevTestMySQL)plugin.db(NotDevTestMySQL.ID); }
@@ -104,6 +121,11 @@ class NotDevListener extends NotListener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         NotDevTestMySQL db = getTestMySQLDB();
+
+        if (db == null) {
+            getLogger().error("Database NotDevTestMySQL not found.");
+            return;
+        }
         
         if (db.existsPlayer(player)) {
             getLogger().info("Player " + player.getName() + " already exists in the database.");
