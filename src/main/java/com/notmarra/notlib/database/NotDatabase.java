@@ -123,21 +123,48 @@ public abstract class NotDatabase extends NotConfigurable {
     }
 
     public Object convertValue(String columnType, Object value) {
-        switch (columnType) {
-            case "TEXT":
-                return String.valueOf(value);
-            case "INTEGER":
-                return Integer.valueOf(String.valueOf(value));
-            case "REAL":
-                return Double.valueOf(String.valueOf(value));
-            case "DOUBLE":
-                return Double.valueOf(String.valueOf(value));
-            case "FLOAT":
-                return Float.valueOf(String.valueOf(value));
-            default:
-                throw new IllegalArgumentException("Unsupported column type: " + columnType);
-        }
+    if (value == null) {
+        return null;
     }
+
+    // Normalize the type name to uppercase for case-insensitive comparison
+    String normalizedType = columnType.toUpperCase();
+
+    switch (normalizedType) {
+        case "TEXT":
+        case "VARCHAR":
+        case "CHAR":
+        case "LONGTEXT":
+        case "MEDIUMTEXT":
+        case "TINYTEXT":
+        case "STRING":
+            return String.valueOf(value);
+        case "INT":
+        case "INTEGER":
+        case "SMALLINT":
+        case "TINYINT":
+        case "MEDIUMINT":
+        case "BIGINT":
+            return Integer.valueOf(String.valueOf(value));
+        case "REAL":
+        case "DOUBLE":
+            return Double.valueOf(String.valueOf(value));
+        case "FLOAT":
+            return Float.valueOf(String.valueOf(value));
+        case "BOOLEAN":
+        case "BOOL":
+            return Boolean.valueOf(String.valueOf(value));
+        case "DATE":
+        case "TIME":
+        case "DATETIME":
+        case "TIMESTAMP":
+            return String.valueOf(value);
+        default:
+            plugin.getLogger().warning("Unsupported column type: " + columnType + 
+                                     ". Returning as string.");
+            return String.valueOf(value); 
+    }
+}
 
     public void process(Consumer<Connection> consumer) {
         try (Connection connection = getConnection()) {
@@ -183,7 +210,7 @@ public abstract class NotDatabase extends NotConfigurable {
             
             if (params != null) {
                 for (int i = 0; i < params.size(); i++) {
-                    stmt.setObject(i, params.get(i));
+                    stmt.setObject(i + 1, params.get(i));
                 }
             }
             

@@ -38,6 +38,7 @@ public abstract class NotSQLite extends NotDatabase {
         File databaseFile = new File(plugin.getDataFolder(), databasePath);
         hikariConfig.setJdbcUrl("jdbc:sqlite:" + databaseFile.getAbsolutePath());
         // hikariConfig.setDataSourceClassName("org.sqlite.SQLiteDataSource");
+        hikariConfig.setPoolName(ID);
         hikariConfig.addDataSourceProperty("cachePrepStmts", "true");
         hikariConfig.addDataSourceProperty("prepStmtCacheSize", "250");
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
