@@ -13,11 +13,10 @@ import com.notmarra.notlib.database.source.NotSQLite;
 import com.notmarra.notlib.database.structure.NotRecord;
 import com.notmarra.notlib.extensions.NotListener;
 import com.notmarra.notlib.utils.gui.NotGUI;
-import com.notmarra.notlib.utils.gui.NotGUISlotIDs;
-import com.notmarra.notlib.utils.gui.animations.NotGUIInfiniteAnimation;
 import com.notmarra.notlib.utils.ChatF;
 import com.notmarra.notlib.utils.command.NotCommand;
 import com.notmarra.notlib.utils.command.arguments.NotLiteralArg;
+import com.notmarra.notlib.utils.command.arguments.NotPlayerArg;
 import com.notmarra.notlib.utils.command.arguments.NotStringArg;
 
 class NotDevListener extends NotListener {
@@ -34,7 +33,8 @@ class NotDevListener extends NotListener {
     public List<NotCommand> notCommands() {
         return List.of(
             testSkullTextureCommand(),
-            notLibDbTestCommand()
+            notLibDbTestCommand(),
+            testSqlStuff()
         );
     }
 
@@ -115,6 +115,68 @@ class NotDevListener extends NotListener {
             } else {
                 ChatF.of("Database of type " + db.getClass().getSimpleName() + " does not support queries.").sendTo(arg.getPlayer());
                 return;
+            }
+        });
+
+        return command;
+    }
+
+    private NotCommand testSqlStuff() {
+        NotCommand command = NotCommand.of("test-sql-stuff", cmd -> {
+            ChatF.of("Test SQL Stuff command executed!").sendTo(cmd.getPlayer());
+        });
+
+        // add xp
+
+        NotLiteralArg addXpArg = command.literalArg("addXp", arg -> {
+            ChatF.of("/test-sql-stuff addXp <player> <xp>").sendTo(arg.getPlayer());
+        });
+
+        NotPlayerArg addXpPlayerArg = addXpArg.playerArg("player", arg -> {
+            ChatF.of("/test-sql-stuff addXp " + arg.get() + " <xp>").sendTo(arg.getPlayer());
+        });
+
+        addXpPlayerArg.intArg("xp", arg -> {
+            NotDevTestMySQL db = getTestMySQLDB();
+
+            if (db == null) {
+                ChatF.of("Database NotDevTestMySQL not found.").sendTo(arg.getPlayer());
+                return;
+            }
+
+            Player player = addXpPlayerArg.get();
+            int xp = arg.get();
+            if (db.addXp(player, xp)) {
+                ChatF.of("Added " + xp + " XP to player " + player.getName()).sendTo(arg.getPlayer());
+            } else {
+                ChatF.of("Failed to add XP to player " + player.getName()).sendTo(arg.getPlayer());
+            }
+        });
+
+        // remove xp
+
+        NotLiteralArg removeXpArg = command.literalArg("removeXp", arg -> {
+            ChatF.of("/test-sql-stuff removeXp <player> <xp>").sendTo(arg.getPlayer());
+        });
+
+        NotPlayerArg removeXpPlayerArg = removeXpArg.playerArg("player", arg -> {
+            ChatF.of("/test-sql-stuff removeXp " + arg.get() + " <xp>").sendTo(arg.getPlayer());
+        });
+
+        removeXpPlayerArg.intArg("xp", arg -> {
+            NotDevTestMySQL db = getTestMySQLDB();
+
+            if (db == null) {
+                ChatF.of("Database NotDevTestMySQL not found.").sendTo(arg.getPlayer());
+                return;
+            }
+
+            Player player = removeXpPlayerArg.get();
+            int xp = arg.get();
+            if (db.removeXp(player, xp)) {
+                ChatF.of("Added " + xp + " XP to player " + player.getName()).sendTo(arg.getPlayer());
+            } else {
+                ChatF.of("Failed to add XP to player " + player.getName()).sendTo(arg.getPlayer());
             }
         });
 

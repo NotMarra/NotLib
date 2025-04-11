@@ -1,9 +1,7 @@
 package com.notmarra.notlib.database.query;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class NotSqlBuilder {
     private String table;
@@ -12,7 +10,7 @@ public class NotSqlBuilder {
     private List<String> joinClauses = new ArrayList<>();
     private List<String> orderByClauses = new ArrayList<>();
     private List<String> groupByClauses = new ArrayList<>();
-    private Map<String, Object> updateValues = new HashMap<>();
+    private List<NotSqlUpdateValue> updateValues = new ArrayList<>();
     private List<List<Object>> insertValues = new ArrayList<>();
     private Integer limit;
     private Integer offset;
@@ -136,7 +134,12 @@ public class NotSqlBuilder {
 
     // UPDATE values
     public NotSqlBuilder set(String column, Object value) {
-        this.updateValues.put(column, value);
+        this.updateValues.add(NotSqlUpdateValue.of(column, value));
+        return this;
+    }
+
+    public NotSqlBuilder setRaw(String column, String rawValue) {
+        this.updateValues.add(NotSqlUpdateValue.ofRaw(column, rawValue));
         return this;
     }
 
@@ -224,8 +227,12 @@ public class NotSqlBuilder {
         StringBuilder query = new StringBuilder("UPDATE ").append(table).append(" SET ");
 
         List<String> setStatements = new ArrayList<>();
-        for (Map.Entry<String, Object> entry : updateValues.entrySet()) {
-            setStatements.add(entry.getKey() + " = " + formatValue(entry.getValue()));
+        for (NotSqlUpdateValue update : updateValues) {
+            if (update.isRaw()) {
+                setStatements.add(update.getColumn() + " = " + update.getValue());
+            } else {
+                setStatements.add(update.getColumn() + " = " + formatValue(update.getValue()));
+            }
         }
 
         query.append(String.join(", ", setStatements));
@@ -274,8 +281,8 @@ public class NotSqlBuilder {
         List<Object> params = new ArrayList<>();
                 
         if (queryType == QueryType.UPDATE) {
-            for (Object value : updateValues.values()) {
-                params.add(value);
+            for (NotSqlUpdateValue update : updateValues) {
+                if (!update.isRaw()) params.add(update.getValue());
             }
         }
         

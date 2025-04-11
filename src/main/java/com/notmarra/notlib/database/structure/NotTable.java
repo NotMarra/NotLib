@@ -2,11 +2,13 @@ package com.notmarra.notlib.database.structure;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import com.notmarra.notlib.database.NotDatabase;
 import com.notmarra.notlib.database.query.NotSqlBuilder;
 import com.notmarra.notlib.database.query.NotSqlQueryExecutor;
-import com.notmarra.notlib.database.query.NotSqlWhereBuilder;
+import com.notmarra.notlib.database.result.NotSqlSelectOneResult;
+import com.notmarra.notlib.database.result.NotSqlSelectResult;
 
 public class NotTable {
     private final String name;
@@ -58,32 +60,40 @@ public class NotTable {
 
     // select, update, insert, delete
 
-    public NotRecord recordGet(String column, String operator, Object value) {
+    public NotSqlSelectOneResult get(Consumer<NotSqlBuilder> builder) {
         checkDbCtx();
-        return executor().fetchOne(
-            NotSqlBuilder.select(getName()).where(column, operator, value)
-        );
+        NotSqlBuilder sqlBuilder = NotSqlBuilder.select(getName());
+        builder.accept(sqlBuilder);
+        return NotSqlSelectOneResult.of(dbCtx, this, executor().fetchOne(sqlBuilder));
     }
 
-    public List<NotRecord> recordsGet(NotSqlWhereBuilder where) {
+    public NotSqlSelectResult getMany(Consumer<NotSqlBuilder> builder) {
         checkDbCtx();
-        return executor().executeQuery(
-            NotSqlBuilder.select(getName()).where(where)
-        );
+        NotSqlBuilder sqlBuilder = NotSqlBuilder.select(getName());
+        builder.accept(sqlBuilder);
+        return NotSqlSelectResult.of(dbCtx, this, executor().executeQuery(sqlBuilder));
     }
 
-    public boolean recordExists(String column, String operator, Object value) {
+    public boolean exists(Consumer<NotSqlBuilder> builder) {
         checkDbCtx();
-        return executor().exists(
-            NotSqlBuilder.select(getName()).where(column, operator, value)
-        );
+        NotSqlBuilder sqlBuilder = NotSqlBuilder.select(getName());
+        builder.accept(sqlBuilder);
+        return executor().exists(sqlBuilder);
     }
 
-    public boolean recordDelete(String column, String operator, Object value) {
+    public boolean delete(Consumer<NotSqlBuilder> builder) {
         checkDbCtx();
-        return executor().succeeded(
-            NotSqlBuilder.deleteFrom(getName()).where(column, operator, value)
-        );
+        NotSqlBuilder sqlBuilder = NotSqlBuilder.deleteFrom(getName());
+        builder.accept(sqlBuilder);
+        return executor().succeeded(sqlBuilder);
+    }
+
+    public int update(Consumer<NotSqlBuilder> builder) {
+        checkDbCtx();
+        NotSqlBuilder sqlBuilder = NotSqlBuilder.update(getName());
+        builder.accept(sqlBuilder);
+        dbCtx.getLogger().info("Executing update: " + sqlBuilder.build());
+        return executor().executeUpdate(sqlBuilder);
     }
 
     public boolean insertRow(List<Object> row) {

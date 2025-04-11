@@ -29,39 +29,50 @@ class NotDevTestMySQL extends NotMySQL {
     public String getId() { return ID; }
 
     public List<NotRecord> getPlayersWhere(NotSqlWhereBuilder where) {
-        return getTable(T_USERS).recordsGet(where);
+        return getTable(T_USERS).getMany(b -> b.where(where)).getRecords();
     }
 
     public double getPlayerBalance(Player player) {
         return getTable(T_USERS)
-            .recordGet(T_USERS_C_UUID, "=", player.getUniqueId().toString())
+            .get(b -> b.where(T_USERS_C_UUID, "=", player.getUniqueId().toString()))
+            .getRecord()
             .getDouble(T_USERS_C_BALANCE, 0.0);
     }
 
     public boolean existsPlayer(Player player) {
         return getTable(T_USERS)
-            .recordExists(T_USERS_C_UUID, "=", player.getUniqueId().toString());
+            .exists(b -> b.where(T_USERS_C_UUID, "=", player.getUniqueId().toString()));
     }
 
     public boolean deletePlayer(String uuid) {
         return getTable(T_USERS)
-            .recordDelete(T_USERS_C_UUID, "=", uuid);
+            .delete(b -> b.where(T_USERS_C_UUID, "=", uuid));
     }
 
     public boolean insertPlayer(Player player) {
         return getTable(T_USERS).insertRow(List.of(
             player.getUniqueId().toString(),
             player.getName(),
-            0.0
+            0.0,
+            0
         ));
     }
 
-    // public boolean addXp(Player player, int xp) {
-    //     return getTable(T_USERS)
-    //         .recordUpdate(T_USERS_C_UUID, "=", player.getUniqueId().toString())
-    //         .set(T_USERS_C_XP, getPlayerXp(player) + xp)
-    //         .execute();
-    // }
+    public boolean addXp(Player player, int xp) {
+        return getTable(T_USERS)
+            .update(b -> {
+                b.where(T_USERS_C_UUID, "=", player.getUniqueId().toString());
+                b.setRaw(T_USERS_C_XP, "xp + " + xp);
+            }) > 0;
+    }
+
+    public boolean removeXp(Player player, int xp) {
+        return getTable(T_USERS)
+            .update(b -> {
+                b.where(T_USERS_C_UUID, "=", player.getUniqueId().toString());
+                b.setRaw(T_USERS_C_XP, "xp - " + xp);
+            }) > 0;
+    }
 
     @Override
     public List<NotTable> setupTables() {

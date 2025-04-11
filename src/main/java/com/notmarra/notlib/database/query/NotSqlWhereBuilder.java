@@ -10,6 +10,22 @@ public class NotSqlWhereBuilder {
         return new NotSqlWhereBuilder();
     }
 
+    public static NotSqlWhereBuilder of(String column, String operator, Object value) {
+        return (new NotSqlWhereBuilder()).and(column, operator, value);
+    }
+
+    public static NotSqlWhereBuilder of(String rawCondition) {
+        return (new NotSqlWhereBuilder()).and(rawCondition);
+    }
+
+    public static NotSqlWhereBuilder ofOr(String column, String operator, Object value) {
+        return (new NotSqlWhereBuilder()).or(column, operator, value);
+    }
+
+    public static NotSqlWhereBuilder ofOr(String rawCondition) {
+        return (new NotSqlWhereBuilder()).or(rawCondition);
+    }
+
     // WHERE clauses
     public NotSqlWhereBuilder and(String column, String operator, Object value) {
         this.whereClauses.add(new NotWhereClause(column, operator, value, "AND"));
