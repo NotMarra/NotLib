@@ -11,8 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.inventory.Inventory;
 
 public class NotGUIListener extends NotListener {
@@ -33,17 +31,17 @@ public class NotGUIListener extends NotListener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) return;
-
         Player player = (Player) event.getWhoClicked();
-        Inventory clickedInventory = event.getClickedInventory();
         NotGUI gui = openGUIs.get(player.getUniqueId());
-        
         if (gui == null) return;
+        Inventory clickedInventory = event.getClickedInventory();
         if (clickedInventory == null) return;
-
-        if (clickedInventory.getHolder() == gui) {
-            event.setCancelled(gui.handleClick(event));
-        }
+        UUID itemUUID = gui.getItemIdFromItemStack(event.getCurrentItem());
+        if (itemUUID == null) return;
+        NotGUIItem item = gui.getNotItem(itemUUID);
+        if (item == null) return;
+        gui.handleClick(event, item);
+        event.setCancelled(!item.canPickUp());
     }
     
     @EventHandler
@@ -59,47 +57,4 @@ public class NotGUIListener extends NotListener {
             openGUIs.remove(player.getUniqueId());
         }
     }
-
-    // TODO: this
-    // @EventHandler
-    // public void onInventoryMoveItemEvent(InventoryMoveItemEvent event) {
-    //     if (!(event.getInitiator() instanceof Player)) return;
-
-    //     Player player = (Player) event.getInitiator();
-    //     NotGUI gui = openGUIs.get(player.getUniqueId());
-    //     if (gui == null) return;
-
-    //     Inventory srcInventory = event.getSource();
-    //     Inventory destInventory = event.getDestination();
-
-    //     UUID itemUUID = gui.getItemIdFromItemStack(event.getItem());
-    //     if (itemUUID == null) return;
-    //     NotGUIItem item = gui.getNotItem(itemUUID);
-    //     if (item == null) return;
-    //     // buttons are not moveable
-    //     if (item.action() != null) {
-    //         event.setCancelled(true);
-    //         return;
-    //     }
-
-    //     // you are moving stuff from/in/inside the gui, which is not allowed
-    //     if (destInventory.equals(gui.getBuiltInventory())) {
-    //         event.setCancelled(true);
-    //         return;
-    //     }
-
-    //     event.setCancelled(true);
-    // }
-    
-    // @EventHandler
-    // public void onInventoryPickupItemEvent(InventoryPickupItemEvent event) {
-    //     if (!(event.getInventory().getHolder() instanceof Player)) return;
-
-    //     Player player = (Player) event.getInventory().getHolder();
-    //     NotGUI gui = openGUIs.get(player.getUniqueId());
-
-    //     if (gui != null && event.getInventory().equals(gui.getBuiltInventory())) {
-    //         event.setCancelled(true);
-    //     }
-    // }
 }

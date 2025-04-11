@@ -235,7 +235,16 @@ public class NotGUIContainer {
         int localSlot = localY * size.width + localX;
         return handleItemClick(event, localSlot);
     }
-    
+
+    public boolean handleClick(InventoryClickEvent event, NotGUIItem item) {
+        BiConsumer<InventoryClickEvent, NotGUIContainer> handler = getHandler(item.id());
+        if (handler != null) {
+            handler.accept(event, this);
+            return true;
+        }
+        return false;
+    }
+
     public boolean handleItemClick(InventoryClickEvent event, int localSlot) {
         ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem == null) return false;

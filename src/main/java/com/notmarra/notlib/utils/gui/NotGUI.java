@@ -206,7 +206,13 @@ public class NotGUI implements InventoryHolder {
     }
 
     public boolean handleClick(InventoryClickEvent event) {
+        if (event.getClickedInventory().getHolder() != this) return false;
         return rootContainer.handleClick(event);
+    }
+
+    public boolean handleClick(InventoryClickEvent event, NotGUIItem item) {
+        if (event.getClickedInventory().getHolder() != this) return false;
+        return rootContainer.handleClick(event, item);
     }
 
     public Inventory build() {

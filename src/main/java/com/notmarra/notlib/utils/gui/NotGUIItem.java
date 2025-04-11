@@ -36,6 +36,7 @@ public class NotGUIItem {
     private String skullTexture;
     private BiConsumer<InventoryClickEvent, NotGUIContainer> action = null;
     private BiFunction<NotGUIItem, SkullMeta, SkullMeta> onSkullMeta = null;
+    private boolean canPickUp = false;
 
     public NotGUIItem(NotGUI gui, Material itemType) {
         this(gui, null, itemType);
@@ -58,6 +59,7 @@ public class NotGUIItem {
     public Material type() { return itemType; }
     public Component name() { return itemName; }
     public List<Component> lore() { return itemLore; }
+    public boolean canPickUp() { return canPickUp; }
     public BiConsumer<InventoryClickEvent, NotGUIContainer> action() { return action; }
 
     public NotGUIItem amount(int itemAmount) {
@@ -100,7 +102,16 @@ public class NotGUIItem {
         return this;
     }
 
-    public NotGUIItem action(BiConsumer<InventoryClickEvent, NotGUIContainer> action) { this.action = action; return this; }
+    public NotGUIItem canPickUp(boolean canPickUp) {
+        this.canPickUp = canPickUp;
+        return this;
+    }
+
+    public NotGUIItem action(BiConsumer<InventoryClickEvent, NotGUIContainer> action) {
+        this.canPickUp = false; // buttons are not pickable
+        this.action = action;
+        return this;
+    }
     public NotGUIItem onClick(BiConsumer<InventoryClickEvent, NotGUIContainer> action) { return action(action); }
 
     public NotGUIItem onSkullMeta(BiFunction<NotGUIItem, SkullMeta, SkullMeta> onSkullMeta) { this.onSkullMeta = onSkullMeta; return this; }
