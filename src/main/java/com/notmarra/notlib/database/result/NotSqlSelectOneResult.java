@@ -20,6 +20,11 @@ public class NotSqlSelectOneResult extends NotSqlResult {
         return record;
     }
 
+    public boolean delete() {
+        if (record == null) return false;
+        return table().delete(b -> b.where(record.buildWhere()));
+    }
+
     public static NotSqlSelectOneResult of(NotDatabase database, NotTable table, NotRecord record) {
         return new NotSqlSelectOneResult(database, table).setRecord(record);
     }

@@ -67,6 +67,13 @@ public class NotTable {
         return NotSqlSelectOneResult.of(dbCtx, this, executor().fetchOne(sqlBuilder));
     }
 
+    public NotSqlSelectResult getAll() {
+        checkDbCtx();
+        return NotSqlSelectResult.of(dbCtx, this, executor().executeQuery(
+            NotSqlBuilder.select(getName())
+        ));
+    }
+
     public NotSqlSelectResult getMany(Consumer<NotSqlBuilder> builder) {
         checkDbCtx();
         NotSqlBuilder sqlBuilder = NotSqlBuilder.select(getName());

@@ -27,7 +27,7 @@ public final class NotLib extends NotPlugin {
 
         // TODO: test stuff, remove
         addListener(new NotDevListener(this));
-        db().registerDatabase(new NotDevTestMySQL(this, CONFIG_YML));
+        // db().registerDatabase(new NotDevTestMySQL(this, CONFIG_YML));
 
         // plugin callbacks
         addPluginEnabledCallback("PlaceholderAPI", () -> hasPlaceholderAPI = true);

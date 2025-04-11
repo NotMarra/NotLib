@@ -179,6 +179,21 @@ class NotDevListener extends NotListener {
             }
         });
 
+        command.literalArg("testResult", arg -> {
+            NotDevTestMySQL db = getTestMySQLDB();
+
+            if (db == null) {
+                ChatF.of("Database NotDevTestMySQL not found.").sendTo(arg.getPlayer());
+                return;
+            }
+
+            int deleted = db.getTable(db.T_USERS)
+                .getAll()
+                .deleteWhere(r -> r.getString(db.T_USERS_C_PLAYER_NAME).equals("test"));
+
+            ChatF.of("Deleted " + deleted + " rows.").sendTo(arg.getPlayer());
+        });
+
         return command;
     }
 

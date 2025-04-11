@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import com.notmarra.notlib.database.query.NotSqlWhereBuilder;
 import com.notmarra.notlib.utils.NotConverter;
 
 public class NotRecord {
@@ -64,6 +65,16 @@ public class NotRecord {
     public Short getShort(String column, short defaultValue) {
         var value = getShort(column);
         return value != null ? value : defaultValue;
+    }
+
+    public NotSqlWhereBuilder buildWhere() {
+        NotSqlWhereBuilder builder = NotSqlWhereBuilder.create();
+
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            builder.and(entry.getKey(), "=", entry.getValue());
+        }
+
+        return builder;
     }
 
     public static NotRecord empty() { return new NotRecord(Map.of()); }

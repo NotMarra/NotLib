@@ -2,6 +2,7 @@ package com.notmarra.notlib.database.result;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import com.notmarra.notlib.database.NotDatabase;
 import com.notmarra.notlib.database.structure.NotRecord;
@@ -26,6 +27,24 @@ public class NotSqlSelectResult extends NotSqlResult {
 
     public List<NotRecord> getRecords() {
         return records;
+    }
+
+    public int deleteAll() {
+        int deleted = 0;
+        for (NotRecord record : records) {
+            if (table().delete(b -> b.where(record.buildWhere()))) deleted++;
+        }
+        return deleted;
+    }
+
+    public int deleteWhere(Function<NotRecord, Boolean> where) {
+        int deleted = 0;
+        for (NotRecord record : records) {
+            if (where.apply(record)) {
+                if (table().delete(b -> b.where(record.buildWhere()))) deleted++;
+            }
+        }
+        return deleted;
     }
 
     public static NotSqlSelectResult of(NotDatabase database, NotTable table, List<NotRecord> records) {

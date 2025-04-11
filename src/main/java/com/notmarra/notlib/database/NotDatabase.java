@@ -209,6 +209,7 @@ public abstract class NotDatabase extends NotConfigurable {
                         Object columnValue = rs.getObject(i);
                         row.put(columnName, convertValue(columnType, columnValue));
                     }
+
                     resultList.add(new NotRecord(row));
                 }
                 
