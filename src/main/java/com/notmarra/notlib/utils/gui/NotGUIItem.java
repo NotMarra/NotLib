@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -34,6 +36,7 @@ public class NotGUIItem {
     private List<Component> itemLore;
     private String skullTexture;
     private BiConsumer<InventoryClickEvent, NotGUIContainer> action = null;
+    private BiFunction<NotGUIItem, SkullMeta, SkullMeta> onSkullMeta = null;
 
     public NotGUIItem(NotGUI gui, Material itemType) {
         this(gui, null, itemType);
@@ -101,6 +104,8 @@ public class NotGUIItem {
     public NotGUIItem action(BiConsumer<InventoryClickEvent, NotGUIContainer> action) { this.action = action; return this; }
     public NotGUIItem onClick(BiConsumer<InventoryClickEvent, NotGUIContainer> action) { return action(action); }
 
+    public NotGUIItem onSkullMeta(BiFunction<NotGUIItem, SkullMeta, SkullMeta> onSkullMeta) { this.onSkullMeta = onSkullMeta; return this; }
+
     public ItemStack build() {
         ItemStack stack = new ItemStack(itemType);
         stack.setAmount(itemAmount);
@@ -109,20 +114,24 @@ public class NotGUIItem {
         if (itemName != null) meta.displayName(itemName);
         if (itemLore != null) meta.lore(itemLore);
 
-        if (itemType == Material.PLAYER_HEAD && skullTexture != null) {
-            try {
-                SkullMeta skullMeta = (SkullMeta) meta;
-                PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
-                
-                PlayerTextures textures = profile.getTextures();
-                URL url = new URI("http://textures.minecraft.net/texture/" + skullTexture).toURL();
-                textures.setSkin(url);
-                profile.setTextures(textures);
-                
-                skullMeta.setPlayerProfile(profile);
-                meta = skullMeta;
-            } catch (Exception e) {
-                e.printStackTrace();
+        if (onSkullMeta != null) {
+            meta = onSkullMeta.apply(this, (SkullMeta) meta);
+        } else {
+            if (itemType == Material.PLAYER_HEAD && skullTexture != null) {
+                try {
+                    SkullMeta skullMeta = (SkullMeta) meta;
+                    PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
+                    
+                    PlayerTextures textures = profile.getTextures();
+                    URL url = new URI("http://textures.minecraft.net/texture/" + skullTexture).toURL();
+                    textures.setSkin(url);
+                    profile.setTextures(textures);
+                    
+                    skullMeta.setPlayerProfile(profile);
+                    meta = skullMeta;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 

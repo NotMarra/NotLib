@@ -60,6 +60,7 @@ public class NotGUIListener extends NotListener {
         }
     }
 
+    // TODO: this
     // @EventHandler
     // public void onInventoryMoveItemEvent(InventoryMoveItemEvent event) {
     //     if (!(event.getInitiator() instanceof Player)) return;
@@ -75,8 +76,18 @@ public class NotGUIListener extends NotListener {
     //     if (itemUUID == null) return;
     //     NotGUIItem item = gui.getNotItem(itemUUID);
     //     if (item == null) return;
-    //     if (item.isButton()) return;
-    
+    //     // buttons are not moveable
+    //     if (item.action() != null) {
+    //         event.setCancelled(true);
+    //         return;
+    //     }
+
+    //     // you are moving stuff from/in/inside the gui, which is not allowed
+    //     if (destInventory.equals(gui.getBuiltInventory())) {
+    //         event.setCancelled(true);
+    //         return;
+    //     }
+
     //     event.setCancelled(true);
     // }
     

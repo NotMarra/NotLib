@@ -272,9 +272,7 @@ public class NotSqlBuilder {
 
     public List<Object> getParameters() {
         List<Object> params = new ArrayList<>();
-        
-        params.addAll(whereBuilder.getParameters());
-        
+                
         if (queryType == QueryType.UPDATE) {
             for (Object value : updateValues.values()) {
                 params.add(value);
@@ -286,6 +284,8 @@ public class NotSqlBuilder {
                 params.addAll(values);
             }
         }
+
+        params.addAll(whereBuilder.getParameters());
         
         return params;
     }

@@ -18,6 +18,7 @@ class NotDevTestMySQL extends NotMySQL {
     public final String T_USERS_C_UUID = "uuid";
     public final String T_USERS_C_PLAYER_NAME = "player_name";
     public final String T_USERS_C_BALANCE = "balance";
+    public final String T_USERS_C_XP = "xp";
 
     public NotDevTestMySQL(NotPlugin plugin, String defaultConfig) {
         super(plugin, defaultConfig);
@@ -55,18 +56,26 @@ class NotDevTestMySQL extends NotMySQL {
         ));
     }
 
+    // public boolean addXp(Player player, int xp) {
+    //     return getTable(T_USERS)
+    //         .recordUpdate(T_USERS_C_UUID, "=", player.getUniqueId().toString())
+    //         .set(T_USERS_C_XP, getPlayerXp(player) + xp)
+    //         .execute();
+    // }
+
     @Override
     public List<NotTable> setupTables() {
         return List.of(
             NotTable.createNew(T_USERS, List.of(
                 NotColumn.varchar(T_USERS_C_UUID, 36).primaryKey().notNull(),
                 NotColumn.varchar(T_USERS_C_PLAYER_NAME, 36).notNull(),
-                NotColumn.doubleType(T_USERS_C_BALANCE).notNull().defaultValue("0")
+                NotColumn.doubleType(T_USERS_C_BALANCE).notNull().defaultValue("0"),
+                NotColumn.integer(T_USERS_C_XP).notNull().defaultValue("0")
             ))
             .initialInsertList(List.of(
-                List.of("123e4567-e89b-12d3-a456-426614174000", "Player1", 100.0),
-                List.of("123e4567-e89b-12d3-a456-426614174001", "Player2", 200.0),
-                List.of("123e4567-e89b-12d3-a456-426614174002", "Player3", 300.0)
+                List.of("123e4567-e89b-12d3-a456-426614174000", "Player1", 100.0, 0),
+                List.of("123e4567-e89b-12d3-a456-426614174001", "Player2", 200.0, 0),
+                List.of("123e4567-e89b-12d3-a456-426614174002", "Player3", 300.0, 0)
             ))
         );
     }
