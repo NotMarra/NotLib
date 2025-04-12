@@ -143,6 +143,11 @@ public class NotSqlBuilder {
         return this;
     }
 
+    public NotSqlBuilder setValues(List<NotSqlUpdateValue> values) {
+        this.updateValues.addAll(values);
+        return this;
+    }
+
     public NotSqlBuilder setRaw(String column, String rawValue) {
         this.updateValues.add(NotSqlUpdateValue.ofRaw(column, rawValue));
         return this;
