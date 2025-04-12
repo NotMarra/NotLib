@@ -19,7 +19,6 @@ database:
     database: 'notlib'
 
   NotDevTestMySQL:
-    MySQL:
     # host of the MySQL server
     host: '127.0.0.1'
     # port of the MySQL server

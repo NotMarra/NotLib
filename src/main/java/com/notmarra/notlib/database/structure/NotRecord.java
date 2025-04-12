@@ -1,6 +1,7 @@
 package com.notmarra.notlib.database.structure;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,9 +12,11 @@ import com.notmarra.notlib.database.query.NotSqlWhereBuilder;
 import com.notmarra.notlib.utils.NotConverter;
 
 public class NotRecord {
-    private final Map<String, Object> data;
+    private final Map<String, Object> data = new HashMap<>();
 
-    public NotRecord(Map<String, Object> data) { this.data = data; }
+    public NotRecord(Map<String, Object> data) {
+        this.data.putAll(data);
+    }
 
     public Map<String, Object> getData() { return data; }
     public boolean isEmpty() { return data.isEmpty(); }
@@ -80,10 +83,13 @@ public class NotRecord {
         return builder;
     }
 
-    public List<NotSqlUpdateValue> buildUpdate() {
+    public List<NotSqlUpdateValue> buildUpdate() { return buildUpdate(List.of()); }
+
+    public List<NotSqlUpdateValue> buildUpdate(List<String> excludeColumns) {
         List<NotSqlUpdateValue> values = new ArrayList<>();
 
         for (Map.Entry<String, Object> entry : data.entrySet()) {
+            if (excludeColumns.contains(entry.getKey())) continue;
             values.add(NotSqlUpdateValue.of(entry.getKey(), entry.getValue()));
         }
 
