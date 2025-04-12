@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import com.notmarra.notlib.extensions.NotPlugin;
 
 public class NotDatabaseManager {
@@ -17,22 +19,42 @@ public class NotDatabaseManager {
     public NotDatabaseManager(NotPlugin plugin) { this.plugin = plugin; }
     
     public static NotDatabaseManager getInstance() { return instance; }
-    
-    public NotDatabaseManager registerDatabase(NotDatabase newDatabase) {
+
+    public NotDatabaseManager addDatabase(NotDatabase newDatabase) {
         if (databases.containsKey(newDatabase.getId())) {
             throw new IllegalArgumentException("Database with ID " + newDatabase.getId() + " is already registered.");
-        }
-        try {
-            newDatabase.close();
-            newDatabase.connect();
-            newDatabase.setup();
-        } catch (Exception e) {
-            plugin.getLogger().severe("Failed to set up database: " + e.getMessage());
         }
         databases.put(newDatabase.getId(), newDatabase);
         return this;
     }
+
+    public NotDatabaseManager registerDatabase(String dbId) {
+        if (!databases.containsKey(dbId)) {
+            throw new IllegalArgumentException("Database with ID " + dbId + " is not registered.");
+        }
+        try {
+            NotDatabase registered = databases.get(dbId);
+            registered.close();
+            registered.connect();
+            registered.setup();
+        } catch (Exception e) {
+            plugin.getLogger().severe("Failed to set up database: " + e.getMessage());
+        }
+        return this;
+    }
     
+    public NotDatabaseManager registerDatabase(NotDatabase newDatabase) {
+        addDatabase(newDatabase);
+        registerDatabase(newDatabase.getId());
+        return this;
+    }
+    
+    public @Nullable NotDatabase firstConnected() {
+        return databases.values().stream()
+            .filter(db -> db.isConnected())
+            .findFirst()
+            .orElse(null);
+    }
     public Map<String, NotDatabase> getDatabases() { return databases; }
     public List<String> getDatabaseIds() { return new ArrayList<>(databases.keySet()); }
     public NotDatabase getDatabase(String dbId) { return databases.get(dbId); }

@@ -1,9 +1,12 @@
 package com.notmarra.notlib.database.structure;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import com.notmarra.notlib.database.query.NotSqlUpdateValue;
 import com.notmarra.notlib.database.query.NotSqlWhereBuilder;
 import com.notmarra.notlib.utils.NotConverter;
 
@@ -75,6 +78,20 @@ public class NotRecord {
         }
 
         return builder;
+    }
+
+    public List<NotSqlUpdateValue> buildUpdate() {
+        List<NotSqlUpdateValue> values = new ArrayList<>();
+
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            values.add(NotSqlUpdateValue.of(entry.getKey(), entry.getValue()));
+        }
+
+        return values;
+    }
+
+    public void set(String column, Object value) {
+        data.put(column, value);
     }
 
     public static NotRecord empty() { return new NotRecord(Map.of()); }

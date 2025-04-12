@@ -113,6 +113,11 @@ public class NotSqlBuilder {
         return this;
     }
 
+    public NotSqlBuilder orderBy(String column, boolean direction) {
+        this.orderByClauses.add(column + " " + (direction ? "ASC" : "DESC"));
+        return this;
+    }
+
     // GROUP BY clauses
     public NotSqlBuilder groupBy(String... columns) {
         for (String column : columns) {
