@@ -126,8 +126,9 @@ public abstract class NotDatabase extends NotConfigurable {
             case "SMALLINT":
             case "TINYINT":
             case "MEDIUMINT":
-            case "BIGINT":
                 return Integer.valueOf(String.valueOf(value));
+            case "BIGINT":
+                return Long.valueOf(String.valueOf(value));
             case "REAL":
             case "DOUBLE":
                 return Double.valueOf(String.valueOf(value));
