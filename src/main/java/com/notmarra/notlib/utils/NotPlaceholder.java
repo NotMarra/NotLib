@@ -6,7 +6,7 @@ import com.notmarra.notlib.extensions.NotPlugin;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 
 public class NotPlaceholder extends PlaceholderExpansion {
-    private NotPlugin plugin;
+    public NotPlugin plugin;
 
     public NotPlaceholder(NotPlugin plugin) {
         this.plugin = plugin;
