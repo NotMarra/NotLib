@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.event.ClickCallback;
@@ -184,10 +186,13 @@ public class ChatF {
         return this;
     }
 
-    public ChatF clickWithOptions(int uses, TemporalAmount duration, ClickCallback<Audience> event) {
+    public ChatF clickWithOptions(int uses, @Nullable TemporalAmount duration, ClickCallback<Audience> event) {
         if (appendComponents.isEmpty()) return this;
         Component last = appendComponents.removeLast();
-        last = last.clickEvent(ClickEvent.callback(event, o -> o.uses(uses).lifetime(duration)));
+        last = last.clickEvent(ClickEvent.callback(event, o -> {
+            o.uses(uses);
+            if (duration != null) o.lifetime(duration);
+        }));
         appendComponents.add(last);
         return this;
     }
