@@ -197,6 +197,17 @@ public class ChatF {
         return this;
     }
 
+    private ChatF _doAction(ClickEvent.Action action, String stuff) {
+        if (appendComponents.isEmpty()) return this;
+        Component last = appendComponents.removeLast();
+        last = last.clickEvent(ClickEvent.clickEvent(action, stuff));
+        appendComponents.add(last);
+        return this;
+    }
+
+    public ChatF clickOpenUrl(String url) { return _doAction(ClickEvent.Action.OPEN_URL, url); }
+    public ChatF clickCopyToClipboard(String value) { return _doAction(ClickEvent.Action.COPY_TO_CLIPBOARD, value); }
+
     public ChatF click(ClickCallback<Audience> event) {
         if (appendComponents.isEmpty()) return this;
         Component last = appendComponents.removeLast();

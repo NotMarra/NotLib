@@ -10,6 +10,7 @@ public class NotColumn {
     private boolean autoIncrement;
     private boolean notNull;
     private boolean unique;
+    private String rawDefaultValue;
     private String defaultValue;
 
     public NotColumn(String name) { this.name = name; }
@@ -31,6 +32,7 @@ public class NotColumn {
         this.scale = scale; 
         return this; 
     }
+    public NotColumn rawDefaultValue(String rawDefaultValue) { this.rawDefaultValue = rawDefaultValue; return this; }
     public NotColumn defaultValue(String defaultValue) { this.defaultValue = defaultValue; return this; }
 
     public String getName() { return name; }
@@ -42,6 +44,7 @@ public class NotColumn {
     public boolean isAutoIncrement() { return autoIncrement; }
     public boolean isNotNull() { return notNull; }
     public boolean isUnique() { return unique; }
+    public String getRawDefaultValue() { return rawDefaultValue; }
     public String getDefaultValue() { return defaultValue; }
 
     public static NotColumn string(String name) { return new NotColumn(name).type(NotColumnType.STRING); }

@@ -76,6 +76,7 @@ public abstract class NotMySQL extends NotDatabase {
             if (column.isAutoIncrement()) sql.append(" AUTO_INCREMENT");
             if (column.isNotNull()) sql.append(" NOT NULL");
             if (column.isUnique()) sql.append(" UNIQUE");
+            if (column.getRawDefaultValue() != null) sql.append(" DEFAULT ").append(column.getRawDefaultValue());
             if (column.getDefaultValue() != null) sql.append(" DEFAULT '").append(column.getDefaultValue()).append("'");
             if (i < table.getColumns().size() - 1) sql.append(", ");
         }
