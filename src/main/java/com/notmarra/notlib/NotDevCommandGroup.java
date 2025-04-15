@@ -1,5 +1,6 @@
 package com.notmarra.notlib;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,8 @@ public final class NotDevCommandGroup extends NotCommandGroup {
             diffgui(),
             testanimationsgui(),
             testChatFClickable(),
+            testChatFClickableWithOptions(),
+            testChatFClickableInfinite(),
             testChatFHoverItem()
         );
     }
@@ -47,6 +50,38 @@ public final class NotDevCommandGroup extends NotCommandGroup {
                 .append("Test 2", Style.style(ChatF.C_GREEN, TextDecoration.UNDERLINED))
                 .hover(ChatF.of("You hovered over me!", ChatF.C_YELLOW))
                 .click(audience -> {
+                    ChatF.of("You click on a text").sendTo(cmd.getPlayer());
+                })
+
+                .appendBold("Test 3", ChatF.C_BLUE)
+                .sendTo(cmd.getPlayer());
+        });
+    }
+
+    private NotCommand testChatFClickableWithOptions() {
+        return NotCommand.of("test-chatf-clickable-with-options", cmd -> {
+            ChatF.empty()
+                .appendBold("Test 1", ChatF.C_RED)
+
+                .append("Test 2", Style.style(ChatF.C_GREEN, TextDecoration.UNDERLINED))
+                .hover(ChatF.of("You hovered over me!", ChatF.C_YELLOW))
+                .clickWithOptions(-1, Duration.ofSeconds(10), audience -> {
+                    ChatF.of("You click on a text").sendTo(cmd.getPlayer());
+                })
+
+                .appendBold("Test 3", ChatF.C_BLUE)
+                .sendTo(cmd.getPlayer());
+        });
+    }
+
+    private NotCommand testChatFClickableInfinite() {
+        return NotCommand.of("test-chatf-clickable-infinite", cmd -> {
+            ChatF.empty()
+                .appendBold("Test 1", ChatF.C_RED)
+
+                .append("Test 2", Style.style(ChatF.C_GREEN, TextDecoration.UNDERLINED))
+                .hover(ChatF.of("You hovered over me!", ChatF.C_YELLOW))
+                .clickInfinite(audience -> {
                     ChatF.of("You click on a text").sendTo(cmd.getPlayer());
                 })
 

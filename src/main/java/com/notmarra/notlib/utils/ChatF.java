@@ -1,5 +1,6 @@
 package com.notmarra.notlib.utils;
 
+import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -172,6 +173,22 @@ public class ChatF {
 
     public ChatF nl() {
         appendComponents.add(Component.newline());
+        return this;
+    }
+
+    public ChatF clickInfinite(ClickCallback<Audience> event) {
+        if (appendComponents.isEmpty()) return this;
+        Component last = appendComponents.removeLast();
+        last = last.clickEvent(ClickEvent.callback(event, o -> o.uses(-1)));
+        appendComponents.add(last);
+        return this;
+    }
+
+    public ChatF clickWithOptions(int uses, TemporalAmount duration, ClickCallback<Audience> event) {
+        if (appendComponents.isEmpty()) return this;
+        Component last = appendComponents.removeLast();
+        last = last.clickEvent(ClickEvent.callback(event, o -> o.uses(uses).lifetime(duration)));
+        appendComponents.add(last);
         return this;
     }
 
