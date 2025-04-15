@@ -45,11 +45,13 @@ class NotDevListener extends NotListener {
                 .createItem(Material.PLAYER_HEAD)
                     .withSkullTexture("1aec2a159f62d2ace9e1d3e5057a7f8d1ec3ffdfe92433e0a09a9837cadf2083")
                     .addToGUI(0)
+                    .gui()
                 .createItem(Material.DIAMOND_AXE)
                     .onClick((event, c) -> {
                         ChatF.of("Clicked on skull texture!").sendTo(cmd.getPlayer());
                     })
                     .addToGUI(1)
+                    .gui()
                 .open(cmd.getPlayer());
         });
     }
@@ -91,7 +93,7 @@ class NotDevListener extends NotListener {
                 }
 
                 if (query.toLowerCase().trim().startsWith("select")) {
-                    List<NotRecord> results = db.getQueryExecutor().executeQuery(query);
+                    List<NotRecord> results = db.getQueryExecutor().select(query);
                     if (results.isEmpty()) {
                         ChatF.of("No results found.").sendTo(arg.getPlayer());
                     } else {
@@ -105,7 +107,7 @@ class NotDevListener extends NotListener {
                     query.toLowerCase().trim().startsWith("update") ||
                     query.toLowerCase().trim().startsWith("delete")
                 ) {
-                    int affectedRows = db.getQueryExecutor().executeUpdate(query);
+                    int affectedRows = db.getQueryExecutor().update(query);
                     ChatF.of("Executed query. Affected rows: " + affectedRows).sendTo(arg.getPlayer());
                 } else {
                     ChatF.of("Unsupported query type.", ChatF.C_RED).sendTo(arg.getPlayer());
@@ -188,8 +190,7 @@ class NotDevListener extends NotListener {
             }
 
             int deleted = db.getTable(db.T_USERS)
-                .getAll()
-                .deleteWhere(r -> r.getString(db.T_USERS_C_PLAYER_NAME).equals("test"));
+                .delete(b -> b.where(db.T_USERS_C_PLAYER_NAME, "=", "test"));
 
             ChatF.of("Deleted " + deleted + " rows.").sendTo(arg.getPlayer());
         });

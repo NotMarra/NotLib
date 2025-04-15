@@ -14,7 +14,11 @@ import com.notmarra.notlib.extensions.NotPlugin;
 import com.notmarra.notlib.utils.ChatF;
 import com.notmarra.notlib.utils.command.NotCommand;
 import com.notmarra.notlib.utils.gui.NotGUI;
+import com.notmarra.notlib.utils.gui.NotGUIItem;
 import com.notmarra.notlib.utils.gui.NotGUISlotIDs;
+
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
 
 public final class NotDevCommandGroup extends NotCommandGroup {
     public static final String ID = "notdevcommandgroup";
@@ -29,8 +33,46 @@ public final class NotDevCommandGroup extends NotCommandGroup {
         return List.of(
             testGui(),
             diffgui(),
-            testanimationsgui()
+            testanimationsgui(),
+            testChatFClickable(),
+            testChatFHoverItem()
         );
+    }
+
+    private NotCommand testChatFClickable() {
+        return NotCommand.of("test-chatf-clickable", cmd -> {
+            ChatF.empty()
+                .appendBold("Test 1", ChatF.C_RED)
+
+                .append("Test 2", Style.style(ChatF.C_GREEN, TextDecoration.UNDERLINED))
+                .hover(ChatF.of("You hovered over me!", ChatF.C_YELLOW))
+                .click(audience -> {
+                    ChatF.of("You click on a text").sendTo(cmd.getPlayer());
+                })
+
+                .appendBold("Test 3", ChatF.C_BLUE)
+                .sendTo(cmd.getPlayer());
+        });
+    }
+
+    private NotCommand testChatFHoverItem() {
+        return NotCommand.of("test-chatf-hover-item", cmd -> {
+            ChatF.empty()
+                .appendBold("Test 1", ChatF.C_RED)
+
+                .append("Test 2", Style.style(ChatF.C_GREEN, TextDecoration.UNDERLINED))
+                .hoverItem(
+                    NotGUIItem.newNonGUI(Material.DIAMOND_AXE)
+                )
+                // .hoverEntity(cmd.getPlayer())
+
+                .click(audience -> {
+                    ChatF.of("You click on a text").sendTo(cmd.getPlayer());
+                })
+
+                .appendBold("Test 3", ChatF.C_BLUE)
+                .sendTo(cmd.getPlayer());
+        });
     }
 
     private NotCommand testGui() {

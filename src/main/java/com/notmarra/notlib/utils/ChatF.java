@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.event.ClickCallback;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.format.Style;
@@ -17,6 +21,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.notmarra.notlib.NotLib;
+import com.notmarra.notlib.utils.gui.NotGUIItem;
 
 
 public class ChatF {
@@ -85,7 +90,7 @@ public class ChatF {
     public Component build() {
         Component baseComponent = this.baseComponent;
 
-        for (Component component : this.appendComponents) {
+        for (Component component : appendComponents) {
             baseComponent = baseComponent.append(component);
         }
 
@@ -130,79 +135,113 @@ public class ChatF {
 
     public ChatF appendMany(ChatF... formatters) {
         for (ChatF formatter : formatters) {
-            this.appendComponents.add(formatter.build());
+            appendComponents.add(formatter.build());
         }
         return this;
     }
 
     public ChatF appendMany(Component... components) {
-        Collections.addAll(this.appendComponents, components);
+        Collections.addAll(appendComponents, components);
         return this;
     }
 
     public ChatF appendMany(String... strings) {
         for (String string : strings) {
-            this.appendComponents.add(Component.text(string));
+            appendComponents.add(Component.text(string));
         }
         return this;
     }
 
     public ChatF appendListChatF(List<ChatF> formatters) {
         for (ChatF formatter : formatters) {
-            this.appendComponents.add(formatter.build());
+            appendComponents.add(formatter.build());
         }
         return this;
     }
 
     public ChatF appendListComponent(List<Component> components) {
-        this.appendComponents.addAll(components);
+        appendComponents.addAll(components);
         return this;
     }
 
     public ChatF appendListString(List<String> strings) {
         for (String string : strings) {
-            this.appendComponents.add(Component.text(string));
+            appendComponents.add(Component.text(string));
         }
         return this;
     }
 
     public ChatF nl() {
-        this.appendComponents.add(Component.newline());
+        appendComponents.add(Component.newline());
+        return this;
+    }
+
+    public ChatF click(ClickCallback<Audience> event) {
+        if (appendComponents.isEmpty()) return this;
+        Component last = appendComponents.removeLast();
+        last = last.clickEvent(ClickEvent.callback(event));
+        appendComponents.add(last);
+        return this;
+    }
+
+    public ChatF hoverItem(NotGUIItem item) {
+        if (appendComponents.isEmpty()) return this;
+        Component last = appendComponents.removeLast();
+        last = last.hoverEvent(item.build().asHoverEvent());
+        appendComponents.add(last);
+        return this;
+    }
+
+    public ChatF hoverEntity(Entity entity) {
+        if (appendComponents.isEmpty()) return this;
+        Component last = appendComponents.removeLast();
+        last = last.hoverEvent(entity.asHoverEvent());
+        appendComponents.add(last);
+        return this;
+    }
+
+    public ChatF hover(String component) { return hover(ChatF.of(component)); }
+    public ChatF hover(ChatF component) { return hover(component.build()); }
+    public ChatF hover(Component component) {
+        if (appendComponents.isEmpty()) return this;
+        Component last = appendComponents.removeLast();
+        last = last.hoverEvent(HoverEvent.showText(component));
+        appendComponents.add(last);
         return this;
     }
 
     public ChatF append(ChatF formatter) {
-        this.appendComponents.add(formatter.build());
+        appendComponents.add(formatter.build());
         return this;
     }
 
     public ChatF append(Component component) {
-        this.appendComponents.add(component);
+        appendComponents.add(component);
         return this;
     }
 
     public ChatF append(String string) {
-        this.appendComponents.add(toComponent(string));
+        appendComponents.add(toComponent(string));
         return this;
     }
 
     public ChatF append(String string, TextColor color) {
-        this.appendComponents.add(toComponent(string, color));
+        appendComponents.add(toComponent(string, color));
         return this;
     }
 
     public ChatF append(String string, Style style) {
-        this.appendComponents.add(toComponent(string, style));
+        appendComponents.add(toComponent(string, style));
         return this;
     }
 
     public ChatF appendBold(String string) {
-        this.appendComponents.add(toComponentBold(string));
+        appendComponents.add(toComponentBold(string));
         return this;
     }
 
     public ChatF appendBold(String string, TextColor color) {
-        this.appendComponents.add(toComponentBold(string, color));
+        appendComponents.add(toComponentBold(string, color));
         return this;
     }
 
@@ -268,6 +307,10 @@ public class ChatF {
     }
 
     // shorthands
+
+    public void sendTo(Audience audience) {
+        audience.sendMessage(build());
+    }
 
     public void sendTo(Player player) {
         if (this.entity == null) {

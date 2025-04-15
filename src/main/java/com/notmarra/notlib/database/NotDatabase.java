@@ -57,14 +57,11 @@ public abstract class NotDatabase extends NotConfigurable {
     public NotSqlBuilder update(String table) { return NotSqlBuilder.update(table); }
     public NotSqlBuilder deleteFrom(String table) { return NotSqlBuilder.deleteFrom(table); }
     public boolean exists(NotSqlBuilder builder) { return queryExecutor.exists(builder); }
-    public List<NotRecord> query(NotSqlBuilder builder) { return queryExecutor.executeQuery(builder); }
-    public int execute(NotSqlBuilder builder) { return queryExecutor.executeUpdate(builder); }
-    public List<NotRecord> executeQuery(NotSqlBuilder builder) { return queryExecutor.executeQuery(builder); }
-    public NotRecord fetchOne(NotSqlBuilder builder) { return queryExecutor.fetchOne(builder); }
+    public NotRecord selectOne(NotSqlBuilder builder) { return queryExecutor.selectOne(builder); }
+    public List<NotRecord> select(NotSqlBuilder builder) { return queryExecutor.select(builder); }
+    public int execute(NotSqlBuilder builder) { return queryExecutor.update(builder); }
 
-    public NotSqlQueryExecutor getQueryExecutor() {
-        return queryExecutor;
-    }
+    public NotSqlQueryExecutor getQueryExecutor() { return queryExecutor; }
 
     public Map<String, NotTable> getTables() { return tables; }
     public NotTable getTable(String tableName) { return tables.get(tableName); }
@@ -166,26 +163,46 @@ public abstract class NotDatabase extends NotConfigurable {
         }
     }
 
-    public boolean processQuery(String sql) {
+    public boolean processResult(String sql) {
+        if (NotDebugger.should(NotLib.DEBUG_DB)) {
+            getLogger().info("[processResult] SQL: " + sql);
+        }
+
         try (Connection connection = getConnection()) {
-            if (NotDebugger.should(NotLib.DEBUG_DB)) {
-                getLogger().info("[processQuery] SQL: " + sql);
-            }
             return connection.createStatement().execute(sql);
         } catch (Exception e) {
-            getLogger().error("Error processing query: " + e.getMessage());
+            getLogger().error("Error processing result: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
 
-    public List<NotRecord> processResult(String sql, List<Object> params) {
-        if (sql == null || sql.isEmpty()) return List.of();
-        
-
+    public int processUpdate(String sql, List<Object> params) {
         if (NotDebugger.should(NotLib.DEBUG_DB)) {
-            getLogger().info("[processResult] SQL: " + sql);
-            getLogger().info("[processResult] Params: " + params);
+            getLogger().info("[processUpdate] SQL: " + sql);
+            getLogger().info("[processUpdate] Params: " + params);
+        }
+
+        try {
+            Connection connection = getConnection();
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
+            }
+            
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            getLogger().error("Error processing update: " + e.getMessage());
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public List<NotRecord> processSelect(String sql, List<Object> params) {
+        if (NotDebugger.should(NotLib.DEBUG_DB)) {
+            getLogger().info("[processSelect] SQL: " + sql);
+            getLogger().info("[processSelect] Params: " + params);
         }
 
         try (Connection connection = getConnection();

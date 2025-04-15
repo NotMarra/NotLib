@@ -145,23 +145,22 @@ public class NotGUIItem {
             }
         }
 
-        NamespacedKey key = new NamespacedKey(gui().getPlugin(), NotGUI.ITEM_UUID_KEY);
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.set(key, PersistentDataType.STRING, uid.toString());
+        if (gui() != null) {
+            NamespacedKey key = new NamespacedKey(gui().getPlugin(), NotGUI.ITEM_UUID_KEY);
+            PersistentDataContainer container = meta.getPersistentDataContainer();
+            container.set(key, PersistentDataType.STRING, uid.toString());
+        }
 
         stack.setItemMeta(meta);
 
         return stack;
     }
 
-    public NotGUI gui() {
-        return parentGUI;
-    }
+    public NotGUI gui() { return parentGUI; }
+    public NotGUIContainer parent() { return parentContainer; }
 
-    public NotGUIContainer parent() {
-        return parentContainer;
-    }
+    public NotGUIItem addToGUI(int slot) { gui().addItem(this, slot); return this; }
+    public NotGUIItem addToGUI(int x, int y) { gui().addItem(this, x, y); return this; }
 
-    public NotGUI addToGUI(int slot) { return gui().addItem(this, slot); }
-    public NotGUI addToGUI(int x, int y) { return gui().addItem(this, x, y); }
+    public static NotGUIItem newNonGUI(Material itemType) { return new NotGUIItem(null, itemType); }
 }

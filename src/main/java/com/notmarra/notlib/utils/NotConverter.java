@@ -225,4 +225,8 @@ public class NotConverter {
             return null;
         }
     }
+
+    public static String toString(Object value) {
+        return value instanceof String ? (String) value : value != null ? value.toString() : "";
+    }
 }

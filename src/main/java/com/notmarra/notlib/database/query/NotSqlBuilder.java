@@ -16,9 +16,11 @@ public class NotSqlBuilder {
     private Integer offset;
     private QueryType queryType;
 
-    private enum QueryType {
+    public enum QueryType {
         SELECT, INSERT, UPDATE, DELETE
     }
+
+    public QueryType getQueryType() { return queryType; }
 
     // Static factory methods
     public static NotSqlBuilder select(String table) {
@@ -71,6 +73,66 @@ public class NotSqlBuilder {
         return this;
     }
 
+    public NotSqlBuilder whereEquals(String column, Object value) {
+        this.whereBuilder.andEquals(column, value);
+        return this;
+    }
+
+    public NotSqlBuilder whereNotEquals(String column, Object value) {
+        this.whereBuilder.andNotEquals(column, value);
+        return this;
+    }
+
+    public NotSqlBuilder whereLessThan(String column, Object value) {
+        this.whereBuilder.andLessThan(column, value);
+        return this;
+    }
+
+    public NotSqlBuilder whereLessThanOrEquals(String column, Object value) {
+        this.whereBuilder.andLessThanOrEquals(column, value);
+        return this;
+    }
+
+    public NotSqlBuilder whereGreaterThan(String column, Object value) {
+        this.whereBuilder.andGreaterThan(column, value);
+        return this;
+    }
+
+    public NotSqlBuilder whereGreaterThanOrEquals(String column, Object value) {
+        this.whereBuilder.andGreaterThanOrEquals(column, value);
+        return this;
+    }
+
+    public NotSqlBuilder whereIn(String column, List<Object> values) {
+        this.whereBuilder.andIn(column, values);
+        return this;
+    }
+
+    public NotSqlBuilder whereNotIn(String column, List<Object> values) {
+        this.whereBuilder.andNotIn(column, values);
+        return this;
+    }
+
+    public NotSqlBuilder whereLike(String column, String pattern) {
+        this.whereBuilder.andLike(column, pattern);
+        return this;
+    }
+
+    public NotSqlBuilder whereNotLike(String column, String pattern) {
+        this.whereBuilder.andNotLike(column, pattern);
+        return this;
+    }
+
+    public NotSqlBuilder whereNull(String column) {
+        this.whereBuilder.andNull(column);
+        return this;
+    }
+
+    public NotSqlBuilder whereNotNull(String column) {
+        this.whereBuilder.andNotNull(column);
+        return this;
+    }
+
     public NotSqlBuilder where(String rawCondition) {
         this.whereBuilder.and(rawCondition);
         return this;
@@ -118,6 +180,16 @@ public class NotSqlBuilder {
         return this;
     }
 
+    public NotSqlBuilder orderByDesc(String column) {
+        this.orderByClauses.add(column + " DESC");
+        return this;
+    }
+
+    public NotSqlBuilder orderByAsc(String column) {
+        this.orderByClauses.add(column + " ASC");
+        return this;
+    }
+
     // GROUP BY clauses
     public NotSqlBuilder groupBy(String... columns) {
         for (String column : columns) {
@@ -150,6 +222,11 @@ public class NotSqlBuilder {
 
     public NotSqlBuilder setRaw(String column, String rawValue) {
         this.updateValues.add(NotSqlUpdateValue.ofRaw(column, rawValue));
+        return this;
+    }
+
+    public NotSqlBuilder setRaw(String column, String value, List<Object> values) {
+        this.updateValues.add(NotSqlUpdateValue.ofRaw(column, value, values));
         return this;
     }
 
@@ -238,11 +315,7 @@ public class NotSqlBuilder {
 
         List<String> setStatements = new ArrayList<>();
         for (NotSqlUpdateValue update : updateValues) {
-            if (update.isRaw()) {
-                setStatements.add(update.getColumn() + " = " + update.getValue());
-            } else {
-                setStatements.add(update.getColumn() + " = " + formatValue(update.getValue()));
-            }
+            setStatements.add(update.getColumn() + " = " + update.getNewValue());
         }
 
         query.append(String.join(", ", setStatements));
@@ -292,7 +365,7 @@ public class NotSqlBuilder {
                 
         if (queryType == QueryType.UPDATE) {
             for (NotSqlUpdateValue update : updateValues) {
-                if (!update.isRaw()) params.add(update.getValue());
+                params.addAll(update.getValues());
             }
         }
         

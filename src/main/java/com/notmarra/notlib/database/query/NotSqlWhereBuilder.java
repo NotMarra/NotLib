@@ -37,6 +37,82 @@ public class NotSqlWhereBuilder {
         return this;
     }
 
+    public NotSqlWhereBuilder andEquals(String column, Object value) {
+        this.whereClauses.add(new NotWhereClause(column, "=", value, "AND"));
+        return this;
+    }
+
+    public NotSqlWhereBuilder andNotEquals(String column, Object value) {
+        this.whereClauses.add(new NotWhereClause(column, "!=", value, "AND"));
+        return this;
+    }
+
+    public NotSqlWhereBuilder andLessThan(String column, Object value) {
+        this.whereClauses.add(new NotWhereClause(column, "<", value, "AND"));
+        return this;
+    }
+
+    public NotSqlWhereBuilder andLessThanOrEquals(String column, Object value) {
+        this.whereClauses.add(new NotWhereClause(column, "<=", value, "AND"));
+        return this;
+    }
+
+    public NotSqlWhereBuilder andGreaterThan(String column, Object value) {
+        this.whereClauses.add(new NotWhereClause(column, ">", value, "AND"));
+        return this;
+    }
+
+    public NotSqlWhereBuilder andGreaterThanOrEquals(String column, Object value) {
+        this.whereClauses.add(new NotWhereClause(column, ">=", value, "AND"));
+        return this;
+    }
+
+    public NotSqlWhereBuilder andIn(String column, List<Object> values) {
+        StringBuilder inClause = new StringBuilder(column + " IN (");
+        for (int i = 0; i < values.size(); i++) {
+            inClause.append(formatValue(values.get(i)));
+            if (i < values.size() - 1) {
+                inClause.append(", ");
+            }
+        }
+        inClause.append(")");
+        this.whereClauses.add(new NotWhereClause(inClause.toString(), values, "AND"));
+        return this;
+    }
+
+    public NotSqlWhereBuilder andNotIn(String column, List<Object> values) {
+        StringBuilder notInClause = new StringBuilder(column + " NOT IN (");
+        for (int i = 0; i < values.size(); i++) {
+            notInClause.append(formatValue(values.get(i)));
+            if (i < values.size() - 1) {
+                notInClause.append(", ");
+            }
+        }
+        notInClause.append(")");
+        this.whereClauses.add(new NotWhereClause(notInClause.toString(), values, "AND"));
+        return this;
+    }
+
+    public NotSqlWhereBuilder andLike(String column, Object value) {
+        this.whereClauses.add(new NotWhereClause(column, "LIKE", value, "AND"));
+        return this;
+    }
+
+    public NotSqlWhereBuilder andNotLike(String column, Object value) {
+        this.whereClauses.add(new NotWhereClause(column, "NOT LIKE", value, "AND"));
+        return this;
+    }
+
+    public NotSqlWhereBuilder andNull(String column) {
+        this.whereClauses.add(new NotWhereClause(column, "IS NULL", null, "AND"));
+        return this;
+    }
+
+    public NotSqlWhereBuilder andNotNull(String column) {
+        this.whereClauses.add(new NotWhereClause(column, "IS NOT NULL", null, "AND"));
+        return this;
+    }
+
     public NotSqlWhereBuilder or(String column, String operator, Object value) {
         this.whereClauses.add(new NotWhereClause(column, operator, value, "OR"));
         return this;
@@ -65,11 +141,15 @@ public class NotSqlWhereBuilder {
                 if (clause.isRaw()) {
                     query.append(clause.getRawCondition());
                 } else {
-                    query.append(clause.getColumn())
-                        .append(" ")
-                        .append(clause.getOperator())
-                        .append(" ")
-                        .append(formatValue(clause.getValue()));
+                    if (clause.isMulti()) {
+                        query.append(clause.getSql());
+                    } else {
+                        query.append(clause.getSql())
+                            .append(" ")
+                            .append(clause.getOperator())
+                            .append(" ")
+                            .append(formatValue(clause.getValue()));
+                    }
                 }
                 
                 isFirst = false;
@@ -81,26 +161,24 @@ public class NotSqlWhereBuilder {
         List<Object> params = new ArrayList<>();
         
         for (NotWhereClause clause : whereClauses) {
-            if (!clause.isRaw()) {
-                params.add(clause.getValue());
-            }
+            if (!clause.isRaw()) params.addAll(clause.getValues());
         }
         
         return params;
     }
 
     private static class NotWhereClause {
-        private String column;
+        private String sql;
         private String operator;
-        private Object value;
+        private List<Object> values;
         private String logicalOperator;
         private boolean isRaw;
         private String rawCondition;
 
-        public NotWhereClause(String column, String operator, Object value, String logicalOperator) {
-            this.column = column;
+        public NotWhereClause(String sql, String operator, Object value, String logicalOperator) {
+            this.sql = sql;
             this.operator = operator;
-            this.value = value;
+            this.values = List.of(value);
             this.logicalOperator = logicalOperator;
             this.isRaw = false;
         }
@@ -111,9 +189,19 @@ public class NotSqlWhereBuilder {
             this.isRaw = true;
         }
 
-        public String getColumn() { return column; }
+        public NotWhereClause(String sql, List<Object> values, String logicalOperator) {
+            this.sql = sql;
+            this.values = values;
+            this.logicalOperator = logicalOperator;
+            this.isRaw = false;
+        }
+
+        public boolean isMulti() { return values.size() > 1; }
+
+        public String getSql() { return sql; }
         public String getOperator() { return operator; }
-        public Object getValue() { return value; }
+        public List<Object> getValues() { return values; }
+        public Object getValue() { return values.isEmpty() ? null : values.get(0); }
         public String getLogicalOperator() { return logicalOperator; }
         public boolean isRaw() { return isRaw; }
         public String getRawCondition() { return rawCondition; }

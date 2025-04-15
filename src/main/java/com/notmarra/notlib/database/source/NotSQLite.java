@@ -74,9 +74,21 @@ public abstract class NotSQLite extends NotDatabase {
             if (column.isUnique()) sql.append(" UNIQUE");
             if (i < table.getColumns().size() - 1) sql.append(", ");
         }
+
+        List<String> primaryKeys = table.getPrimaryKeys();
+        if (!primaryKeys.isEmpty()) {
+            sql.append(", PRIMARY KEY (");
+            for (int i = 0; i < primaryKeys.size(); i++) {
+                String primaryKey = primaryKeys.get(i);
+                sql.append(primaryKey);
+                if (i < primaryKeys.size() - 1) sql.append(", ");
+            }
+            sql.append(")");
+        }
+
         sql.append(");");
 
-        return processQuery(sql.toString());
+        return processResult(sql.toString());
     }
 
     @Override

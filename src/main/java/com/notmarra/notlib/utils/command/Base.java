@@ -28,6 +28,7 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public abstract class Base<T extends Base<T>> {
@@ -138,6 +139,14 @@ public abstract class Base<T extends Base<T>> {
     public NotStringArg stringArg(String name) { NotStringArg arg = NotStringArg.of(name); this.addArg(arg); return arg; }
     public NotStringArg stringArg(String name, Consumer<NotArgument<String>> executor) { NotStringArg arg = NotStringArg.of(name, executor); this.addArg(arg); return arg; }
 
+    public Map<String, Object> getValues() {
+        Map<String, Object> values = new HashMap<>();
+        for (String arg : this.arguments.keySet()) {
+            values.put(arg, this.arguments.get(arg).get());
+            values.putAll(this.arguments.get(arg).getValues());
+        }
+        return values;
+    }
 
     public abstract CommandNode<CommandSourceStack> build();
 }

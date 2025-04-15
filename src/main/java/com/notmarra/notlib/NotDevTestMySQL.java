@@ -29,24 +29,23 @@ class NotDevTestMySQL extends NotMySQL {
     public String getId() { return ID; }
 
     public List<NotRecord> getPlayersWhere(NotSqlWhereBuilder where) {
-        return getTable(T_USERS).getMany(b -> b.where(where)).getRecords();
+        return getTable(T_USERS).select(b -> b.where(where));
     }
 
     public double getPlayerBalance(Player player) {
         return getTable(T_USERS)
-            .get(b -> b.where(T_USERS_C_UUID, "=", player.getUniqueId().toString()))
-            .getRecord()
+            .selectOne(b -> b.whereEquals(T_USERS_C_UUID, player.getUniqueId().toString()))
             .getDouble(T_USERS_C_BALANCE, 0.0);
     }
 
     public boolean existsPlayer(Player player) {
         return getTable(T_USERS)
-            .exists(b -> b.where(T_USERS_C_UUID, "=", player.getUniqueId().toString()));
+            .exists(b -> b.whereEquals(T_USERS_C_UUID, player.getUniqueId().toString()));
     }
 
     public boolean deletePlayer(String uuid) {
         return getTable(T_USERS)
-            .delete(b -> b.where(T_USERS_C_UUID, "=", uuid));
+            .deleteSucceded(b -> b.whereEquals(T_USERS_C_UUID, uuid));
     }
 
     public boolean insertPlayer(Player player) {
@@ -61,16 +60,16 @@ class NotDevTestMySQL extends NotMySQL {
     public boolean addXp(Player player, int xp) {
         return getTable(T_USERS)
             .update(b -> {
-                b.where(T_USERS_C_UUID, "=", player.getUniqueId().toString());
-                b.setRaw(T_USERS_C_XP, "xp + " + xp);
+                b.setRaw(T_USERS_C_XP, "xp + ?", List.of(xp));
+                b.whereEquals(T_USERS_C_UUID, player.getUniqueId().toString());
             }) > 0;
     }
 
     public boolean removeXp(Player player, int xp) {
         return getTable(T_USERS)
             .update(b -> {
-                b.where(T_USERS_C_UUID, "=", player.getUniqueId().toString());
-                b.setRaw(T_USERS_C_XP, "xp - " + xp);
+                b.setRaw(T_USERS_C_XP, "xp - ?", List.of(xp));
+                b.whereEquals(T_USERS_C_UUID, player.getUniqueId().toString());
             }) > 0;
     }
 
