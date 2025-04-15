@@ -52,7 +52,6 @@ public class ChatF {
 
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
 
-    private final Component baseComponent;
     private final List<Component> appendComponents = new ArrayList<>();
     private final HashMap<String, Object> replacements = new HashMap<>();
 
@@ -60,7 +59,7 @@ public class ChatF {
     private Entity targetEntity;
 
     public ChatF(Component baseComponent) {
-        this.baseComponent = baseComponent;
+        this.appendComponents.add(baseComponent);
     }
 
     public String buildString() {
@@ -88,7 +87,7 @@ public class ChatF {
     }
 
     public Component build() {
-        Component baseComponent = this.baseComponent;
+        Component baseComponent = Component.empty();
 
         for (Component component : appendComponents) {
             baseComponent = baseComponent.append(component);
