@@ -8,18 +8,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'adopt'
           java-version: '21'
+
+      - name: Set snapshot version
+        run: |
+          SHORT_HASH=$(git rev-parse --short HEAD)
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          SNAPSHOT_VERSION="${VERSION}_${SHORT_HASH}"
+          echo "SNAPSHOT_VERSION=${SNAPSHOT_VERSION}" >> $GITHUB_ENV
+          echo "ARTIFACT_PATH=target" >> $GITHUB_ENV
+
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots clean package
+
+      - name: Rename JAR with snapshot version
+        run: |
+          JAR_FILE=$(find target -name "*.jar" | grep -v "original")
+          mv "$JAR_FILE" "target/NotLib-${SNAPSHOT_VERSION}.jar"
+
       - name: Upload Plugin jar
         uses: actions/upload-artifact@v4
         with:
-          name: NotLib-${{ env.snapshotVersion }}-${{ env.git_hash }}.jar
-          path: ${{ env.artifactPath }}/NotLib-${{ env.snapshotVersion }}.jar
+          name: NotLib-${{ env.SNAPSHOT_VERSION }}.jar
+          path: target/NotLib-${{ env.SNAPSHOT_VERSION }}.jar
