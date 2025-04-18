@@ -3,7 +3,10 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
+
+permissions:
+  contents: write
 
 jobs:
   release:
@@ -17,7 +20,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 21
-          distribution: 'adopt'
+          distribution: "adopt"
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots clean package
       - name: Get Version from POM
