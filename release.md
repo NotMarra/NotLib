@@ -15,3 +15,10 @@ It assumes you are using Semantic Versioning - which is well worth a read howeve
 You have three types of releases: major.minor.patch each changing the version number by one. You would run
 `npx dwmkerr/standard-version --packageFiles pom.xml --bumpFiles pom.xml --release-as <major|minor|patch>`
 when you are ready to change that specific version.
+
+# How it works?
+
+## Commits
+
+use Conventional Commits https://www.conventionalcommits.org/en/v1.0.0/
+and we are using Semantic Versioning https://semver.org/
