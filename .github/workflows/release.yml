@@ -24,7 +24,7 @@ jobs:
         run: echo "::set-output name=version::$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive exec:exec)"
         id: version
       - name: Create Release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v1
         id: create_release
         with:
           draft: false
