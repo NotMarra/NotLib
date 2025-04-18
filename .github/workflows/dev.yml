@@ -30,9 +30,13 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots clean package
 
-      - name: Rename JAR with snapshot version
+      - name: Rename shaded JAR with snapshot version
         run: |
-          JAR_FILE=$(find target -name "*.jar" | grep -v "original")
+          JAR_FILE=$(find target -name "*-shaded.jar" | head -n 1)
+          if [ -z "$JAR_FILE" ]; then
+            echo "Shaded JAR not found!"
+            exit 1
+          fi
           mv "$JAR_FILE" "target/NotLib-${SNAPSHOT_VERSION}.jar"
 
       - name: Upload Plugin jar
