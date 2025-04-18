@@ -1,0 +1,25 @@
+name: Build DEV Jars
+
+on: [push, pull_request]
+
+jobs:
+  build_dev_jars:
+    name: Build DEV jars
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '21'
+      - name: Build with Maven
+        run: mvn --batch-mode --update-snapshots clean package
+      - name: Upload Plugin jar
+        uses: actions/upload-artifact@v3
+        with:
+          name: NotLib-${{ env.snapshotVersion }}-${{ env.git_hash }}.jar
+          path: ${{ env.artifactPath }}/NotLib-${{ env.snapshotVersion }}.jar
