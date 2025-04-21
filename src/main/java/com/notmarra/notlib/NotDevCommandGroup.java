@@ -38,7 +38,8 @@ public final class NotDevCommandGroup extends NotCommandGroup {
             testChatFClickable(),
             testChatFClickableWithOptions(),
             testChatFClickableInfinite(),
-            testChatFHoverItem()
+            testChatFHoverItem(),
+            testPatternGui()
         );
     }
 
@@ -97,7 +98,7 @@ public final class NotDevCommandGroup extends NotCommandGroup {
 
                 .append("Test 2", Style.style(ChatF.C_GREEN, TextDecoration.UNDERLINED))
                 .hoverItem(
-                    NotGUIItem.newNonGUI(Material.DIAMOND_AXE)
+                    NotGUIItem.create(Material.DIAMOND_AXE)
                 )
                 // .hoverEntity(cmd.getPlayer())
 
@@ -257,9 +258,46 @@ public final class NotDevCommandGroup extends NotCommandGroup {
                     //     c.position(newX, c.pos().y);
                     // });
                 })
+                .createItem(Material.DISPENSER)
+                    .name(ChatF.empty())
+                    .lore(List.of(ChatF.empty()))
+                    .addToGUI(1)
+                    .gui()
                 .onClose(event -> {
                     Player player = (Player) event.getPlayer();
                     ChatF.of("You closed the GUI!").sendTo(player);
+                })
+                .open(cmd.getPlayer());
+        });
+    }
+
+    private NotCommand testPatternGui() {
+        List<String> patternList = List.of(
+            "#########",
+            "###X#X###",
+            "##X#X#X##",
+            "###X#X###",
+            "####X####",
+            "#########"
+        );
+
+        return NotCommand.of("test-pattern-gui", cmd -> {
+            NotGUI.create("TITLE")
+                .pattern(patternList)
+                .emptySlotChars(List.of('#'))
+                .onPatternMatch(info -> {
+                    if (info.ch == 'X') {
+                        return info.gui.createItem(Material.DIAMOND_AXE).name(ChatF.of("COUNT: " + info.count + " TOTAL: " + info.total));
+                        // OR
+                        // return NotGUIItem.create(info.gui, Material.DIAMOND_AXE);
+                    }
+                    return null;
+                })
+                .onOpen(e -> {
+                    ChatF.of("You have open the GUI!").sendTo(e.getPlayer());
+                })
+                .onClose(e -> {
+                    ChatF.of("You have closed the GUI!").sendTo(e.getPlayer());
                 })
                 .open(cmd.getPlayer());
         });

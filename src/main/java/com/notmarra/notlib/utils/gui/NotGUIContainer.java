@@ -197,21 +197,20 @@ public class NotGUIContainer {
     
     private void setItemToSlot(int slot, ItemStack item) {
         Inventory builtInventory = gui.getBuiltInventory();
-        if (builtInventory != null) {
-            int x = slot % size.width;
-            int y = slot / size.width;
-            
-            int absoluteX = position.x + x;
-            int absoluteY = position.y + y;
-            int inventorySlot = absoluteY * gui().rowSize() + absoluteX;
-            
-            if (inventorySlot >= 0 && inventorySlot < builtInventory.getSize()) {
-                builtInventory.setItem(inventorySlot, item);
-            } else if (wrapped) {
-                int wrappedSlot = inventorySlot % builtInventory.getSize();
-                if (wrappedSlot < 0) wrappedSlot += builtInventory.getSize();
-                builtInventory.setItem(wrappedSlot, item);             
-            }
+
+        int x = slot % size.width;
+        int y = slot / size.width;
+        
+        int absoluteX = position.x + x;
+        int absoluteY = position.y + y;
+        int inventorySlot = absoluteY * gui().rowSize() + absoluteX;
+        
+        if (inventorySlot >= 0 && inventorySlot < builtInventory.getSize()) {
+            builtInventory.setItem(inventorySlot, item);
+        } else if (wrapped) {
+            int wrappedSlot = inventorySlot % builtInventory.getSize();
+            if (wrappedSlot < 0) wrappedSlot += builtInventory.getSize();
+            builtInventory.setItem(wrappedSlot, item);             
         }
     }
     
@@ -303,7 +302,7 @@ public class NotGUIContainer {
             parentOffset.x + position.x,
             parentOffset.y + position.y
         );
-        
+
         for (Map.Entry<Integer, ItemStack> entry : items.entrySet()) {
             int localSlot = entry.getKey();
             ItemStack item = entry.getValue();

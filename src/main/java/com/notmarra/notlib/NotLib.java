@@ -1,5 +1,6 @@
 package com.notmarra.notlib;
 
+import com.notmarra.notlib.cache.NotCache;
 import com.notmarra.notlib.extensions.NotPlugin;
 import com.notmarra.notlib.quests.NotQuestListener;
 import com.notmarra.notlib.utils.ChatF;
@@ -11,23 +12,23 @@ public final class NotLib extends NotPlugin {
     private static Boolean hasPlaceholderAPI = false;
     private static Boolean hasVault = false;
 
-    public static final String DEBUG_DB = "debug_db";
+    private NotDebugger debugger;
+    public NotDebugger getDebugger() { return debugger; }
 
     @Override
     public void initNotPlugin() {
-        NotDebugger.register(DEBUG_DB);
-
         // listeners
         addListener(new NotGUIListener(this));
 
         addListener(new NotQuestListener(this));
 
         // commands
+        addCommandGroup(new NotLibCommandGroup(this));
         addCommandGroup(new NotDevCommandGroup(this));
 
         // TODO: test stuff, remove
         addListener(new NotDevListener(this));
-        // db().registerDatabase(new NotDevTestMySQL(this, CONFIG_YML));
+        db().registerDatabase(new NotDevTestMySQL(this, CONFIG_YML));
 
         // plugin callbacks
         addPluginEnabledCallback("PlaceholderAPI", () -> hasPlaceholderAPI = true);
@@ -36,7 +37,9 @@ public final class NotLib extends NotPlugin {
 
     @Override
     public void onEnable() {
+        NotCache.initialize(this);
         instance = this;
+        this.debugger = new NotDebugger(this);
         super.onEnable();
         log().info(ChatF.of("Enabled!").build());
     }
@@ -48,6 +51,7 @@ public final class NotLib extends NotPlugin {
 
     public NotGUIListener getNotGUIListener() { return (NotGUIListener)getListener(NotGUIListener.ID); }
 
+    public static NotDebugger dbg() { return getInstance().getDebugger(); }
     public static NotLib getInstance() { return instance; }
     public static Boolean hasPlaceholderAPI() { return hasPlaceholderAPI; }
     public static Boolean hasVault() { return hasVault; }

@@ -62,7 +62,7 @@ public class ChatF {
     private Entity targetEntity;
 
     public ChatF(Component baseComponent) {
-        this.appendComponents.add(baseComponent);
+        appendComponents.add(baseComponent);
     }
 
     public String buildString() {
@@ -96,7 +96,7 @@ public class ChatF {
             baseComponent = baseComponent.append(component);
         }
 
-        baseComponent = buildReplacements(baseComponent, this.replacements);
+        baseComponent = buildReplacements(baseComponent, replacements);
 
         if (NotLib.hasPlaceholderAPI() && entity instanceof Player player) {
             String message = miniMessage.serialize(baseComponent);
@@ -242,6 +242,18 @@ public class ChatF {
         return this;
     }
 
+    public ChatF append(Object o) {
+        if (o instanceof Component) {
+            return append((Component)o);
+        } else if (o instanceof ChatF) {
+            return append(((ChatF)o).build());
+        } else if (o instanceof String) {
+            return append((String)o);
+        } else {
+            return append(o.toString());
+        }
+    }
+
     public ChatF append(ChatF formatter) {
         appendComponents.add(formatter.build());
         return this;
@@ -249,6 +261,16 @@ public class ChatF {
 
     public ChatF append(Component component) {
         appendComponents.add(component);
+        return this;
+    }
+
+    public ChatF append(Component component, TextColor color) {
+        appendComponents.add(component.color(color));
+        return this;
+    }
+
+    public ChatF append(Component component, Style style) {
+        appendComponents.add(component.style(style));
         return this;
     }
 
@@ -278,7 +300,7 @@ public class ChatF {
     }
 
     public ChatF replace(String key, Object value) {
-        this.replacements.put(key, value);
+        replacements.put(key, value);
         return this;
     }
 
@@ -290,8 +312,28 @@ public class ChatF {
         return new ChatF(Component.newline());
     }
 
+    public static ChatF from(Object o) {
+        if (o instanceof Component) {
+            return ChatF.of((Component)o);
+        } else if (o instanceof ChatF) {
+            return ChatF.of(((ChatF)o).build());
+        } else if (o instanceof String) {
+            return ChatF.of((String)o);
+        } else {
+            return ChatF.of(o.toString());
+        }
+    }
+
     public static ChatF of(Component inputComponent) {
         return new ChatF(inputComponent);
+    }
+
+    public static ChatF of(Component inputComponent, TextColor color) {
+        return new ChatF(inputComponent.color(color));
+    }
+
+    public static ChatF of(Component inputComponent, Style style) {
+        return new ChatF(inputComponent.style(style));
     }
 
     public static ChatF of(String inputString) {
@@ -345,11 +387,8 @@ public class ChatF {
     }
 
     public void sendTo(Player player) {
-        if (this.entity == null) {
-            this.entity = player;
-        }
-
-        entity.sendMessage(build());
+        if (entity == null) entity = player;
+        player.sendMessage(build());
     }
 
     public void sendTo(Entity entity) {

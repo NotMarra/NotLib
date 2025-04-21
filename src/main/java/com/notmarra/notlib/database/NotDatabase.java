@@ -164,9 +164,7 @@ public abstract class NotDatabase extends NotConfigurable {
     }
 
     public boolean processResult(String sql) {
-        if (NotDebugger.should(NotLib.DEBUG_DB)) {
-            getLogger().info("[processResult] SQL: " + sql);
-        }
+        NotLib.dbg().log(NotDebugger.C_DATABASE, "[processResult] SQL: " + sql);
 
         try (Connection connection = getConnection()) {
             return connection.createStatement().execute(sql);
@@ -178,10 +176,8 @@ public abstract class NotDatabase extends NotConfigurable {
     }
 
     public int processUpdate(String sql, List<Object> params) {
-        if (NotDebugger.should(NotLib.DEBUG_DB)) {
-            getLogger().info("[processUpdate] SQL: " + sql);
-            getLogger().info("[processUpdate] Params: " + params);
-        }
+        NotLib.dbg().log(NotDebugger.C_DATABASE, "[processUpdate] SQL: " + sql);
+        NotLib.dbg().log(NotDebugger.C_DATABASE, "[processUpdate] Params: " + params);
 
         try {
             Connection connection = getConnection();
@@ -200,10 +196,8 @@ public abstract class NotDatabase extends NotConfigurable {
     }
 
     public List<NotRecord> processSelect(String sql, List<Object> params) {
-        if (NotDebugger.should(NotLib.DEBUG_DB)) {
-            getLogger().info("[processSelect] SQL: " + sql);
-            getLogger().info("[processSelect] Params: " + params);
-        }
+        NotLib.dbg().log(NotDebugger.C_DATABASE, "[processSelect] SQL: " + sql);
+        NotLib.dbg().log(NotDebugger.C_DATABASE, "[processSelect] Params: " + params);
 
         try (Connection connection = getConnection();
             PreparedStatement stmt = connection.prepareStatement(sql)) {

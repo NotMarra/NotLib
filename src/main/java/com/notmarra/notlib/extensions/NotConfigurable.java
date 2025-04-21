@@ -15,6 +15,8 @@ public abstract class NotConfigurable {
 
     public FileConfiguration getConfig(String path) { return plugin.getSubConfig(path); }
 
+    public FileConfiguration getFirstConfig() { return plugin.getSubConfig(getConfigPaths().getFirst()); }
+
     // e.g: return getPluginConfig().getBoolean("modules.something");
     public boolean isEnabled() { return true; }
 

@@ -49,12 +49,9 @@ public abstract class NotPlugin extends JavaPlugin {
     public NotCommandGroup getCommandGroup(String id) { return CMDGROUPS.get(id); }
 
     public void registerConfigurable(NotConfigurable configurable, String configPath) {
-        if (!CONFIGURABLES.containsKey(configPath)) {
-            CONFIGURABLES.computeIfAbsent(configPath, k -> new ArrayList<>());
-        } else {
-            if (!CONFIGURABLES.get(configPath).contains(configurable)) {
-                CONFIGURABLES.get(configPath).add(configurable);
-            }
+        CONFIGURABLES.computeIfAbsent(configPath, k -> new ArrayList<>());
+        if (!CONFIGURABLES.get(configPath).contains(configurable)) {
+            CONFIGURABLES.get(configPath).add(configurable);
         }
         saveDefaultConfig(configPath);
     }
@@ -86,6 +83,9 @@ public abstract class NotPlugin extends JavaPlugin {
         if (!configFile.exists()) return;
         CONFIGS.put(configPath, YamlConfiguration.loadConfiguration(configFile));
     }
+
+    public File getFile(String child) { return new File(getDataFolder(), child); }
+    public String getAbsPath(String child) { return (new File(getDataFolder(), child)).getAbsolutePath(); }
 
     public abstract void initNotPlugin();
 
@@ -120,7 +120,7 @@ public abstract class NotPlugin extends JavaPlugin {
     public FileConfiguration getSubConfig(String file) { return CONFIGS.get(file); }
     public FileConfiguration reloadConfig(String file) {
         File configFile = new File(getDataFolder(), file);
-        if (!configFile.exists()) return null;
+        if (!configFile.exists()) return new YamlConfiguration();
         CONFIGS.put(file, YamlConfiguration.loadConfiguration(configFile));
         if (CONFIGURABLES.containsKey(file)) {
             CONFIGURABLES.get(file).forEach(c -> c.onConfigReload(List.of(file)));

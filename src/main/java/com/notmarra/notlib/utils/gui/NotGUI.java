@@ -1,19 +1,24 @@
 package com.notmarra.notlib.utils.gui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -21,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.notmarra.notlib.NotLib;
 import com.notmarra.notlib.utils.ChatF;
+import com.notmarra.notlib.utils.NotDebugger;
 import com.notmarra.notlib.utils.NotSize;
 import com.notmarra.notlib.utils.NotVector2;
 import com.notmarra.notlib.utils.gui.animations.NotGUIAnimation;
@@ -38,11 +44,16 @@ import net.kyori.adventure.text.Component;
 public class NotGUI implements InventoryHolder {
     public static final String ITEM_UUID_KEY = "notlib-gui-item-uuid";
 
-    private NotLib plugin;
+    public NotLib plugin;
     @Nullable private InventoryType guiType; // null is double-chest
     private Component guiTitle;
     private NotGUIContainer rootContainer;
     private Inventory builtInventory;
+    private List<String> pattern = new ArrayList<>();
+    // private 
+    private List<Character> patternEmptySlotChars = new ArrayList<>();
+    private Function<NotGUIPatternMatchInfo, NotGUIItem> onPatternMatch;
+    public Consumer<InventoryOpenEvent> onOpen;
     public Consumer<InventoryCloseEvent> onClose;
 
     public final List<NotGUIAnimation> animations = new ArrayList<>();
@@ -52,6 +63,7 @@ public class NotGUI implements InventoryHolder {
         plugin = NotLib.getInstance();
         guiTitle = ChatF.of("NotGUI").build();
         rootContainer = new NotGUIContainer(this);
+        rows(6);
         inventorySizes.put(InventoryType.CHEST, NotSize.of(9, 3));
         inventorySizes.put(InventoryType.DISPENSER, NotSize.of(3, 3));
         inventorySizes.put(InventoryType.DROPPER, NotSize.of(3, 3));
@@ -83,6 +95,7 @@ public class NotGUI implements InventoryHolder {
         if (guiType == null) return 9;
         return inventorySizes.get(guiType).width;
     }
+    public boolean isPatternMatched() { return !this.pattern.isEmpty() && this.onPatternMatch != null; }
     public NotGUI title(String title) { return title(ChatF.of(title)); }
     public NotGUI title(ChatF title) { return title(title.build()); }
     public NotGUI title(Component title) { this.guiTitle = title; return this; }
@@ -100,6 +113,15 @@ public class NotGUI implements InventoryHolder {
             if (rows < 1 || rows > 6) return this;
         }
         return size(9, rows);
+    }
+    public NotGUI pattern(String pattern) { return pattern(Arrays.asList(pattern.split("\n"))); }
+    public NotGUI pattern(List<String> pattern) {
+        this.pattern = pattern;
+        return this;
+    }
+    public NotGUI emptySlotChars(List<Character> characters) {
+        this.patternEmptySlotChars = characters;
+        return this;
     }
 
     public NotGUIContainer createContainer() {
@@ -184,6 +206,7 @@ public class NotGUI implements InventoryHolder {
     public Inventory getBuiltInventory() {
         if (builtInventory == null) {
             builtInventory = build();
+            patternMatchGui();
         }
         return builtInventory;
     }
@@ -193,6 +216,9 @@ public class NotGUI implements InventoryHolder {
         return getBuiltInventory();
     }
 
+    public List<String> pattern() { return pattern; }
+    public Function<NotGUIPatternMatchInfo, NotGUIItem> onPatternMatch() { return onPatternMatch; }
+    public List<Character> emptySlotCharacters() { return this.patternEmptySlotChars; }
     public NotSize size() { return rootContainer.size(); }
     public int totalSize() { return rootContainer.totalSize(); }
 
@@ -213,6 +239,68 @@ public class NotGUI implements InventoryHolder {
     public boolean handleClick(InventoryClickEvent event, NotGUIItem item) {
         if (event.getClickedInventory().getHolder() != this) return false;
         return rootContainer.handleClick(event, item);
+    }
+
+    private void patternMatchGui() {
+        if (!isPatternMatched()) return;
+        NotSize guiSize = size();
+
+        if (!isChest()) {
+            NotLib.dbg().log(NotDebugger.C_ERROR, "Pattern cannot be used with GUI type: " + guiType + "! (Only chest/double-chest)");
+            return;
+        }
+
+        if (pattern().size() > guiSize.height) {
+            NotLib.dbg().log(NotDebugger.C_ERROR, "Pattern height is too big for this GUI: " + (pattern().size()) + " > " + guiSize.height);
+            return;
+        }
+
+        int maxWidth = Collections.max(pattern().stream().map(c -> c.length()).toList());
+        if (maxWidth > guiSize.width) {
+            NotLib.dbg().log(NotDebugger.C_ERROR, "Pattern width is too big for this GUI: " + (maxWidth) + " > " + guiSize.width);
+            return;   
+        }
+
+        Map<Character, Integer> totals = new HashMap<>();
+        for (String line : pattern) {
+            for (int i = 0; i < line.length(); i++) {
+                char ch = line.charAt(i);
+                if (totals.containsKey(ch)) {
+                    totals.put(ch, totals.get(ch) + 1);
+                } else {
+                    totals.put(ch, 1);
+                }
+            }
+        }
+
+        Map<Character, Integer> counts = new HashMap<>();
+        for (int y = 0; y < pattern.size(); y++) {
+            String patternLine = pattern.get(y);
+            for (int x = 0; x < patternLine.length(); x++) {
+                char ch = patternLine.charAt(x);
+
+                if (counts.containsKey(ch)) {
+                    counts.put(ch, counts.get(ch) + 1);
+                } else {
+                    counts.put(ch, 1);
+                }
+
+                if (patternEmptySlotChars.contains(ch)) {
+                    continue;
+                }
+
+                int slot = x + (y * guiSize.width);
+
+                NotGUIPatternMatchInfo info = new NotGUIPatternMatchInfo(
+                    this,
+                    ch, x, y,
+                    counts.get(ch), totals.get(ch), slot
+                );
+
+                NotGUIItem matched = onPatternMatch.apply(info);
+                if (matched != null) addItem(matched, slot);
+            }
+        }
     }
 
     public Inventory build() {
@@ -245,8 +333,18 @@ public class NotGUI implements InventoryHolder {
         }
     }
 
+    public NotGUI onOpen(Consumer<InventoryOpenEvent> onOpen) {
+        this.onOpen = onOpen;
+        return this;
+    }
+
     public NotGUI onClose(Consumer<InventoryCloseEvent> onClose) {
         this.onClose = onClose;
+        return this;
+    }
+
+    public NotGUI onPatternMatch(Function<NotGUIPatternMatchInfo, NotGUIItem> onPatternMatch) {
+        this.onPatternMatch = onPatternMatch;
         return this;
     }
 
@@ -285,4 +383,105 @@ public class NotGUI implements InventoryHolder {
     public static NotGUI create(String title) { return create().title(title); }
     public static NotGUI create(ChatF title) { return create().title(title); }
     public static NotGUI create(Component title) { return create().title(title); }
+
+    public class NotGUIPatternMatchInfo {
+        public final NotGUI gui;
+        public final char ch;
+        public final int x;
+        public final int y;
+        public final int count; // kolikátý
+        public final int total; // celkem stejných
+        public final int slot;
+
+        public NotGUIPatternMatchInfo(
+            NotGUI gui,
+            char ch, int x, int y,
+            int count, int total, int slot
+        ) {
+            this.gui = gui;
+            this.ch = ch;
+            this.x = x;
+            this.y = y;
+            this.count = count;
+            this.total = total;
+            this.slot = slot;
+        }
+
+        public NotVector2 pos() {
+            return NotVector2.of(this.x, this.y);
+        }
+    }
+
+    public class NotGUIPatternItemConfigurationSection {
+        public final ConfigurationSection section;
+
+        public static final String N_PATTERN = "type";
+        public static final String DEF_PATTERN = "DIAMOND";
+        public static final String N_TAKE = "take";
+        public static final boolean DEF_TAKE = false;
+        public static final String N_AMOUNT = "amount";
+        public static final int DEF_AMOUNT = 1;
+        public static final String N_NAME = "name";
+        public static final String DEF_NAME = "Diamond";
+        public static final String N_LORE = "lore";
+
+        public NotGUIPatternItemConfigurationSection(ConfigurationSection section) {
+            this.section = section;
+        }
+
+        public String getType() { return this.section.getString(N_PATTERN, DEF_PATTERN); }
+        public Material getMaterial() {
+            Material material = Material.getMaterial(getType());
+            return material != null ? material : Material.DIAMOND;
+        }
+
+        public boolean getTake() { return this.section.getBoolean(N_TAKE, DEF_TAKE); }
+        public int getAmount() { return this.section.getInt(N_AMOUNT, DEF_AMOUNT); }
+        public String getName() { return this.section.getString(N_NAME, DEF_NAME); }
+        public List<String> getLore() { return this.section.getStringList(N_LORE); }
+    }
+
+    public class NotGUIPatternSection {
+        Map<String, List<NotGUIPatternItemConfigurationSection>> rules = new HashMap<>();
+        
+    }
+
+    public class NotGUIPatternConfigurationSection {
+        public final ConfigurationSection section;
+
+        public static final String N_PATTERN = "pattern";
+        public static final String N_ITEMS = "items";
+
+        public NotGUIPatternConfigurationSection(ConfigurationSection section) {
+            this.section = section;
+        }
+
+        public List<String> getPattern() { return section.getStringList(N_PATTERN); }
+
+        public Map<String, List<NotGUIPatternItemConfigurationSection>> getItemRules() {
+            Map<String, List<NotGUIPatternItemConfigurationSection>> rules = new HashMap<>();
+
+            ConfigurationSection itemsSection = section.getConfigurationSection(N_ITEMS);
+
+            if (itemsSection != null) {
+                for (String key : itemsSection.getKeys(false)) {
+                    List<NotGUIPatternItemConfigurationSection> itemRules = new ArrayList<>();
+                    if (rules.containsKey(key)) itemRules = rules.get(key);
+
+                    if (itemsSection.isList(key)) {
+                        for (Object o : itemsSection.getList(key)) {
+                            if (o instanceof ConfigurationSection) {
+                                itemRules.add(new NotGUIPatternItemConfigurationSection((ConfigurationSection)o));
+                            }
+                        }
+                    } else if (itemsSection.isConfigurationSection(key)) {
+                        ConfigurationSection itemSection = itemsSection.getConfigurationSection(key);
+                        itemRules.add(new NotGUIPatternItemConfigurationSection(itemSection));
+                    }
+                }
+            }
+
+            return rules;
+        }
+    }
 }

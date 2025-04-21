@@ -11,6 +11,7 @@ import java.util.function.BiFunction;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Item;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -32,7 +33,7 @@ public class NotGUIItem {
     private int itemAmount = 1;
     private Material itemType;
     private Component itemName;
-    private List<Component> itemLore;
+    private List<Component> itemLore = new ArrayList<>();
     private String skullTexture;
     private BiConsumer<InventoryClickEvent, NotGUIContainer> action = null;
     private BiFunction<NotGUIItem, SkullMeta, SkullMeta> onSkullMeta = null;
@@ -85,20 +86,20 @@ public class NotGUIItem {
         return this;
     }
 
-    public NotGUIItem lore(List<Object> itemLore) {
-        List<Component> lore = new ArrayList<>();
+    public NotGUIItem lore(String itemLore) { return lore(List.of(itemLore)); }
+    public NotGUIItem lore(Component itemLore) { return lore(List.of(itemLore)); }
+    public NotGUIItem lore(ChatF itemLore) { return lore(List.of(itemLore)); }
 
+    public NotGUIItem lore(List<Object> itemLore) {
         for (Object line : itemLore) {
             if (line instanceof String) {
-                lore.add(ChatF.of((String) line).build());
+                this.itemLore.add(ChatF.of((String) line).build());
             } else if (line instanceof ChatF) {
-                lore.add(((ChatF) line).build());
+                this.itemLore.add(((ChatF) line).build());
             } else if (line instanceof Component) {
-                lore.add((Component) line);
+                this.itemLore.add((Component) line);
             }
         }
-
-        this.itemLore = lore;
         return this;
     }
 
@@ -120,38 +121,41 @@ public class NotGUIItem {
         ItemStack stack = new ItemStack(itemType);
         stack.setAmount(itemAmount);
 
-        ItemMeta meta = stack.getItemMeta();
-        if (itemName != null) meta.displayName(itemName);
-        if (itemLore != null) meta.lore(itemLore);
+        ItemMeta meta = stack.hasItemMeta() ? stack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemType);
+        // NOTE: Material.AIR has not ItemMeta no matter what!
+        if (itemType != Material.AIR && meta != null) {
+            if (itemName != null) meta.displayName(itemName);
+            if (itemLore != null) meta.lore(itemLore);
 
-        if (onSkullMeta != null) {
-            meta = onSkullMeta.apply(this, (SkullMeta) meta);
-        } else {
-            if (itemType == Material.PLAYER_HEAD && skullTexture != null) {
-                try {
-                    SkullMeta skullMeta = (SkullMeta) meta;
-                    PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
-                    
-                    PlayerTextures textures = profile.getTextures();
-                    URL url = new URI("http://textures.minecraft.net/texture/" + skullTexture).toURL();
-                    textures.setSkin(url);
-                    profile.setTextures(textures);
-                    
-                    skullMeta.setPlayerProfile(profile);
-                    meta = skullMeta;
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (onSkullMeta != null) {
+                meta = onSkullMeta.apply(this, (SkullMeta) meta);
+            } else {
+                if (itemType == Material.PLAYER_HEAD && skullTexture != null) {
+                    try {
+                        SkullMeta skullMeta = (SkullMeta) meta;
+                        PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
+                        
+                        PlayerTextures textures = profile.getTextures();
+                        URL url = new URI("http://textures.minecraft.net/texture/" + skullTexture).toURL();
+                        textures.setSkin(url);
+                        profile.setTextures(textures);
+                        
+                        skullMeta.setPlayerProfile(profile);
+                        meta = skullMeta;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-        }
 
-        if (gui() != null) {
-            NamespacedKey key = new NamespacedKey(gui().getPlugin(), NotGUI.ITEM_UUID_KEY);
-            PersistentDataContainer container = meta.getPersistentDataContainer();
-            container.set(key, PersistentDataType.STRING, uid.toString());
-        }
+            if (gui() != null) {
+                NamespacedKey key = new NamespacedKey(gui().getPlugin(), NotGUI.ITEM_UUID_KEY);
+                PersistentDataContainer container = meta.getPersistentDataContainer();
+                container.set(key, PersistentDataType.STRING, uid.toString());
+            }
 
-        stack.setItemMeta(meta);
+            stack.setItemMeta(meta);
+        }
 
         return stack;
     }
@@ -162,5 +166,20 @@ public class NotGUIItem {
     public NotGUIItem addToGUI(int slot) { gui().addItem(this, slot); return this; }
     public NotGUIItem addToGUI(int x, int y) { gui().addItem(this, x, y); return this; }
 
-    public static NotGUIItem newNonGUI(Material itemType) { return new NotGUIItem(null, itemType); }
+    public static NotGUIItem create(NotGUI gui, Material itemType) { return new NotGUIItem(gui, itemType); }
+    public static NotGUIItem create(Material itemType) { return new NotGUIItem(null, itemType); }
+
+    public static NotGUIItem fromItemStack(ItemStack item) {
+        NotGUIItem newItem = create(item.getType())
+            .name(item.effectiveName());
+        
+        List<Component> lore = item.lore();
+        if (lore != null) newItem.lore(lore.stream().map(c -> (Object)c).toList());
+
+        return newItem;
+    }
+
+    public static NotGUIItem fromItem(Item item) {
+        return fromItemStack(item.getItemStack());
+    }
 }
