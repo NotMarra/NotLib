@@ -17,6 +17,10 @@ public final class NotLib extends NotPlugin {
 
     @Override
     public void initNotPlugin() {
+        instance = this;
+        this.debugger = new NotDebugger(this);
+        NotCache.initialize(this);
+
         // listeners
         addListener(new NotGUIListener(this));
 
@@ -28,7 +32,7 @@ public final class NotLib extends NotPlugin {
 
         // TODO: test stuff, remove
         addListener(new NotDevListener(this));
-        db().registerDatabase(new NotDevTestMySQL(this, CONFIG_YML));
+        // db().registerDatabase(new NotDevTestMySQL(this, CONFIG_YML));
 
         // plugin callbacks
         addPluginEnabledCallback("PlaceholderAPI", () -> hasPlaceholderAPI = true);
@@ -36,11 +40,7 @@ public final class NotLib extends NotPlugin {
     }
 
     @Override
-    public void onEnable() {
-        NotCache.initialize(this);
-        instance = this;
-        this.debugger = new NotDebugger(this);
-        super.onEnable();
+    public void onNotPluginEnable() {
         log().info(ChatF.of("Enabled!").build());
     }
 

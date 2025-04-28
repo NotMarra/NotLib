@@ -89,6 +89,7 @@ public abstract class NotPlugin extends JavaPlugin {
     public String getAbsPath(String child) { return (new File(getDataFolder(), child)).getAbsolutePath(); }
 
     public abstract void initNotPlugin();
+    public abstract void onNotPluginEnable();
 
     public ComponentLogger log() { return getComponentLogger(); }
 
@@ -112,6 +113,7 @@ public abstract class NotPlugin extends JavaPlugin {
 
             LISTENERS.values().forEach(l -> l.register());
             CMDGROUPS.values().forEach(c -> c.register());
+            onNotPluginEnable();
         } catch (Exception e) {
             getComponentLogger().error(
                 ChatF.empty()
