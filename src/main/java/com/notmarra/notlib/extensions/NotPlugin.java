@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.notmarra.notlib.database.NotDatabase;
 import com.notmarra.notlib.database.NotDatabaseManager;
+import com.notmarra.notlib.utils.ChatF;
 
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 
@@ -93,23 +94,34 @@ public abstract class NotPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        NotMinecraftStuff.getInstance().initialize();
+        try {
+            NotMinecraftStuff.getInstance().initialize();
 
-        this.translationManager = new NotTranslationManager(this);
-        this.databaseManager = new NotDatabaseManager(this);
+            this.translationManager = new NotTranslationManager(this);
+            this.databaseManager = new NotDatabaseManager(this);
 
-        saveDefaultConfig(CONFIG_YML);
-        loadConfigFile(CONFIG_YML);
-        initNotPlugin();
+            saveDefaultConfig(CONFIG_YML);
+            loadConfigFile(CONFIG_YML);
+            initNotPlugin();
 
-        for (String pluginId : ON_PLUGIN_ENABLED_CALLBACKS.keySet()) {
-            if (Bukkit.getPluginManager().isPluginEnabled(pluginId)) {
-                ON_PLUGIN_ENABLED_CALLBACKS.get(pluginId).run();
+            for (String pluginId : ON_PLUGIN_ENABLED_CALLBACKS.keySet()) {
+                if (Bukkit.getPluginManager().isPluginEnabled(pluginId)) {
+                    ON_PLUGIN_ENABLED_CALLBACKS.get(pluginId).run();
+                }
             }
-        }
 
-        LISTENERS.values().forEach(l -> l.register());
-        CMDGROUPS.values().forEach(c -> c.register());
+            LISTENERS.values().forEach(l -> l.register());
+            CMDGROUPS.values().forEach(c -> c.register());
+        } catch (Exception e) {
+            getComponentLogger().error(
+                ChatF.empty()
+                    .append("[CRITICAL ERROR] Disabling plugin", ChatF.C_RED)
+                    .nl()
+                    .appendListString(List.of(e.getStackTrace()).stream().map(x -> "    " + x.toString() + '\n').toList(), ChatF.C_ORANGE)
+                    .build()
+            );
+            getServer().getPluginManager().disablePlugin(this);
+        }
     }
 
     @Override

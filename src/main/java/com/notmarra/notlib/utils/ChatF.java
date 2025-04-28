@@ -167,9 +167,17 @@ public class ChatF {
     }
 
     public ChatF appendListString(List<String> strings) {
-        for (String string : strings) {
-            appendComponents.add(Component.text(string));
-        }
+        for (String string : strings) append(string);
+        return this;
+    }
+
+    public ChatF appendListString(List<String> strings, TextColor color) {
+        for (String string : strings) append(string, color);
+        return this;
+    }
+
+    public ChatF appendListString(List<String> strings, Style style) {
+        for (String string : strings) append(string, style);
         return this;
     }
 
