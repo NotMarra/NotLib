@@ -18,6 +18,9 @@ public class NotFloatArg extends NotArgument<Float> {
     }
 
     public static NotFloatArg of(String name) { return new NotFloatArg(name); }
+    public static NotFloatArg of(String name, Object description) {
+        return (NotFloatArg)NotFloatArg.of(name).setDescription(description);
+    }
     public static NotFloatArg of(String name, Consumer<NotArgument<Float>> executor) {
         return (NotFloatArg)NotFloatArg.of(name).onExecute(executor);
     }

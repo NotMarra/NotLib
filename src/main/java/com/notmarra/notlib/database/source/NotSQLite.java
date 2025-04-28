@@ -1,10 +1,12 @@
 package com.notmarra.notlib.database.source;
 
+import com.notmarra.notlib.NotLib;
 import com.notmarra.notlib.database.NotDatabase;
 import com.notmarra.notlib.database.structure.NotColumn;
 import com.notmarra.notlib.database.structure.NotColumnType;
 import com.notmarra.notlib.database.structure.NotTable;
 import com.notmarra.notlib.extensions.NotPlugin;
+import com.notmarra.notlib.utils.NotDebugger;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -96,8 +98,10 @@ public abstract class NotSQLite extends NotDatabase {
         StringBuilder sql = new StringBuilder("INSERT INTO " + table.getName() + " (");
         for (int i = 0; i < table.getColumns().size(); i++) {
             NotColumn column = table.getColumns().get(i);
-            sql.append(column.getName());
-            if (i < table.getColumns().size() - 1) sql.append(", ");
+            if (!column.isAutoIncrement()) {
+                sql.append(column.getName());
+                if (i < table.getColumns().size() - 1) sql.append(", ");
+            }
         }
         sql.append(") VALUES (");
         for (int i = 0; i < row.size(); i++) {
@@ -105,6 +109,11 @@ public abstract class NotSQLite extends NotDatabase {
             if (i < row.size() - 1) sql.append(", ");
         }
         sql.append(")");
+
+        NotLib.dbg().log(NotDebugger.C_DATABASE, "[MySQL insertRow] SQL: " + sql.toString());
+        if (!row.isEmpty()) {
+            NotLib.dbg().log(NotDebugger.C_DATABASE, "[MySQL insertRow] Params: " + row);
+        }
         
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {

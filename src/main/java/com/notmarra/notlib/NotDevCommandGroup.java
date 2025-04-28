@@ -12,8 +12,11 @@ import org.bukkit.event.inventory.InventoryType;
 
 import com.notmarra.notlib.extensions.NotCommandGroup;
 import com.notmarra.notlib.extensions.NotPlugin;
+import com.notmarra.notlib.font.NotFontItem;
 import com.notmarra.notlib.utils.ChatF;
 import com.notmarra.notlib.utils.command.NotCommand;
+import com.notmarra.notlib.utils.command.arguments.NotLiteralArg;
+import com.notmarra.notlib.utils.command.arguments.NotStringArg;
 import com.notmarra.notlib.utils.gui.NotGUI;
 import com.notmarra.notlib.utils.gui.NotGUIItem;
 import com.notmarra.notlib.utils.gui.NotGUISlotIDs;
@@ -39,7 +42,10 @@ public final class NotDevCommandGroup extends NotCommandGroup {
             testChatFClickableWithOptions(),
             testChatFClickableInfinite(),
             testChatFHoverItem(),
-            testPatternGui()
+            testPatternGui(),
+            testCustomFont(),
+            testCommandSignature(),
+            testCommandHelp()
         );
     }
 
@@ -300,6 +306,49 @@ public final class NotDevCommandGroup extends NotCommandGroup {
                     ChatF.of("You have closed the GUI!").sendTo(e.getPlayer());
                 })
                 .open(cmd.getPlayer());
+        });
+    }
+
+    private NotCommand testCustomFont() {
+        return NotCommand.of("test-custom-font", cmd -> {
+            ChatF.of("You got a ").append(NotFontItem.DIAMOND).append("!").sendTo(cmd.getPlayer());
+        });
+    }
+
+    private NotCommand testCommandSignature() {
+        return NotCommand.of("test-command-signature", cmd -> {
+            NotCommand command = NotCommand.of("test");
+            NotStringArg arg1 = command.stringArg("arg1");
+            NotStringArg arg2 = arg1.stringArg("arg2");
+            ChatF.of("--- SIGNATURE ---").sendTo(cmd.getPlayer());
+            ChatF.of(arg2.getSignature()).sendTo(cmd.getPlayer());
+            ChatF.of("--- SIGNATURE WITH SUFFIX ---").sendTo(cmd.getPlayer());
+            ChatF.of(arg2.getSignatureWith("player", "other")).sendTo(cmd.getPlayer());
+        });
+    }
+
+    private NotCommand testCommandHelp() {
+        return NotCommand.of("test-command-help", cmd -> {
+            NotCommand command = NotCommand.of("test");
+            command.setDescription(ChatF.of("This command does a lot of things!", ChatF.C_RED));
+
+            NotLiteralArg createArg = command.literalArg("create");
+            createArg.setDescription("This argument is very important!");
+
+            NotStringArg arg2 = createArg.stringArg("arg2");
+            arg2.setDescription("This argument is also very important!");
+
+            NotLiteralArg setArg = command.literalArg("set");
+            setArg.setDescription("This argument is very important!");
+
+            NotStringArg setArg2 = setArg.stringArg("arg2");
+            setArg2.setDescription("This argument is also very important!");
+
+            ChatF.of("--- HELP ---").sendTo(cmd.getPlayer());
+            command.getHelpFor(List.of("create")).sendTo(cmd.getPlayer());
+
+            ChatF.of("--- PATH TO setArg2 ---").sendTo(cmd.getPlayer());
+            ChatF.of(setArg2.getPath()).sendTo(cmd.getPlayer());
         });
     }
 }

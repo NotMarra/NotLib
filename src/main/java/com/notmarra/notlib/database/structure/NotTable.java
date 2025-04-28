@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
 import com.notmarra.notlib.database.NotDatabase;
 import com.notmarra.notlib.database.query.NotSqlBuilder;
 import com.notmarra.notlib.database.query.NotSqlQueryExecutor;
@@ -69,6 +71,10 @@ public class NotTable {
 
     public NotRecord selectOne(Consumer<NotSqlBuilder> builder) {
         return executor().selectOne(_useSqlBuilder(builder, NotSqlBuilder.select(getName())));
+    }
+
+    public @Nullable NotRecord selectOneOrNull(Consumer<NotSqlBuilder> builder) {
+        return executor().selectOneOrNull(_useSqlBuilder(builder, NotSqlBuilder.select(getName())));
     }
 
     public List<NotRecord> select() {

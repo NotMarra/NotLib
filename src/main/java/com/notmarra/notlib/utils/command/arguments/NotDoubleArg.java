@@ -18,6 +18,9 @@ public class NotDoubleArg extends NotArgument<Double> {
     }
 
     public static NotDoubleArg of(String name) { return new NotDoubleArg(name); }
+    public static NotDoubleArg of(String name, Object description) {
+        return (NotDoubleArg)NotDoubleArg.of(name).setDescription(description);
+    }
     public static NotDoubleArg of(String name, Consumer<NotArgument<Double>> executor) {
         return (NotDoubleArg)NotDoubleArg.of(name).onExecute(executor);
     }

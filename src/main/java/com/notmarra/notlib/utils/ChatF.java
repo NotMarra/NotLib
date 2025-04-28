@@ -289,6 +289,21 @@ public class ChatF {
         return this;
     }
 
+    public ChatF append(Character ch) {
+        appendComponents.add(toComponent(ch));
+        return this;
+    }
+
+    public ChatF append(Character ch, TextColor color) {
+        appendComponents.add(toComponent(ch, color));
+        return this;
+    }
+
+    public ChatF append(Character ch, Style style) {
+        appendComponents.add(toComponent(ch, style));
+        return this;
+    }
+
     public ChatF appendBold(String string) {
         appendComponents.add(toComponentBold(string));
         return this;
@@ -348,6 +363,18 @@ public class ChatF {
         return new ChatF(toComponent(inputString, style));
     }
 
+    public static ChatF of(Character inputCharacter) {
+        return new ChatF(toComponent(inputCharacter));
+    }
+
+    public static ChatF of(Character inputCharacter, TextColor color) {
+        return new ChatF(toComponent(inputCharacter, color));
+    }
+
+    public static ChatF of(Character inputCharacter, Style style) {
+        return new ChatF(toComponent(inputCharacter, style));
+    }
+
     public static ChatF ofBold(String inputString) {
         return new ChatF(toComponentBold(inputString));
     }
@@ -370,6 +397,18 @@ public class ChatF {
 
     public static Component toComponent(String inputString, Style style) {
         return toComponent(inputString).style(style);
+    }
+
+    public static Component toComponent(Character inputCharacter) {
+        return miniMessage.deserialize(String.valueOf(inputCharacter));
+    }
+
+    public static Component toComponent(Character inputCharacter, TextColor color) {
+        return toComponent(inputCharacter).color(color);
+    }
+
+    public static Component toComponent(Character inputCharacter, Style style) {
+        return toComponent(inputCharacter).style(style);
     }
 
     public static Component toComponentBold(String inputString) {

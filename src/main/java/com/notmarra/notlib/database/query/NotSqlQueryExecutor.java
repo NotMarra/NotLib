@@ -5,6 +5,8 @@ import com.notmarra.notlib.database.structure.NotRecord;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 public class NotSqlQueryExecutor {
     private final NotDatabase database;
 
@@ -15,14 +17,25 @@ public class NotSqlQueryExecutor {
     /**
      * Executes a query and returns a single result as a map
      */
+
     public NotRecord selectOne(String sql) {
-        List<NotRecord> results = select(sql);
-        return results.isEmpty() ? NotRecord.empty() : results.get(0);
+        NotRecord result = selectOneOrNull(sql);
+        return result != null ? result : NotRecord.empty();
     }
 
     public NotRecord selectOne(NotSqlBuilder builder) {
+        NotRecord result = selectOneOrNull(builder);
+        return result != null ? result : NotRecord.empty();
+    }
+
+    public @Nullable NotRecord selectOneOrNull(String sql) {
+        List<NotRecord> results = select(sql);
+        return results.isEmpty() ? null : results.get(0);
+    }
+
+    public @Nullable NotRecord selectOneOrNull(NotSqlBuilder builder) {
         List<NotRecord> results = select(builder);
-        return results.isEmpty() ? NotRecord.empty() : results.get(0);
+        return results.isEmpty() ? null : results.get(0);
     }
 
     public List<NotRecord> select(String sql) {

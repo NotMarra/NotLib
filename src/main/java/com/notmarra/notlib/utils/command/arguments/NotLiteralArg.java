@@ -9,9 +9,13 @@ import io.papermc.paper.command.brigadier.Commands;
 public class NotLiteralArg extends NotArgument<String> {
     public NotLiteralArg(String name) {
         super(name);
+        this.isLiteral = true;
     }
 
     public static NotLiteralArg of(String name) { return new NotLiteralArg(name); }
+    public static NotLiteralArg of(String name, Object description) {
+        return (NotLiteralArg)NotLiteralArg.of(name).setDescription(description);
+    }
     public static NotLiteralArg of(String name, Consumer<NotArgument<String>> executor) {
         return (NotLiteralArg)NotLiteralArg.of(name).onExecute(executor);
     }

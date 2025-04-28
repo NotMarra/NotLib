@@ -3,13 +3,17 @@ package com.notmarra.notlib.utils.command;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.notmarra.notlib.utils.ChatF;
 import com.notmarra.notlib.utils.NotConverter;
 import com.notmarra.notlib.utils.command.arguments.NotArgument;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import org.bukkit.entity.Entity;
@@ -18,6 +22,7 @@ import org.bukkit.entity.Player;
 public class NotCommand extends Base<NotCommand> {
     public NotCommand(String name) { super(name); }
     public static NotCommand of(String name) { return new NotCommand(name); }
+    public static NotCommand of(String name, Object description) { return (NotCommand)NotCommand.of(name).setDescription(description); }
     public static NotCommand of(String name, Consumer<NotCommand> executor) { return (NotCommand)NotCommand.of(name).onExecute(executor); }
 
     public Object get(String path) {
@@ -36,6 +41,79 @@ public class NotCommand extends Base<NotCommand> {
         }
 
         return null;
+    }
+
+    public ChatF getHelpFor(List<String> filter) {
+        ChatF help = ChatF.empty();
+        
+        help.append(ChatF.ofBold("/" + this.name, ChatF.C_YELLOW));
+        
+        if (this.description != null) {
+            help.append(ChatF.of(" - ").append(this.description));
+        }
+        
+        if (!this.arguments.isEmpty()) {
+            HashMap<String, NotArgument<Object>> filtered = new HashMap<>();
+            for (NotArgument<Object> arg : this.arguments.values()) {
+                String argPath = arg.getPath();
+                if (!filter.isEmpty() && filter.stream().anyMatch(x -> argPath.startsWith(x) || x.startsWith(argPath))) {
+                    filtered.put(arg.name, arg);
+                }
+            }
+
+            appendArgumentsTree(help, filtered, filter, 0, "");
+        }
+
+        return help;
+    }
+
+    public ChatF getHelp() {
+        ChatF help = ChatF.empty();
+        
+        help.append(ChatF.ofBold("/" + this.name, ChatF.C_YELLOW));
+        
+        if (this.description != null) {
+            help.append(ChatF.of(" - ").append(this.description));
+        }
+        
+        if (!this.arguments.isEmpty()) {
+            appendArgumentsTree(help, this.arguments, List.of(), 0, "");
+        }
+        
+        return help;
+    }
+    
+    private void appendArgumentsTree(ChatF help, HashMap<String, NotArgument<Object>> args, List<String> filter, int depth, String prefix) {
+        List<Map.Entry<String, NotArgument<Object>>> sortedArgs = new ArrayList<>(args.entrySet());
+        sortedArgs.sort(Map.Entry.comparingByKey());
+
+        sortedArgs.removeIf(x -> {
+            String argPath = x.getValue().getPath();
+            return !filter.isEmpty() && !filter.stream().anyMatch(y -> argPath.startsWith(y) || y.startsWith(argPath));
+        });
+        
+        for (int i = 0; i < sortedArgs.size(); i++) {
+            NotArgument<Object> arg = sortedArgs.get(i).getValue();
+
+            boolean isLast = (i == sortedArgs.size() - 1);
+            
+            String branchSymbol = isLast ? "└" : "├";
+            String nextPrefix = prefix + (isLast ? "  " : "│");
+            
+            help.append(ChatF.newline().append(prefix + branchSymbol, ChatF.C_GRAY));
+
+            String argName = arg.name;
+            if (!arg.isLiteral) argName = "<" + argName + ">";
+            help.append(ChatF.ofBold(argName, ChatF.C_GREEN));
+            
+            if (arg.description != null) {
+                help.append(ChatF.of(" - ").append(arg.description));
+            }
+            
+            if (!arg.arguments.isEmpty()) {
+                appendArgumentsTree(help, arg.arguments, filter, depth + 1, nextPrefix);
+            }
+        }
     }
 
     private <T> T _getValue(String path, Class<T> clazz) {

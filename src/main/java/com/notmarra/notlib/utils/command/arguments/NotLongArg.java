@@ -18,6 +18,9 @@ public class NotLongArg extends NotArgument<Long> {
     }
 
     public static NotLongArg of(String name) { return new NotLongArg(name); }
+    public static NotLongArg of(String name, Object description) {
+        return (NotLongArg)NotLongArg.of(name).setDescription(description);
+    }
     public static NotLongArg of(String name, Consumer<NotArgument<Long>> executor) {
         return (NotLongArg)NotLongArg.of(name).onExecute(executor);
     }

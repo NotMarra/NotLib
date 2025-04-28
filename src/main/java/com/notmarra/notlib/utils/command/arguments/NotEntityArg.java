@@ -17,6 +17,9 @@ public class NotEntityArg extends NotArgument<Entity> {
     }
 
     public static NotEntityArg of(String name) { return new NotEntityArg(name); }
+    public static NotEntityArg of(String name, Object description) {
+        return (NotEntityArg)NotEntityArg.of(name).setDescription(description);
+    }
     public static NotEntityArg of(String name, Consumer<NotArgument<Entity>> executor) {
         return (NotEntityArg)NotEntityArg.of(name).onExecute(executor);
     }

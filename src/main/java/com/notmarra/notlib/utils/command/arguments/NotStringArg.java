@@ -14,6 +14,9 @@ public class NotStringArg extends NotArgument<String> {
     }
 
     public static NotStringArg of(String name) { return new NotStringArg(name); }
+    public static NotStringArg of(String name, Object description) {
+        return (NotStringArg)NotStringArg.of(name).setDescription(description);
+    }
     public static NotStringArg of(String name, Consumer<NotArgument<String>> executor) {
         return (NotStringArg)NotStringArg.of(name).onExecute(executor);
     }

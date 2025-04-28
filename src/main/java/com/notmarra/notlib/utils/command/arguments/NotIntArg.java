@@ -18,6 +18,9 @@ public class NotIntArg extends NotArgument<Integer> {
     }
 
     public static NotIntArg of(String name) { return new NotIntArg(name); }
+    public static NotIntArg of(String name, Object description) {
+        return (NotIntArg)NotIntArg.of(name).setDescription(description);
+    }
     public static NotIntArg of(String name, Consumer<NotArgument<Integer>> executor) {
         return (NotIntArg)NotIntArg.of(name).onExecute(executor);
     }

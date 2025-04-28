@@ -17,6 +17,9 @@ public class NotPlayerArg extends NotArgument<Player> {
     }
 
     public static NotPlayerArg of(String name) { return new NotPlayerArg(name); }
+    public static NotPlayerArg of(String name, Object description) {
+        return (NotPlayerArg)NotPlayerArg.of(name).setDescription(description);
+    }
     public static NotPlayerArg of(String name, Consumer<NotArgument<Player>> executor) {
         return (NotPlayerArg)NotPlayerArg.of(name).onExecute(executor);
     }

@@ -13,6 +13,9 @@ public class NotGreedyStringArg extends NotArgument<String> {
     }
 
     public static NotGreedyStringArg of(String name) { return new NotGreedyStringArg(name); }
+    public static NotGreedyStringArg of(String name, Object description) {
+        return (NotGreedyStringArg)NotGreedyStringArg.of(name).setDescription(description);
+    }
     public static NotGreedyStringArg of(String name, Consumer<NotArgument<String>> executor) {
         return (NotGreedyStringArg)NotGreedyStringArg.of(name).onExecute(executor);
     }

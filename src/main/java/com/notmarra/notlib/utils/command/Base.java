@@ -34,6 +34,7 @@ import java.util.function.Consumer;
 public abstract class Base<T extends Base<T>> {
     public Base<?> parent;
     public final String name;
+    public Object description;
     public HashMap<String, NotArgument<Object>> arguments = new HashMap<>();
     public Consumer<T> executor;
     public List<String> suggestions = List.of();
@@ -86,6 +87,12 @@ public abstract class Base<T extends Base<T>> {
         return this;
     }
 
+    // NOTE: description can be ChatF, Component, String or other...
+    public Base<T> setDescription(Object description) {
+        this.description = description;
+        return this;
+    }
+
     public Base<T> setSuggestions(List<String> suggestions) {
         this.suggestions = suggestions;
         return this;
@@ -101,42 +108,68 @@ public abstract class Base<T extends Base<T>> {
     }
 
     public NotBoolArg boolArg(String name) { NotBoolArg arg = NotBoolArg.of(name); this.addArg(arg); return arg; }
+    public NotBoolArg boolArg(String name, Object description) { NotBoolArg arg = NotBoolArg.of(name, description); this.addArg(arg); return arg; }
+    public NotBoolArg boolArg(String name, Object description, Consumer<NotArgument<Boolean>> executor) { NotBoolArg arg = (NotBoolArg)NotBoolArg.of(name, description).onExecute(executor); this.addArg(arg); return arg; }
     public NotBoolArg boolArg(String name, Consumer<NotArgument<Boolean>> executor) { NotBoolArg arg = NotBoolArg.of(name, executor); this.addArg(arg); return arg; }
 
     public NotDoubleArg doubleArg(String name) { NotDoubleArg arg = NotDoubleArg.of(name); this.addArg(arg); return arg; }
+    public NotDoubleArg doubleArg(String name, Object description) { NotDoubleArg arg = NotDoubleArg.of(name, description); this.addArg(arg); return arg; }
+    public NotDoubleArg doubleArg(String name, Object description, Consumer<NotArgument<Double>> executor) { NotDoubleArg arg = (NotDoubleArg)NotDoubleArg.of(name, description).onExecute(executor); this.addArg(arg); return arg; }
     public NotDoubleArg doubleArg(String name, Consumer<NotArgument<Double>> executor) { NotDoubleArg arg = NotDoubleArg.of(name, executor); this.addArg(arg); return arg; }
 
     public NotEntitiesArg entitiesArg(String name) { NotEntitiesArg arg = NotEntitiesArg.of(name); this.addArg(arg); return arg; }
+    public NotEntitiesArg entitiesArg(String name, Object description) { NotEntitiesArg arg = NotEntitiesArg.of(name, description); this.addArg(arg); return arg; }
+    public NotEntitiesArg entitiesArg(String name, Object description, Consumer<NotArgument<List<Entity>>> executor) { NotEntitiesArg arg = (NotEntitiesArg)NotEntitiesArg.of(name, description).onExecute(executor); this.addArg(arg); return arg; }
     public NotEntitiesArg entitiesArg(String name, Consumer<NotArgument<List<Entity>>> executor) { NotEntitiesArg arg = NotEntitiesArg.of(name, executor); this.addArg(arg); return arg; }
 
     public NotEntityArg entityArg(String name) { NotEntityArg arg = NotEntityArg.of(name); this.addArg(arg); return arg; }
+    public NotEntityArg entityArg(String name, Object description) { NotEntityArg arg = NotEntityArg.of(name, description); this.addArg(arg); return arg; }
+    public NotEntityArg entityArg(String name, Object description, Consumer<NotArgument<Entity>> executor) { NotEntityArg arg = (NotEntityArg)NotEntityArg.of(name, description).onExecute(executor); this.addArg(arg); return arg; }
     public NotEntityArg entityArg(String name, Consumer<NotArgument<Entity>> executor) { NotEntityArg arg = NotEntityArg.of(name, executor); this.addArg(arg); return arg; }
 
     public NotFloatArg floatArg(String name) { NotFloatArg arg = NotFloatArg.of(name); this.addArg(arg); return arg; }
+    public NotFloatArg floatArg(String name, Object description) { NotFloatArg arg = NotFloatArg.of(name, description); this.addArg(arg); return arg; }
+    public NotFloatArg floatArg(String name, Object description, Consumer<NotArgument<Float>> executor) { NotFloatArg arg = (NotFloatArg)NotFloatArg.of(name, description).onExecute(executor); this.addArg(arg); return arg; }
     public NotFloatArg floatArg(String name, Consumer<NotArgument<Float>> executor) { NotFloatArg arg = NotFloatArg.of(name, executor); this.addArg(arg); return arg; }
 
     public NotGreedyStringArg greedyStringArg(String name) { NotGreedyStringArg arg = NotGreedyStringArg.of(name); this.addArg(arg); return arg; }
+    public NotGreedyStringArg greedyStringArg(String name, Object description) { NotGreedyStringArg arg = NotGreedyStringArg.of(name, description); this.addArg(arg); return arg; }
+    public NotGreedyStringArg greedyStringArg(String name, Object description, Consumer<NotArgument<String>> executor) { NotGreedyStringArg arg = (NotGreedyStringArg)NotGreedyStringArg.of(name, description).onExecute(executor); this.addArg(arg); return arg; }
     public NotGreedyStringArg greedyStringArg(String name, Consumer<NotArgument<String>> executor) { NotGreedyStringArg arg = NotGreedyStringArg.of(name, executor); this.addArg(arg); return arg; }
 
     public NotIntArg intArg(String name) { NotIntArg arg = NotIntArg.of(name); this.addArg(arg); return arg; }
+    public NotIntArg intArg(String name, Object description) { NotIntArg arg = NotIntArg.of(name, description); this.addArg(arg); return arg; }
+    public NotIntArg intArg(String name, Object description, Consumer<NotArgument<Integer>> executor) { NotIntArg arg = (NotIntArg)NotIntArg.of(name, description).onExecute(executor); this.addArg(arg); return arg; }
     public NotIntArg intArg(String name, Consumer<NotArgument<Integer>> executor) { NotIntArg arg = NotIntArg.of(name, executor); this.addArg(arg); return arg; }
 
     public NotLiteralArg literalArg(String name) { NotLiteralArg arg = NotLiteralArg.of(name); this.addArg(arg); return arg; }
+    public NotLiteralArg literalArg(String name, Object description) { NotLiteralArg arg = NotLiteralArg.of(name, description); this.addArg(arg); return arg; }
+    public NotLiteralArg literalArg(String name, Object description, Consumer<NotArgument<String>> executor) { NotLiteralArg arg = (NotLiteralArg)NotLiteralArg.of(name, description).onExecute(executor); this.addArg(arg); return arg; }
     public NotLiteralArg literalArg(String name, Consumer<NotArgument<String>> executor) { NotLiteralArg arg = NotLiteralArg.of(name, executor); this.addArg(arg); return arg; }
 
     public NotLongArg longArg(String name) { NotLongArg arg = NotLongArg.of(name); this.addArg(arg); return arg; }
+    public NotLongArg longArg(String name, Object description) { NotLongArg arg = NotLongArg.of(name, description); this.addArg(arg); return arg; }
+    public NotLongArg longArg(String name, Object description, Consumer<NotArgument<Long>> executor) { NotLongArg arg = (NotLongArg)NotLongArg.of(name, description).onExecute(executor); this.addArg(arg); return arg; }
     public NotLongArg longArg(String name, Consumer<NotArgument<Long>> executor) { NotLongArg arg = NotLongArg.of(name, executor); this.addArg(arg); return arg; }
 
     public NotPlayerArg playerArg(String name) { NotPlayerArg arg = NotPlayerArg.of(name); this.addArg(arg); return arg; }
+    public NotPlayerArg playerArg(String name, Object description) { NotPlayerArg arg = NotPlayerArg.of(name, description); this.addArg(arg); return arg; }
+    public NotPlayerArg playerArg(String name, Object description, Consumer<NotArgument<Player>> executor) { NotPlayerArg arg = (NotPlayerArg)NotPlayerArg.of(name, description).onExecute(executor); this.addArg(arg); return arg; }
     public NotPlayerArg playerArg(String name, Consumer<NotArgument<Player>> executor) { NotPlayerArg arg = NotPlayerArg.of(name, executor); this.addArg(arg); return arg; }
 
     public NotPlayerProfilesArg playerProfilesArg(String name) { NotPlayerProfilesArg arg = NotPlayerProfilesArg.of(name); this.addArg(arg); return arg; }
+    public NotPlayerProfilesArg playerProfilesArg(String name, Object description) { NotPlayerProfilesArg arg = NotPlayerProfilesArg.of(name, description); this.addArg(arg); return arg; }
+    public NotPlayerProfilesArg playerProfilesArg(String name, Object description, Consumer<NotArgument<List<PlayerProfile>>> executor) { NotPlayerProfilesArg arg = (NotPlayerProfilesArg)NotPlayerProfilesArg.of(name, description).onExecute(executor); this.addArg(arg); return arg; }
     public NotPlayerProfilesArg playerProfilesArg(String name, Consumer<NotArgument<List<PlayerProfile>>> executor) { NotPlayerProfilesArg arg = NotPlayerProfilesArg.of(name, executor); this.addArg(arg); return arg; }
 
     public NotPlayersArg playersArg(String name) { NotPlayersArg arg = NotPlayersArg.of(name); this.addArg(arg); return arg; }
+    public NotPlayersArg playersArg(String name, Object description) { NotPlayersArg arg = NotPlayersArg.of(name, description); this.addArg(arg); return arg; }
+    public NotPlayersArg playersArg(String name, Object description, Consumer<NotArgument<List<Player>>> executor) { NotPlayersArg arg = (NotPlayersArg)NotPlayersArg.of(name, description).onExecute(executor); this.addArg(arg); return arg; }
     public NotPlayersArg playersArg(String name, Consumer<NotArgument<List<Player>>> executor) { NotPlayersArg arg = NotPlayersArg.of(name, executor); this.addArg(arg); return arg; }
 
     public NotStringArg stringArg(String name) { NotStringArg arg = NotStringArg.of(name); this.addArg(arg); return arg; }
+    public NotStringArg stringArg(String name, Object description) { NotStringArg arg = NotStringArg.of(name, description); this.addArg(arg); return arg; }
+    public NotStringArg stringArg(String name, Object description, Consumer<NotArgument<String>> executor) { NotStringArg arg = (NotStringArg)NotStringArg.of(name, description).onExecute(executor); this.addArg(arg); return arg; }
     public NotStringArg stringArg(String name, Consumer<NotArgument<String>> executor) { NotStringArg arg = NotStringArg.of(name, executor); this.addArg(arg); return arg; }
 
     public Map<String, Object> getValues() {

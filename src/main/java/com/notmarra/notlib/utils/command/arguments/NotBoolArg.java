@@ -15,6 +15,9 @@ public class NotBoolArg extends NotArgument<Boolean> {
     }
 
     public static NotBoolArg of(String name) { return new NotBoolArg(name); }
+    public static NotBoolArg of(String name, Object description) {
+        return (NotBoolArg)NotBoolArg.of(name).setDescription(description);
+    }
     public static NotBoolArg of(String name, Consumer<NotArgument<Boolean>> executor) {
         return (NotBoolArg)NotBoolArg.of(name).onExecute(executor);
     }

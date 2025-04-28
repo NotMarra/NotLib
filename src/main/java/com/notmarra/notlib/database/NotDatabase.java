@@ -177,7 +177,9 @@ public abstract class NotDatabase extends NotConfigurable {
 
     public int processUpdate(String sql, List<Object> params) {
         NotLib.dbg().log(NotDebugger.C_DATABASE, "[processUpdate] SQL: " + sql);
-        NotLib.dbg().log(NotDebugger.C_DATABASE, "[processUpdate] Params: " + params);
+        if (!params.isEmpty()) {
+            NotLib.dbg().log(NotDebugger.C_DATABASE, "[processUpdate] Params: " + params);
+        }
 
         try {
             Connection connection = getConnection();
@@ -197,7 +199,9 @@ public abstract class NotDatabase extends NotConfigurable {
 
     public List<NotRecord> processSelect(String sql, List<Object> params) {
         NotLib.dbg().log(NotDebugger.C_DATABASE, "[processSelect] SQL: " + sql);
-        NotLib.dbg().log(NotDebugger.C_DATABASE, "[processSelect] Params: " + params);
+        if (!params.isEmpty()) {
+            NotLib.dbg().log(NotDebugger.C_DATABASE, "[processSelect] Params: " + params);
+        }
 
         try (Connection connection = getConnection();
             PreparedStatement stmt = connection.prepareStatement(sql)) {
