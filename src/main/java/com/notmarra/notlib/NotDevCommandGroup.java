@@ -14,6 +14,7 @@ import com.notmarra.notlib.extensions.NotCommandGroup;
 import com.notmarra.notlib.extensions.NotPlugin;
 import com.notmarra.notlib.font.NotFontItem;
 import com.notmarra.notlib.utils.ChatF;
+import com.notmarra.notlib.utils.NotBossBar;
 import com.notmarra.notlib.utils.command.NotCommand;
 import com.notmarra.notlib.utils.command.arguments.NotLiteralArg;
 import com.notmarra.notlib.utils.command.arguments.NotStringArg;
@@ -45,7 +46,9 @@ public final class NotDevCommandGroup extends NotCommandGroup {
             testPatternGui(),
             testCustomFont(),
             testCommandSignature(),
-            testCommandHelp()
+            testCommandHelp(),
+            testBossBar(),
+            testScheduler()
         );
     }
 
@@ -349,6 +352,32 @@ public final class NotDevCommandGroup extends NotCommandGroup {
 
             ChatF.of("--- PATH TO setArg2 ---").sendTo(cmd.getPlayer());
             ChatF.of(setArg2.getPath()).sendTo(cmd.getPlayer());
+        });
+    }
+
+    NotBossBar bossBar;
+    private NotCommand testBossBar() {
+        return NotCommand.of("test-bossbar", cmd -> {
+            if (bossBar != null) {
+                cmd.getPlayer().hideBossBar(bossBar.get());
+                cmd.getPlayer().sendActionBar(ChatF.of("BossBar removed!").build());
+                bossBar = null;
+            } else {
+                bossBar = NotBossBar.create(ChatF.of("Test BossBar").build());
+                cmd.getPlayer().showBossBar(bossBar.get());
+                cmd.getPlayer().sendActionBar(ChatF.of("BossBar shown!").build());
+            }
+        });
+    }
+
+    private NotCommand testScheduler() {
+        return NotCommand.of("test-scheduler", cmd -> {
+            plugin.scheduler().runTaskAsync(() -> {
+                ChatF.of("This is a test!").sendTo(cmd.getPlayer());
+            });
+            plugin.scheduler().runTaskLater(() -> {
+                ChatF.of("This is a test! 2 sec later!!!!!!!!!").sendTo(cmd.getPlayer());
+            }, 40L);
         });
     }
 }

@@ -14,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.notmarra.notlib.database.NotDatabase;
 import com.notmarra.notlib.database.NotDatabaseManager;
 import com.notmarra.notlib.utils.ChatF;
+import com.notmarra.notlib.utils.NotScheduler;
 
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 
@@ -36,6 +37,9 @@ public abstract class NotPlugin extends JavaPlugin {
     private NotDatabaseManager databaseManager;
     public NotDatabaseManager db() { return databaseManager; }
     public NotDatabase db(String dbId) { return databaseManager.getDatabase(dbId); }
+
+    private NotScheduler scheduler;
+    public NotScheduler scheduler() { return scheduler; }
 
     public final String CONFIG_YML = "config.yml";
 
@@ -100,6 +104,7 @@ public abstract class NotPlugin extends JavaPlugin {
 
             this.translationManager = new NotTranslationManager(this);
             this.databaseManager = new NotDatabaseManager(this);
+            this.scheduler = new NotScheduler(this);
 
             saveDefaultConfig(CONFIG_YML);
             loadConfigFile(CONFIG_YML);
