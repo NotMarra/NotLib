@@ -1,0 +1,167 @@
+\doxysection{com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation Class Reference}
+\hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation}{}\label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+Inheritance diagram for com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=6.000000cm]{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_aa49964d70f257047cb5bde99d6b97a2e}{Not\+GUIAnimation}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1_not_g_u_i}{Not\+GUI}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_afd84d9569aad7ceb6b58cbcd815a5be3}{gui}}, long \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a945ec855487d6333f9bb0198f03ba26c}{duration\+Ticks}}, long \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a8085f31fb464e857e297bb2f41163def}{frames}})
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a19b4227d4c48817d4e030105fe721612}{Not\+GUIAnimation}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1_not_g_u_i}{Not\+GUI}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_afd84d9569aad7ceb6b58cbcd815a5be3}{gui}}, long \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a945ec855487d6333f9bb0198f03ba26c}{duration\+Ticks}}, long \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a8085f31fb464e857e297bb2f41163def}{frames}}, boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a206a714947a300f6e7a7f8ea77ecb716}{infinite}})
+\item 
+UUID \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a3d8fcfde68bc6aa6a4be37796e183342}{id}} ()
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1_not_g_u_i}{Not\+GUI}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_ad23371e21e538449b8d10b846d6eb280}{gui}} ()
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation}{Not\+GUIAnimation}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a0d06b21fdfdfc9d0315f4c33aa50d5a2}{inf}} ()
+\item 
+boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a47c510c152f5d029fa8eac371dd96985}{is\+Infinite}} ()
+\item 
+void \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a4c73e8437b0c9a1b95f22c6e8bb5dd7e}{start}} (Consumer$<$ Float $>$ update\+Function)
+\item 
+void \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a1ee42d203960ad33b057e783e3a86571}{cancel}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+abstract float \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a51127fcf5e5f7029e2e545dbcd5f0fff}{calculate\+Progress}} (long current\+Frame)
+\item 
+boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_ab90c3b6e186865a6055211f989c7b74d}{should\+Continue}} (long current\+Frame)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+final \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1_not_g_u_i}{Not\+GUI}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_afd84d9569aad7ceb6b58cbcd815a5be3}{gui}}
+\item 
+final UUID \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a56b2ee6ba5ad7d14c35d743fbaa28e40}{uid}}
+\item 
+long \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a945ec855487d6333f9bb0198f03ba26c}{duration\+Ticks}}
+\item 
+long \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a8085f31fb464e857e297bb2f41163def}{frames}}
+\item 
+Bukkit\+Task \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a0f25ed04c66b1b70db478f805dfe5b6b}{task}}
+\item 
+boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a206a714947a300f6e7a7f8ea77ecb716}{infinite}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_aa49964d70f257047cb5bde99d6b97a2e}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!NotGUIAnimation@{NotGUIAnimation}}
+\index{NotGUIAnimation@{NotGUIAnimation}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{NotGUIAnimation()}{NotGUIAnimation()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_aa49964d70f257047cb5bde99d6b97a2e} 
+com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+Not\+GUIAnimation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1_not_g_u_i}{Not\+GUI}}}]{gui}{, }\item[{long}]{duration\+Ticks}{, }\item[{long}]{frames}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a19b4227d4c48817d4e030105fe721612}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!NotGUIAnimation@{NotGUIAnimation}}
+\index{NotGUIAnimation@{NotGUIAnimation}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{NotGUIAnimation()}{NotGUIAnimation()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a19b4227d4c48817d4e030105fe721612} 
+com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+Not\+GUIAnimation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1_not_g_u_i}{Not\+GUI}}}]{gui}{, }\item[{long}]{duration\+Ticks}{, }\item[{long}]{frames}{, }\item[{boolean}]{infinite}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a51127fcf5e5f7029e2e545dbcd5f0fff}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!calculateProgress@{calculateProgress}}
+\index{calculateProgress@{calculateProgress}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{calculateProgress()}{calculateProgress()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a51127fcf5e5f7029e2e545dbcd5f0fff} 
+abstract float com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+calculate\+Progress (\begin{DoxyParamCaption}\item[{long}]{current\+Frame}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [abstract]}, {\ttfamily [protected]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_back_and_forth_animation_a6b0a2e5070617c8a5e1843b5f5bc19e8}{com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIBack\+And\+Forth\+Animation}}, \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_bounce_animation_ad7d42d9df997b949dc35dcfd3168ae89}{com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIBounce\+Animation}}, \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_ease_in_out_animation_a37cfd15542bf909360e43a1feea786f4}{com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIEase\+In\+Out\+Animation}}, \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_elastic_animation_a08b6d7bc193bdcf51a0cfed0f15cbac7}{com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIElastic\+Animation}}, \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_infinite_animation_a9008341862b91296488edd83c152746e}{com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIInfinite\+Animation}}, \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_progress_animation_a7a0beb2831b22e99debb0a46f90ed8cd}{com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIProgress\+Animation}}, \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_pulse_animation_af4d5eacb21d9209a84f770ee875e62dc}{com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIPulse\+Animation}}, and \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_step_animation_abb1155ba96375f1413939e80e5fd2fac}{com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIStep\+Animation}}.
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a1ee42d203960ad33b057e783e3a86571}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!cancel@{cancel}}
+\index{cancel@{cancel}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{cancel()}{cancel()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a1ee42d203960ad33b057e783e3a86571} 
+void com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+cancel (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_ad23371e21e538449b8d10b846d6eb280}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!gui@{gui}}
+\index{gui@{gui}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{gui()}{gui()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_ad23371e21e538449b8d10b846d6eb280} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1_not_g_u_i}{Not\+GUI}} com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+gui (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a3d8fcfde68bc6aa6a4be37796e183342}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!id@{id}}
+\index{id@{id}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{id()}{id()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a3d8fcfde68bc6aa6a4be37796e183342} 
+UUID com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+id (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a0d06b21fdfdfc9d0315f4c33aa50d5a2}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!inf@{inf}}
+\index{inf@{inf}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{inf()}{inf()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a0d06b21fdfdfc9d0315f4c33aa50d5a2} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation}{Not\+GUIAnimation}} com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+inf (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a47c510c152f5d029fa8eac371dd96985}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!isInfinite@{isInfinite}}
+\index{isInfinite@{isInfinite}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{isInfinite()}{isInfinite()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a47c510c152f5d029fa8eac371dd96985} 
+boolean com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+is\+Infinite (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_ab90c3b6e186865a6055211f989c7b74d}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!shouldContinue@{shouldContinue}}
+\index{shouldContinue@{shouldContinue}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{shouldContinue()}{shouldContinue()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_ab90c3b6e186865a6055211f989c7b74d} 
+boolean com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+should\+Continue (\begin{DoxyParamCaption}\item[{long}]{current\+Frame}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_infinite_animation_afde1fb8a8ad99879d7cf8de091f516e3}{com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIInfinite\+Animation}}.
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a4c73e8437b0c9a1b95f22c6e8bb5dd7e}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!start@{start}}
+\index{start@{start}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a4c73e8437b0c9a1b95f22c6e8bb5dd7e} 
+void com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+start (\begin{DoxyParamCaption}\item[{Consumer$<$ Float $>$}]{update\+Function}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a945ec855487d6333f9bb0198f03ba26c}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!durationTicks@{durationTicks}}
+\index{durationTicks@{durationTicks}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{durationTicks}{durationTicks}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a945ec855487d6333f9bb0198f03ba26c} 
+long com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+duration\+Ticks\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a8085f31fb464e857e297bb2f41163def}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!frames@{frames}}
+\index{frames@{frames}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{frames}{frames}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a8085f31fb464e857e297bb2f41163def} 
+long com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+frames\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_afd84d9569aad7ceb6b58cbcd815a5be3}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!gui@{gui}}
+\index{gui@{gui}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{gui}{gui}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_afd84d9569aad7ceb6b58cbcd815a5be3} 
+final \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1_not_g_u_i}{Not\+GUI}} com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+gui\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a206a714947a300f6e7a7f8ea77ecb716}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!infinite@{infinite}}
+\index{infinite@{infinite}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{infinite}{infinite}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a206a714947a300f6e7a7f8ea77ecb716} 
+boolean com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+infinite\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a0f25ed04c66b1b70db478f805dfe5b6b}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!task@{task}}
+\index{task@{task}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{task}{task}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a0f25ed04c66b1b70db478f805dfe5b6b} 
+Bukkit\+Task com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+task\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a56b2ee6ba5ad7d14c35d743fbaa28e40}\index{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}!uid@{uid}}
+\index{uid@{uid}!com.notmarra.notlib.utils.gui.animations.NotGUIAnimation@{com.notmarra.notlib.utils.gui.animations.NotGUIAnimation}}
+\doxysubsubsection{\texorpdfstring{uid}{uid}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1animations_1_1_not_g_u_i_animation_a56b2ee6ba5ad7d14c35d743fbaa28e40} 
+final UUID com.\+notmarra.\+notlib.\+utils.\+gui.\+animations.\+Not\+GUIAnimation.\+uid\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/com/notmarra/notlib/utils/gui/animations/\mbox{\hyperlink{_not_g_u_i_animation_8java}{Not\+GUIAnimation.\+java}}\end{DoxyCompactItemize}

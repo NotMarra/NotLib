@@ -1,0 +1,600 @@
+\doxysection{com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder Class Reference}
+\hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{}\label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+
+
+A builder class for constructing SQL WHERE clauses in a fluent API style.  
+
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_ac76aaf5c59ce0cfac2e6d57a59f20d11}{and}} (String column, String operator, Object value)
+\begin{DoxyCompactList}\small\item\em Adds a new WHERE clause with the AND condition to the query. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a8d2b6fa8f49f6ca276cdee63fe1d7810}{and}} (String raw\+Condition)
+\begin{DoxyCompactList}\small\item\em Adds a new WHERE condition with AND logic operator. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_ac5983849888696addd8f22ea5d5a58a7}{and\+Equals}} (String column, Object value)
+\begin{DoxyCompactList}\small\item\em Adds an equality condition to the WHERE clause with an AND operator. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a3e9e134126c1d6d9709ae699c615fc2c}{and\+Not\+Equals}} (String column, Object value)
+\begin{DoxyCompactList}\small\item\em Adds a "{}\+AND column != value"{} clause to the SQL WHERE statement. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a61f4bf83c9762a6f33ec7d1fc2882a01}{and\+Less\+Than}} (String column, Object value)
+\begin{DoxyCompactList}\small\item\em Adds a "{}less than"{} condition to the WHERE clause, connected with AND. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a5cb5fc8cbce56e32cca173e932317285}{and\+Less\+Than\+Or\+Equals}} (String column, Object value)
+\begin{DoxyCompactList}\small\item\em Adds a \textquotesingle{}less than or equal\textquotesingle{} condition to the WHERE clause with an AND operator. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_aa99b801becf0d91b499d2e422e7ca44a}{and\+Greater\+Than}} (String column, Object value)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_acc3fa9ca2278af96914b54607d7cf95e}{and\+Greater\+Than\+Or\+Equals}} (String column, Object value)
+\begin{DoxyCompactList}\small\item\em Adds an AND condition to the WHERE clause with the \texorpdfstring{$>$}{>}= operator. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a074a7f75db3a3f879a24b97081daa514}{and\+In}} (String column, List$<$ Object $>$ values)
+\begin{DoxyCompactList}\small\item\em Adds an "{}\+AND IN"{} condition to the WHERE clause. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a8ba390c27c5e1eff3c04280921764197}{and\+Not\+In}} (String column, List$<$ Object $>$ values)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a9f2eeca5c24f5f13eed6c10f93aae4d9}{and\+Like}} (String column, Object value)
+\begin{DoxyCompactList}\small\item\em Adds a LIKE condition to the WHERE clause with an AND operator. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a960cbc88347dc029f8320dbca287964a}{and\+Not\+Like}} (String column, Object value)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a5055c16df419ce3beed397f715836519}{and\+Null}} (String column)
+\begin{DoxyCompactList}\small\item\em Adds an {\ttfamily AND IS NULL} condition to the WHERE clause. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a144aeed31cc64f64b113b063d519a036}{and\+Not\+Null}} (String column)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_ae7988f2b096ea685f5ad310c187fffa6}{or}} (String column, String operator, Object value)
+\begin{DoxyCompactList}\small\item\em Adds an "{}\+OR"{} condition to the SQL WHERE clause. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_aa234a9a2e9385053e07336a61598bc87}{or}} (String raw\+Condition)
+\begin{DoxyCompactList}\small\item\em Adds a raw "{}\+OR"{} condition to the WHERE clause. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a0b2b1218bc7ba77b2f23fbb4de5278c6}{build}} (String\+Builder query)
+\begin{DoxyCompactList}\small\item\em Builds the SQL "{}\+WHERE"{} clause segment of a query. \end{DoxyCompactList}\item 
+List$<$ Object $>$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a8b90a0c3ffaf3e5ba76d296e731c0369}{get\+Parameters}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves all parameter values from non-\/raw where clauses. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a56e9c29e87cb0099a55cbeb2607ea506}{create}} ()
+\begin{DoxyCompactList}\small\item\em Creates and returns a new instance of the \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_abcfd7e212556ae09f6c261595df11bca}{of}} (String column, String operator, Object value)
+\begin{DoxyCompactList}\small\item\em Creates a new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance with an initial condition. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a9135e312ae4ee12971d464a0ac4970bc}{of}} (String raw\+Condition)
+\item 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a36f7657697a6ac3814538eef59fd3c31}{of\+Or}} (String column, String operator, Object value)
+\begin{DoxyCompactList}\small\item\em Creates a new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} with an initial OR condition. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_aa46d311148432aa48043a350eb09d179}{of\+Or}} (String raw\+Condition)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A builder class for constructing SQL WHERE clauses in a fluent API style. 
+
+This class provides a convenient way to build complex SQL WHERE conditions with proper parameter handling to prevent SQL injection. It supports various comparison operators, logical AND/\+OR combinations, and special conditions like IN, LIKE, and NULL checks. \begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_ac76aaf5c59ce0cfac2e6d57a59f20d11}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!and@{and}}
+\index{and@{and}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{and()}{and()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_ac76aaf5c59ce0cfac2e6d57a59f20d11} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+and (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{String}]{operator}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds a new WHERE clause with the AND condition to the query. 
+
+This method appends a new WHERE clause to the existing query using the AND logical operator. The clause is constructed using the provided column name, operator, and value.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The name of the column to compare \\
+\hline
+{\em operator} & The comparison operator (e.\+g., "{}="{}, "{}$<$"{}, "{}$>$"{}, "{}\+LIKE"{}, etc.) \\
+\hline
+{\em value} & The value to compare against the column \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+This builder instance, allowing for method chaining 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a8d2b6fa8f49f6ca276cdee63fe1d7810}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!and@{and}}
+\index{and@{and}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{and()}{and()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a8d2b6fa8f49f6ca276cdee63fe1d7810} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+and (\begin{DoxyParamCaption}\item[{String}]{raw\+Condition}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds a new WHERE condition with AND logic operator. 
+
+Appends a new condition to the existing WHERE clause using the AND operator. This allows for combining multiple conditions that all must be satisfied.
+
+
+\begin{DoxyParams}{Parameters}
+{\em raw\+Condition} & The SQL condition to be added to the WHERE clause \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to the same \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance for method chaining 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_ac5983849888696addd8f22ea5d5a58a7}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!andEquals@{andEquals}}
+\index{andEquals@{andEquals}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{andEquals()}{andEquals()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_ac5983849888696addd8f22ea5d5a58a7} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+and\+Equals (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds an equality condition to the WHERE clause with an AND operator. 
+
+This method appends a new condition to the existing WHERE clause using the AND logical operator. The condition checks if the specified column equals the provided value.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The database column name to compare \\
+\hline
+{\em value} & The value to compare against the column \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+This builder instance for method chaining 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_aa99b801becf0d91b499d2e422e7ca44a}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!andGreaterThan@{andGreaterThan}}
+\index{andGreaterThan@{andGreaterThan}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{andGreaterThan()}{andGreaterThan()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_aa99b801becf0d91b499d2e422e7ca44a} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+and\+Greater\+Than (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Adds a greater than condition to the WHERE clause connected with AND.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The column name to compare \\
+\hline
+{\em value} & The value to compare the column with \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current builder instance for method chaining 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_acc3fa9ca2278af96914b54607d7cf95e}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!andGreaterThanOrEquals@{andGreaterThanOrEquals}}
+\index{andGreaterThanOrEquals@{andGreaterThanOrEquals}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{andGreaterThanOrEquals()}{andGreaterThanOrEquals()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_acc3fa9ca2278af96914b54607d7cf95e} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+and\+Greater\+Than\+Or\+Equals (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds an AND condition to the WHERE clause with the \texorpdfstring{$>$}{>}= operator. 
+
+This method adds a condition to the WHERE clause that checks if the specified column\textquotesingle{}s value is greater than or equal to the given value. The condition is combined with previous conditions using the AND logical operator.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The name of the column to compare \\
+\hline
+{\em value} & The value to compare the column against \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance for method chaining 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a074a7f75db3a3f879a24b97081daa514}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!andIn@{andIn}}
+\index{andIn@{andIn}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{andIn()}{andIn()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a074a7f75db3a3f879a24b97081daa514} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+and\+In (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{List$<$ Object $>$}]{values}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds an "{}\+AND IN"{} condition to the WHERE clause. 
+
+This method creates a SQL WHERE condition that checks if the specified column value is within a given list of values, and joins it with an AND operator.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The name of the column to check. \\
+\hline
+{\em values} & A list of values to check against the column. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance for method chaining. 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a61f4bf83c9762a6f33ec7d1fc2882a01}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!andLessThan@{andLessThan}}
+\index{andLessThan@{andLessThan}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{andLessThan()}{andLessThan()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a61f4bf83c9762a6f33ec7d1fc2882a01} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+and\+Less\+Than (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds a "{}less than"{} condition to the WHERE clause, connected with AND. 
+
+This method appends a condition to the WHERE clause of the SQL query where the specified column is less than the provided value. The condition is joined to previous conditions with an AND operator.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The name of the database column to compare \\
+\hline
+{\em value} & The value to compare against the column \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+This builder instance for method chaining 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a5cb5fc8cbce56e32cca173e932317285}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!andLessThanOrEquals@{andLessThanOrEquals}}
+\index{andLessThanOrEquals@{andLessThanOrEquals}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{andLessThanOrEquals()}{andLessThanOrEquals()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a5cb5fc8cbce56e32cca173e932317285} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+and\+Less\+Than\+Or\+Equals (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds a \textquotesingle{}less than or equal\textquotesingle{} condition to the WHERE clause with an AND operator. 
+
+This method creates a new WHERE clause condition that checks if the specified column has a value less than or equal to the provided value, and joins it with an AND operator to any existing conditions.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The column name to compare \\
+\hline
+{\em value} & The value to compare against the column \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+This builder instance for method chaining 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a9f2eeca5c24f5f13eed6c10f93aae4d9}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!andLike@{andLike}}
+\index{andLike@{andLike}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{andLike()}{andLike()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a9f2eeca5c24f5f13eed6c10f93aae4d9} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+and\+Like (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds a LIKE condition to the WHERE clause with an AND operator. 
+
+This method appends a condition to the WHERE clause that checks if the specified column contains the pattern specified by the value parameter. The condition is combined with the previous conditions using the AND operator.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The name of the column to compare. \\
+\hline
+{\em value} & The pattern to match (can use wildcards like \% and \+\_\+). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance for method chaining. 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a3e9e134126c1d6d9709ae699c615fc2c}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!andNotEquals@{andNotEquals}}
+\index{andNotEquals@{andNotEquals}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{andNotEquals()}{andNotEquals()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a3e9e134126c1d6d9709ae699c615fc2c} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+and\+Not\+Equals (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds a "{}\+AND column != value"{} clause to the SQL WHERE statement. 
+
+This method adds a new WHERE clause that checks if the specified column is not equal to the given value, connected with the previous clause (if any) using the AND operator.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The column name to compare \\
+\hline
+{\em value} & The value to compare the column against \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+This builder instance for method chaining 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a8ba390c27c5e1eff3c04280921764197}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!andNotIn@{andNotIn}}
+\index{andNotIn@{andNotIn}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{andNotIn()}{andNotIn()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a8ba390c27c5e1eff3c04280921764197} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+and\+Not\+In (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{List$<$ Object $>$}]{values}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Adds a NOT IN condition to the WHERE clause with AND operator. This condition checks if the specified column\textquotesingle{}s value is not in the provided list of values.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The name of the column to check \\
+\hline
+{\em values} & The list of values to check against \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance for method chaining 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a960cbc88347dc029f8320dbca287964a}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!andNotLike@{andNotLike}}
+\index{andNotLike@{andNotLike}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{andNotLike()}{andNotLike()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a960cbc88347dc029f8320dbca287964a} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+and\+Not\+Like (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Adds a NOT LIKE condition to the WHERE clause with an AND operator.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The column name to compare \\
+\hline
+{\em value} & The value to compare against \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+This builder instance for method chaining 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a144aeed31cc64f64b113b063d519a036}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!andNotNull@{andNotNull}}
+\index{andNotNull@{andNotNull}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{andNotNull()}{andNotNull()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a144aeed31cc64f64b113b063d519a036} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+and\+Not\+Null (\begin{DoxyParamCaption}\item[{String}]{column}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Adds a NOT NULL check for a specified column to the WHERE clause with AND operator. This condition checks if the column does not contain a NULL value.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & the name of the column to check for not being NULL \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+this builder instance for method chaining 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a5055c16df419ce3beed397f715836519}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!andNull@{andNull}}
+\index{andNull@{andNull}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{andNull()}{andNull()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a5055c16df419ce3beed397f715836519} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+and\+Null (\begin{DoxyParamCaption}\item[{String}]{column}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds an {\ttfamily AND IS NULL} condition to the WHERE clause. 
+
+This method adds a condition checking if the specified column is NULL, and connects it with the previous conditions using the AND operator.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The name of the column to check for NULL \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance for method chaining 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a0b2b1218bc7ba77b2f23fbb4de5278c6}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!build@{build}}
+\index{build@{build}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{build()}{build()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a0b2b1218bc7ba77b2f23fbb4de5278c6} 
+void com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+build (\begin{DoxyParamCaption}\item[{String\+Builder}]{query}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Builds the SQL "{}\+WHERE"{} clause segment of a query. 
+
+This method constructs the WHERE clause by iteratively processing all where clauses that have been added to this builder. It handles different types of where clauses\+:
+\begin{DoxyItemize}
+\item Raw SQL conditions
+\item Multi-\/value clauses
+\item Standard column-\/operator-\/value clauses
+\end{DoxyItemize}
+
+Each clause is connected with its logical operator (AND, OR, etc.), except for the first one.
+
+
+\begin{DoxyParams}{Parameters}
+{\em query} & The String\+Builder instance to which the WHERE clause will be appended \\
+\hline
+\end{DoxyParams}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a56e9c29e87cb0099a55cbeb2607ea506}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!create@{create}}
+\index{create@{create}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a56e9c29e87cb0099a55cbeb2607ea506} 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+create (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Creates and returns a new instance of the \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}. 
+
+This static factory method provides a convenient way to instantiate the \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} without directly using the constructor.
+
+\begin{DoxyReturn}{Returns}
+A new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance ready for building SQL WHERE clauses. 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a8b90a0c3ffaf3e5ba76d296e731c0369}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!getParameters@{getParameters}}
+\index{getParameters@{getParameters}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{getParameters()}{getParameters()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a8b90a0c3ffaf3e5ba76d296e731c0369} 
+List$<$ Object $>$ com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+get\+Parameters (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retrieves all parameter values from non-\/raw where clauses. 
+
+This method collects the parameters from all where clauses that are not marked as raw. Raw clauses are SQL fragments that should be used as-\/is without parameter binding.
+
+\begin{DoxyReturn}{Returns}
+A list of parameter values that should be bound to the prepared statement. 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_abcfd7e212556ae09f6c261595df11bca}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!of@{of}}
+\index{of@{of}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{of()}{of()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_abcfd7e212556ae09f6c261595df11bca} 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+of (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{String}]{operator}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Creates a new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance with an initial condition. 
+
+This static factory method creates a new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} and adds an initial condition using the AND operator.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The database column name to filter on \\
+\hline
+{\em operator} & The comparison operator (e.\+g., "{}="{}, "{}$>$"{}, "{}$<$"{}, "{}\+LIKE"{}, etc.) \\
+\hline
+{\em value} & The value to compare against the column \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance with the initial condition applied 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a9135e312ae4ee12971d464a0ac4970bc}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!of@{of}}
+\index{of@{of}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{of()}{of()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a9135e312ae4ee12971d464a0ac4970bc} 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+of (\begin{DoxyParamCaption}\item[{String}]{raw\+Condition}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Creates a new instance of \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} with the given raw SQL condition.
+
+This factory method creates a \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} and adds the raw condition using the AND operator.
+
+
+\begin{DoxyParams}{Parameters}
+{\em raw\+Condition} & the raw SQL condition to be added to the where clause \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance with the specified condition 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a36f7657697a6ac3814538eef59fd3c31}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!ofOr@{ofOr}}
+\index{ofOr@{ofOr}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{ofOr()}{ofOr()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_a36f7657697a6ac3814538eef59fd3c31} 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+of\+Or (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{String}]{operator}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Creates a new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} with an initial OR condition. 
+
+This static factory method creates a new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance and initializes it with an OR condition using the specified column, operator, and value.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The database column name to use in the condition \\
+\hline
+{\em operator} & The SQL operator to use (e.\+g., "{}="{}, "{}$>$"{}, "{}$<$"{}, "{}\+LIKE"{}, etc.) \\
+\hline
+{\em value} & The value to compare against the column \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance with the initial OR condition 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_aa46d311148432aa48043a350eb09d179}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!ofOr@{ofOr}}
+\index{ofOr@{ofOr}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{ofOr()}{ofOr()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_aa46d311148432aa48043a350eb09d179} 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+of\+Or (\begin{DoxyParamCaption}\item[{String}]{raw\+Condition}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Creates a new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance with an initial \textquotesingle{}OR\textquotesingle{} condition. This is a factory method that simplifies creating a builder with an OR condition.
+
+
+\begin{DoxyParams}{Parameters}
+{\em raw\+Condition} & The raw SQL condition string to be added with an OR operator \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance with the specified OR condition 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_ae7988f2b096ea685f5ad310c187fffa6}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!or@{or}}
+\index{or@{or}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{or()}{or()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_ae7988f2b096ea685f5ad310c187fffa6} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+or (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{String}]{operator}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds an "{}\+OR"{} condition to the SQL WHERE clause. 
+
+This method appends a new WHERE condition connected with "{}\+OR"{} logical operator.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The database column name to check in the condition \\
+\hline
+{\em operator} & The comparison operator (e.\+g., "{}="{}, "{}$<$$>$"{}, "{}$>$"{}, "{}$<$"{}, "{}$>$="{}, "{}$<$="{}, "{}\+LIKE"{}, etc.) \\
+\hline
+{\em value} & The value to compare against the column \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder} instance for method chaining 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_d_1_2_git_hub_2_not_lib_2src_2main_2java_2com_2notmarra_2notlib_2database_2query_2_not_sql_where_builder_8java-example}{D\+:/\+Git\+Hub/\+Not\+Lib/src/main/java/com/notmarra/notlib/database/query/\+Not\+Sql\+Where\+Builder.\+java}}.\end{Desc}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_aa234a9a2e9385053e07336a61598bc87}\index{com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}!or@{or}}
+\index{or@{or}!com.notmarra.notlib.database.query.NotSqlWhereBuilder@{com.notmarra.notlib.database.query.NotSqlWhereBuilder}}
+\doxysubsubsection{\texorpdfstring{or()}{or()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder_aa234a9a2e9385053e07336a61598bc87} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder}{Not\+Sql\+Where\+Builder}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Where\+Builder.\+or (\begin{DoxyParamCaption}\item[{String}]{raw\+Condition}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds a raw "{}\+OR"{} condition to the WHERE clause. 
+
+Appends the specified raw condition to the WHERE clause with an "{}\+OR"{} logical operator. This allows for direct SQL condition strings to be included in the query.
+
+
+\begin{DoxyParams}{Parameters}
+{\em raw\+Condition} & The raw SQL condition string to be added with "{}\+OR"{} operator \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+This builder instance for method chaining 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/com/notmarra/notlib/database/query/\mbox{\hyperlink{_not_sql_where_builder_8java}{Not\+Sql\+Where\+Builder.\+java}}\end{DoxyCompactItemize}

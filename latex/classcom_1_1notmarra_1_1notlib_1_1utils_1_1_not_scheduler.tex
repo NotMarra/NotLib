@@ -1,0 +1,204 @@
+\doxysection{com.\+notmarra.\+notlib.\+utils.\+Not\+Scheduler Class Reference}
+\hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler}{}\label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler}\index{com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a77ffe347d5e94fadbd00c094e46d4931}{Not\+Scheduler}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_plugin}{Not\+Plugin}} plugin)
+\item 
+Bukkit\+Task \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_ac8155d07ee16bb1b1c36002cfeebbc77}{run\+Task}} (Runnable runnable)
+\item 
+Bukkit\+Task \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a64df57da3157499499cf2b9bdbb6f47a}{run\+Task\+Later}} (Runnable runnable, long delay)
+\item 
+Bukkit\+Task \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a80f8268fdef62dba4dd3c54495fc47eb}{run\+Task\+Timer}} (Runnable runnable, long delay, long period)
+\item 
+Bukkit\+Task \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_add33072383aa4dbfaadf965e38958e06}{run\+Task\+Async}} (Runnable runnable)
+\item 
+Bukkit\+Task \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a9b1d4f458e4616a3fd0bfbf2367e8209}{run\+Task\+Later\+Async}} (Runnable runnable, long delay)
+\item 
+Bukkit\+Task \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_af9b982eb26ed3da93c78a15b614cbd9b}{run\+Task\+Timer\+Async}} (Runnable runnable, long delay, long period)
+\item 
+Bukkit\+Runnable \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_af8478fc3fc4b41c50b6d52bf1444ca47}{create\+Task}} ()
+\item 
+boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a94efa713cfa05a87704101340ab2455c}{cancel\+Task}} (Bukkit\+Task task)
+\item 
+void \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a62001ca911bb4c5ad6880bbbbe6456a4}{cancel\+All\+Tasks}} ()
+\item 
+boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_abeb6f3c3b6643e368baa98c56863b898}{is\+Task\+Running}} (int task\+Id)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Provides static methods to easily schedule various types of tasks. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a77ffe347d5e94fadbd00c094e46d4931}\index{com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}!NotScheduler@{NotScheduler}}
+\index{NotScheduler@{NotScheduler}!com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}}
+\doxysubsubsection{\texorpdfstring{NotScheduler()}{NotScheduler()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a77ffe347d5e94fadbd00c094e46d4931} 
+com.\+notmarra.\+notlib.\+utils.\+Not\+Scheduler.\+Not\+Scheduler (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_plugin}{Not\+Plugin}}}]{plugin}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a62001ca911bb4c5ad6880bbbbe6456a4}\index{com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}!cancelAllTasks@{cancelAllTasks}}
+\index{cancelAllTasks@{cancelAllTasks}!com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}}
+\doxysubsubsection{\texorpdfstring{cancelAllTasks()}{cancelAllTasks()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a62001ca911bb4c5ad6880bbbbe6456a4} 
+void com.\+notmarra.\+notlib.\+utils.\+Not\+Scheduler.\+cancel\+All\+Tasks (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Cancel all tasks associated with a plugin. \Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a94efa713cfa05a87704101340ab2455c}\index{com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}!cancelTask@{cancelTask}}
+\index{cancelTask@{cancelTask}!com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}}
+\doxysubsubsection{\texorpdfstring{cancelTask()}{cancelTask()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a94efa713cfa05a87704101340ab2455c} 
+boolean com.\+notmarra.\+notlib.\+utils.\+Not\+Scheduler.\+cancel\+Task (\begin{DoxyParamCaption}\item[{Bukkit\+Task}]{task}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Cancel a task if it\textquotesingle{}s not null and is still running.
+
+
+\begin{DoxyParams}{Parameters}
+{\em task} & The task to cancel \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the task was cancelled, false otherwise 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_af8478fc3fc4b41c50b6d52bf1444ca47}\index{com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}!createTask@{createTask}}
+\index{createTask@{createTask}!com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}}
+\doxysubsubsection{\texorpdfstring{createTask()}{createTask()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_af8478fc3fc4b41c50b6d52bf1444ca47} 
+Bukkit\+Runnable com.\+notmarra.\+notlib.\+utils.\+Not\+Scheduler.\+create\+Task (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Create a new Bukkit\+Runnable task.
+
+\begin{DoxyReturn}{Returns}
+A new Bukkit\+Runnable 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_abeb6f3c3b6643e368baa98c56863b898}\index{com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}!isTaskRunning@{isTaskRunning}}
+\index{isTaskRunning@{isTaskRunning}!com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}}
+\doxysubsubsection{\texorpdfstring{isTaskRunning()}{isTaskRunning()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_abeb6f3c3b6643e368baa98c56863b898} 
+boolean com.\+notmarra.\+notlib.\+utils.\+Not\+Scheduler.\+is\+Task\+Running (\begin{DoxyParamCaption}\item[{int}]{task\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Check if a task is currently running.
+
+
+\begin{DoxyParams}{Parameters}
+{\em task\+Id} & The ID of the task to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the task is running, false otherwise 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_ac8155d07ee16bb1b1c36002cfeebbc77}\index{com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}!runTask@{runTask}}
+\index{runTask@{runTask}!com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}}
+\doxysubsubsection{\texorpdfstring{runTask()}{runTask()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_ac8155d07ee16bb1b1c36002cfeebbc77} 
+Bukkit\+Task com.\+notmarra.\+notlib.\+utils.\+Not\+Scheduler.\+run\+Task (\begin{DoxyParamCaption}\item[{Runnable}]{runnable}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Run a task on the next server tick.
+
+
+\begin{DoxyParams}{Parameters}
+{\em runnable} & The task to run \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A Bukkit\+Task representing the task 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_add33072383aa4dbfaadf965e38958e06}\index{com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}!runTaskAsync@{runTaskAsync}}
+\index{runTaskAsync@{runTaskAsync}!com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}}
+\doxysubsubsection{\texorpdfstring{runTaskAsync()}{runTaskAsync()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_add33072383aa4dbfaadf965e38958e06} 
+Bukkit\+Task com.\+notmarra.\+notlib.\+utils.\+Not\+Scheduler.\+run\+Task\+Async (\begin{DoxyParamCaption}\item[{Runnable}]{runnable}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Run a task asynchronously (off the main server thread).
+
+
+\begin{DoxyParams}{Parameters}
+{\em runnable} & The task to run \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A Bukkit\+Task representing the task 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a64df57da3157499499cf2b9bdbb6f47a}\index{com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}!runTaskLater@{runTaskLater}}
+\index{runTaskLater@{runTaskLater}!com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}}
+\doxysubsubsection{\texorpdfstring{runTaskLater()}{runTaskLater()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a64df57da3157499499cf2b9bdbb6f47a} 
+Bukkit\+Task com.\+notmarra.\+notlib.\+utils.\+Not\+Scheduler.\+run\+Task\+Later (\begin{DoxyParamCaption}\item[{Runnable}]{runnable}{, }\item[{long}]{delay}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Run a task after a specified delay in ticks.
+
+
+\begin{DoxyParams}{Parameters}
+{\em runnable} & The task to run \\
+\hline
+{\em delay} & The delay in ticks before the task runs (20 ticks = 1 second) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A Bukkit\+Task representing the task 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a9b1d4f458e4616a3fd0bfbf2367e8209}\index{com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}!runTaskLaterAsync@{runTaskLaterAsync}}
+\index{runTaskLaterAsync@{runTaskLaterAsync}!com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}}
+\doxysubsubsection{\texorpdfstring{runTaskLaterAsync()}{runTaskLaterAsync()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a9b1d4f458e4616a3fd0bfbf2367e8209} 
+Bukkit\+Task com.\+notmarra.\+notlib.\+utils.\+Not\+Scheduler.\+run\+Task\+Later\+Async (\begin{DoxyParamCaption}\item[{Runnable}]{runnable}{, }\item[{long}]{delay}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Run a task asynchronously after a specified delay in ticks.
+
+
+\begin{DoxyParams}{Parameters}
+{\em runnable} & The task to run \\
+\hline
+{\em delay} & The delay in ticks before the task runs (20 ticks = 1 second) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A Bukkit\+Task representing the task 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a80f8268fdef62dba4dd3c54495fc47eb}\index{com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}!runTaskTimer@{runTaskTimer}}
+\index{runTaskTimer@{runTaskTimer}!com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}}
+\doxysubsubsection{\texorpdfstring{runTaskTimer()}{runTaskTimer()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_a80f8268fdef62dba4dd3c54495fc47eb} 
+Bukkit\+Task com.\+notmarra.\+notlib.\+utils.\+Not\+Scheduler.\+run\+Task\+Timer (\begin{DoxyParamCaption}\item[{Runnable}]{runnable}{, }\item[{long}]{delay}{, }\item[{long}]{period}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Run a task repeatedly at a specified interval after an initial delay.
+
+
+\begin{DoxyParams}{Parameters}
+{\em runnable} & The task to run \\
+\hline
+{\em delay} & The delay in ticks before the first execution (20 ticks = 1 second) \\
+\hline
+{\em period} & The period in ticks between subsequent executions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A Bukkit\+Task representing the task 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_af9b982eb26ed3da93c78a15b614cbd9b}\index{com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}!runTaskTimerAsync@{runTaskTimerAsync}}
+\index{runTaskTimerAsync@{runTaskTimerAsync}!com.notmarra.notlib.utils.NotScheduler@{com.notmarra.notlib.utils.NotScheduler}}
+\doxysubsubsection{\texorpdfstring{runTaskTimerAsync()}{runTaskTimerAsync()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler_af9b982eb26ed3da93c78a15b614cbd9b} 
+Bukkit\+Task com.\+notmarra.\+notlib.\+utils.\+Not\+Scheduler.\+run\+Task\+Timer\+Async (\begin{DoxyParamCaption}\item[{Runnable}]{runnable}{, }\item[{long}]{delay}{, }\item[{long}]{period}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Run a task asynchronously at a specified interval after an initial delay.
+
+
+\begin{DoxyParams}{Parameters}
+{\em runnable} & The task to run \\
+\hline
+{\em delay} & The delay in ticks before the first execution (20 ticks = 1 second) \\
+\hline
+{\em period} & The period in ticks between subsequent executions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A Bukkit\+Task representing the task 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/com/notmarra/notlib/utils/\mbox{\hyperlink{_not_scheduler_8java}{Not\+Scheduler.\+java}}\end{DoxyCompactItemize}

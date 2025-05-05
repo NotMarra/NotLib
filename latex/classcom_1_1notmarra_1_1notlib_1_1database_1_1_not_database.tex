@@ -1,0 +1,534 @@
+\doxysection{com.\+notmarra.\+notlib.\+database.\+Not\+Database Class Reference}
+\hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{}\label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+
+
+An abstract base class for database operations with configurable settings.  
+
+
+Inheritance diagram for com.\+notmarra.\+notlib.\+database.\+Not\+Database\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.847458cm]{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a41ed59294f39d35f564028725e871078}{Not\+Database}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_plugin}{Not\+Plugin}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_a314e530405e7289ec2ea275247568525}{plugin}}, String default\+Config)
+\item 
+List$<$ String $>$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ac05bc2cfa4e649758a3e21ad5b48851d}{get\+Config\+Paths}} ()
+\item 
+abstract String \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a916596d8362519be4235fdf1cc908510}{get\+Id}} ()
+\item 
+abstract List$<$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table}{Not\+Table}} $>$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ac8ae4dfab71f691e80b41651a9ef48e5}{setup\+Tables}} ()
+\item 
+abstract void \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ac58075d8dd39e25ee2276ba867b3e829}{connect}} ()
+\item 
+abstract boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a3b4c7805592323af350c67a06a815c13}{create\+Table}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table}{Not\+Table}} table)
+\item 
+abstract boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a0f34c472a0ba18ecd131d806fddee736}{insert\+Row}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table}{Not\+Table}} table, List$<$ Object $>$ row)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a23b0bae5f469133beb467a9489a5c49d}{select}} (String table)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a2a3cf506eaded0465d0110e5b079bac7}{select}} (String table, List$<$ String $>$ columns)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a920ec1056e3ed1108fdd5f7fcc78aaff}{insert\+Into}} (String table)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_af5c6e46e3b40c23fc830696192ef93ee}{update}} (String table)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a62b3d106309ae0513059bdf05c700507}{delete\+From}} (String table)
+\item 
+boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a644c04ee8c736921ff16f4a747bfd3f6}{exists}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} builder)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a6f483d127b202466c2d89ac9a711567d}{select\+One}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} builder)
+\item 
+List$<$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} $>$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a3f148e5a22f9899be16c8b50fad920e0}{select}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} builder)
+\item 
+int \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a38f3d3b30fce239bf12d5fbda5729667}{execute}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} builder)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor}{Not\+Sql\+Query\+Executor}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ab5ef45cac1b5810ea184e6c40676ec2b}{get\+Query\+Executor}} ()
+\item 
+Map$<$ String, \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table}{Not\+Table}} $>$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a93e8d9ce1ac734f584cde69893e4f794}{get\+Tables}} ()
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table}{Not\+Table}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a57d52c3fe828438f38ab9395fcea1088}{get\+Table}} (String table\+Name)
+\item 
+void \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a59890bf9ae2d11b2cf5a386d8ac4785b}{setup}} ()
+\begin{DoxyCompactList}\small\item\em Initializes the database by setting up all tables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a7ea1ff574151679f23ccf6f8b5fe5672}{on\+Config\+Reload}} (List$<$ String $>$ reloaded\+Configs)
+\begin{DoxyCompactList}\small\item\em Handles the configuration reload event. \end{DoxyCompactList}\item 
+Configuration\+Section \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_af5b5ac6e998ac57caff49d090e9a1a14}{get\+Database\+Config}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the database-\/specific configuration section. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a47fe86f54d51ed280a49fd6dc7b02c95}{set\+Source}} (Hikari\+Data\+Source \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a8a7ada96c6de0a5522ee5cc2117365cd}{source}})
+\item 
+Connection \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ad9f8fe27c1e991a94840b46729b27e93}{get\+Connection}} ()  throws SQLException 
+\begin{DoxyCompactList}\small\item\em Retrieves a connection from the underlying Data\+Source. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a8f53323b6209b758ab2ab607faf0070c}{close}} ()
+\item 
+boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a91e4c3b9c43e9487a6156bee1e29ed8a}{is\+Connected}} ()
+\begin{DoxyCompactList}\small\item\em Checks if the database connection is active. \end{DoxyCompactList}\item 
+Object \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_aad801b94b11ffa5c454ad543e5b85252}{convert\+Value}} (String column\+Type, Object value)
+\begin{DoxyCompactList}\small\item\em Converts a value to the appropriate Java type based on a SQL column type. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ae0433ad440613764542183d0bee0a59b}{process}} (Consumer$<$ Connection $>$ consumer)
+\begin{DoxyCompactList}\small\item\em Processes a database operation using a provided consumer. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a0581052c8b36f1811fb34c18c9d34ace}{process\+Statement}} (Bi\+Consumer$<$ Connection, Statement $>$ consumer)
+\begin{DoxyCompactList}\small\item\em Executes custom operations on a database statement. \end{DoxyCompactList}\item 
+boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a5f183d43586019f8312088b65717c61a}{process\+Result}} (String sql)
+\begin{DoxyCompactList}\small\item\em Executes a SQL statement that returns a boolean value. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a9289741ffda14c18e07555ddabb2c04e}{process\+Update}} (String sql, List$<$ Object $>$ params)
+\begin{DoxyCompactList}\small\item\em Executes an SQL update statement with the provided parameters. \end{DoxyCompactList}\item 
+List$<$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} $>$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_acee92acc7c732ae73e023a6ac8b5e920}{process\+Select}} (String sql, List$<$ Object $>$ params)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable}{com.\+notmarra.\+notlib.\+extensions.\+Not\+Configurable}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_ab63815c51a868df1c8c829d7e7543d41}{Not\+Configurable}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_plugin}{Not\+Plugin}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_a314e530405e7289ec2ea275247568525}{plugin}})
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_plugin}{Not\+Plugin}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_a40ece4c42174575ea30d48488291958e}{get\+Plugin}} ()
+\item 
+File\+Configuration \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_abb4a3fe0515727066f8aecd49e1c64b6}{get\+Config}} (String path)
+\item 
+File\+Configuration \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_a8dd1ceb2e02455637b385544eaaf1590}{get\+First\+Config}} ()
+\item 
+boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_a37462609fc02a6c053edad84d6365602}{is\+Enabled}} ()
+\item 
+File\+Configuration \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_acad0d256413b9d67d22a9909177d9070}{get\+Plugin\+Config}} ()
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable}{Not\+Configurable}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_a1da2ea174364093e65e9e2c26cb3dd02}{reload}} ()
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable}{Not\+Configurable}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_aaaf36120cc6ed137d12223cb09914d4f}{reload\+With\+Files}} ()
+\item 
+Component\+Logger \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_a1262099eaee13294b1068c5e60204df7}{get\+Logger}} ()
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_translation_manager}{Not\+Translation\+Manager}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_a4351500bcf6d0e12e3a080ce27b2bd15}{tm}} ()
+\item 
+String \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_a3b9ee72423f6dadfcdd1ef26069aa943}{tm}} (String key)
+\item 
+List$<$ String $>$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_a39ac32440c0d101c8df17b6c754a6e71}{tm\+List}} (String key)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable}{Not\+Configurable}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_aea2b19fbad2ab6990878ea1b874577bd}{register\+Configurable}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Hikari\+Data\+Source \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a8a7ada96c6de0a5522ee5cc2117365cd}{source}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable}{com.\+notmarra.\+notlib.\+extensions.\+Not\+Configurable}}}
+\begin{DoxyCompactItemize}
+\item 
+final \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_plugin}{Not\+Plugin}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_a314e530405e7289ec2ea275247568525}{plugin}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+An abstract base class for database operations with configurable settings. 
+
+\doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database} provides a foundation for database interactions with built-\/in connection pooling via Hikari\+CP. It supports common SQL operations including select, insert, update, and delete operations through a fluent SQL builder interface.
+
+The class manages database connections and provides methods for\+:
+\begin{DoxyItemize}
+\item Connection management via Hikari\+CP
+\item Table creation and management
+\item SQL query execution
+\item Data type conversion
+\item Configuration handling
+\end{DoxyItemize}
+
+Implementations must provide database-\/specific logic for connecting, creating tables, and inserting data. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a41ed59294f39d35f564028725e871078}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!NotDatabase@{NotDatabase}}
+\index{NotDatabase@{NotDatabase}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{NotDatabase()}{NotDatabase()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a41ed59294f39d35f564028725e871078} 
+com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+Not\+Database (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_plugin}{Not\+Plugin}}}]{plugin}{, }\item[{String}]{default\+Config}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a8f53323b6209b758ab2ab607faf0070c}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!close@{close}}
+\index{close@{close}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a8f53323b6209b758ab2ab607faf0070c} 
+void com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+close (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Closes the database connection.
+
+This method safely closes the data source if it exists and is not already closed. It\textquotesingle{}s recommended to call this method when the database is no longer needed to release resources and prevent memory leaks.
+
+\begin{DoxySeeAlso}{See also}
+javax.\+sql.\+Data\+Source\#close() 
+\end{DoxySeeAlso}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ac58075d8dd39e25ee2276ba867b3e829}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!connect@{connect}}
+\index{connect@{connect}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{connect()}{connect()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ac58075d8dd39e25ee2276ba867b3e829} 
+abstract void com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+connect (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [abstract]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1source_1_1_not_my_s_q_l_a27b8bf325fdd61ade7eac3036702463d}{com.\+notmarra.\+notlib.\+database.\+source.\+Not\+My\+SQL}}, and \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1source_1_1_not_s_q_lite_ac3802ca74bf0981034c03d3cbfacd442}{com.\+notmarra.\+notlib.\+database.\+source.\+Not\+SQLite}}.
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_aad801b94b11ffa5c454ad543e5b85252}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!convertValue@{convertValue}}
+\index{convertValue@{convertValue}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{convertValue()}{convertValue()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_aad801b94b11ffa5c454ad543e5b85252} 
+Object com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+convert\+Value (\begin{DoxyParamCaption}\item[{String}]{column\+Type}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Converts a value to the appropriate Java type based on a SQL column type. 
+
+This method takes a SQL column type and a value and converts the value to the appropriate Java type that corresponds to that column type. For example, it converts values for "{}\+INT"{} columns to Integer objects, values for "{}\+FLOAT"{} columns to Float objects, etc.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column\+Type} & The SQL data type of the column (e.\+g., "{}\+TEXT"{}, "{}\+INT"{}, "{}\+FLOAT"{}) \\
+\hline
+{\em value} & The value to convert to the appropriate Java type \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The value converted to the appropriate Java type based on the column type, or null if the input value is null. If the column type is not supported, the value is returned as a String and an error is logged. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a3b4c7805592323af350c67a06a815c13}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!createTable@{createTable}}
+\index{createTable@{createTable}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{createTable()}{createTable()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a3b4c7805592323af350c67a06a815c13} 
+abstract boolean com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+create\+Table (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table}{Not\+Table}}}]{table}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [abstract]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1source_1_1_not_my_s_q_l_a8b3e7e30c3d44cd1ba3e154fafff8b30}{com.\+notmarra.\+notlib.\+database.\+source.\+Not\+My\+SQL}}, and \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1source_1_1_not_s_q_lite_a51674f489f86a3996140cd5b8d9f79fe}{com.\+notmarra.\+notlib.\+database.\+source.\+Not\+SQLite}}.
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a62b3d106309ae0513059bdf05c700507}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!deleteFrom@{deleteFrom}}
+\index{deleteFrom@{deleteFrom}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{deleteFrom()}{deleteFrom()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a62b3d106309ae0513059bdf05c700507} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+delete\+From (\begin{DoxyParamCaption}\item[{String}]{table}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a38f3d3b30fce239bf12d5fbda5729667}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!execute@{execute}}
+\index{execute@{execute}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{execute()}{execute()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a38f3d3b30fce239bf12d5fbda5729667} 
+int com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+execute (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}}}]{builder}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a644c04ee8c736921ff16f4a747bfd3f6}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!exists@{exists}}
+\index{exists@{exists}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{exists()}{exists()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a644c04ee8c736921ff16f4a747bfd3f6} 
+boolean com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+exists (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}}}]{builder}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ac05bc2cfa4e649758a3e21ad5b48851d}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!getConfigPaths@{getConfigPaths}}
+\index{getConfigPaths@{getConfigPaths}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{getConfigPaths()}{getConfigPaths()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ac05bc2cfa4e649758a3e21ad5b48851d} 
+List$<$ String $>$ com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+get\+Config\+Paths (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_aba77f794d18f8acb57659a2fc3a03724}{com.\+notmarra.\+notlib.\+extensions.\+Not\+Configurable}}.
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ad9f8fe27c1e991a94840b46729b27e93}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!getConnection@{getConnection}}
+\index{getConnection@{getConnection}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{getConnection()}{getConnection()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ad9f8fe27c1e991a94840b46729b27e93} 
+Connection com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+get\+Connection (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) throws SQLException\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retrieves a connection from the underlying Data\+Source. 
+
+\begin{DoxyReturn}{Returns}
+A Connection object representing a connection to the database. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em SQLException} & If the Data\+Source is not initialized, is closed, or if a database access error occurs. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_af5b5ac6e998ac57caff49d090e9a1a14}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!getDatabaseConfig@{getDatabaseConfig}}
+\index{getDatabaseConfig@{getDatabaseConfig}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{getDatabaseConfig()}{getDatabaseConfig()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_af5b5ac6e998ac57caff49d090e9a1a14} 
+Configuration\+Section com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+get\+Database\+Config (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retrieves the database-\/specific configuration section. 
+
+This method gets the configuration section from the main configuration file that is specific to this database instance. The section is identified by "{}database.\mbox{[}database\+\_\+id\mbox{]}"{} where \mbox{[}database\+\_\+id\mbox{]} is the ID returned by \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a916596d8362519be4235fdf1cc908510}{get\+Id()}.
+
+\begin{DoxyReturn}{Returns}
+Configuration\+Section containing database-\/specific configuration. If the section doesn\textquotesingle{}t exist, returns an empty Yaml\+Configuration. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a916596d8362519be4235fdf1cc908510}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!getId@{getId}}
+\index{getId@{getId}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{getId()}{getId()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a916596d8362519be4235fdf1cc908510} 
+abstract String com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+get\+Id (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [abstract]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1source_1_1_not_my_s_q_l_a2ea868d9286ea4efa565d4c71788bf34}{com.\+notmarra.\+notlib.\+database.\+source.\+Not\+My\+SQL}}, and \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1source_1_1_not_s_q_lite_a8def8cc2585db35d4dc47747d2513462}{com.\+notmarra.\+notlib.\+database.\+source.\+Not\+SQLite}}.
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ab5ef45cac1b5810ea184e6c40676ec2b}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!getQueryExecutor@{getQueryExecutor}}
+\index{getQueryExecutor@{getQueryExecutor}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{getQueryExecutor()}{getQueryExecutor()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ab5ef45cac1b5810ea184e6c40676ec2b} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor}{Not\+Sql\+Query\+Executor}} com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+get\+Query\+Executor (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a57d52c3fe828438f38ab9395fcea1088}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!getTable@{getTable}}
+\index{getTable@{getTable}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{getTable()}{getTable()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a57d52c3fe828438f38ab9395fcea1088} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table}{Not\+Table}} com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+get\+Table (\begin{DoxyParamCaption}\item[{String}]{table\+Name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a93e8d9ce1ac734f584cde69893e4f794}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!getTables@{getTables}}
+\index{getTables@{getTables}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{getTables()}{getTables()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a93e8d9ce1ac734f584cde69893e4f794} 
+Map$<$ String, \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table}{Not\+Table}} $>$ com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+get\+Tables (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a920ec1056e3ed1108fdd5f7fcc78aaff}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!insertInto@{insertInto}}
+\index{insertInto@{insertInto}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{insertInto()}{insertInto()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a920ec1056e3ed1108fdd5f7fcc78aaff} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+insert\+Into (\begin{DoxyParamCaption}\item[{String}]{table}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a0f34c472a0ba18ecd131d806fddee736}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!insertRow@{insertRow}}
+\index{insertRow@{insertRow}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{insertRow()}{insertRow()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a0f34c472a0ba18ecd131d806fddee736} 
+abstract boolean com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+insert\+Row (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table}{Not\+Table}}}]{table}{, }\item[{List$<$ Object $>$}]{row}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [abstract]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1source_1_1_not_my_s_q_l_a3b54f7cbe748cb5845a22df8cf09491b}{com.\+notmarra.\+notlib.\+database.\+source.\+Not\+My\+SQL}}, and \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1source_1_1_not_s_q_lite_a4116dfe1fb69d38a2f57a233e00433c5}{com.\+notmarra.\+notlib.\+database.\+source.\+Not\+SQLite}}.
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a91e4c3b9c43e9487a6156bee1e29ed8a}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!isConnected@{isConnected}}
+\index{isConnected@{isConnected}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{isConnected()}{isConnected()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a91e4c3b9c43e9487a6156bee1e29ed8a} 
+boolean com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+is\+Connected (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Checks if the database connection is active. 
+
+\begin{DoxyReturn}{Returns}
+true if the connection is established and open, false otherwise 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a7ea1ff574151679f23ccf6f8b5fe5672}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!onConfigReload@{onConfigReload}}
+\index{onConfigReload@{onConfigReload}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{onConfigReload()}{onConfigReload()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a7ea1ff574151679f23ccf6f8b5fe5672} 
+void com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+on\+Config\+Reload (\begin{DoxyParamCaption}\item[{List$<$ String $>$}]{reloaded\+Configs}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Handles the configuration reload event. 
+
+This method is called when configurations are reloaded. It closes the current database connection and establishes a new connection to reflect any changes in the configuration.
+
+
+\begin{DoxyParams}{Parameters}
+{\em reloaded\+Configs} & List of configuration files that were reloaded \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_configurable_a46cd1685036d7de58f2c14f41a78354b}{com.\+notmarra.\+notlib.\+extensions.\+Not\+Configurable}}.
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ae0433ad440613764542183d0bee0a59b}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!process@{process}}
+\index{process@{process}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{process()}{process()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ae0433ad440613764542183d0bee0a59b} 
+void com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+process (\begin{DoxyParamCaption}\item[{Consumer$<$ Connection $>$}]{consumer}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Processes a database operation using a provided consumer. 
+
+This method opens a database connection, passes it to the provided consumer for processing, and ensures the connection is properly closed afterwards. Any exceptions during processing are caught, logged, and the stack trace is printed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em consumer} & A Consumer functional interface that accepts a Connection object to perform database operations. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a5f183d43586019f8312088b65717c61a}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!processResult@{processResult}}
+\index{processResult@{processResult}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{processResult()}{processResult()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a5f183d43586019f8312088b65717c61a} 
+boolean com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+process\+Result (\begin{DoxyParamCaption}\item[{String}]{sql}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Executes a SQL statement that returns a boolean value. 
+
+This method executes the specified SQL statement on the database connection and returns the boolean result. The SQL statement is debugged if logging is enabled.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sql} & The SQL statement to execute \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the first result is a Result\+Set object; false if it is an update count or there are no results 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em SQLException} & if a database access error occurs or the given SQL statement produces a Result\+Set object that is then automatically closed \\
+\hline
+\end{DoxyExceptions}
+\begin{DoxySeeAlso}{See also}
+java.\+sql.\+Statement\#execute(\+String) 
+\end{DoxySeeAlso}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_acee92acc7c732ae73e023a6ac8b5e920}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!processSelect@{processSelect}}
+\index{processSelect@{processSelect}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{processSelect()}{processSelect()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_acee92acc7c732ae73e023a6ac8b5e920} 
+List$<$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} $>$ com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+process\+Select (\begin{DoxyParamCaption}\item[{String}]{sql}{, }\item[{List$<$ Object $>$}]{params}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Executes a SELECT SQL query and returns the results as a list of \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record} objects.
+
+This method prepares and executes the provided SQL query with the given parameters. It processes the Result\+Set and converts each row into a \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record} object with appropriate type conversions for different SQL data types.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sql} & The SELECT SQL query to execute \\
+\hline
+{\em params} & List of parameters to bind to the prepared statement. Can be empty if no parameters are needed. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A List of \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record} objects containing the query results. Returns an empty list if an error occurs. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em SQLException} & If a database access error occurs (caught internally and logged) \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a0581052c8b36f1811fb34c18c9d34ace}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!processStatement@{processStatement}}
+\index{processStatement@{processStatement}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{processStatement()}{processStatement()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a0581052c8b36f1811fb34c18c9d34ace} 
+void com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+process\+Statement (\begin{DoxyParamCaption}\item[{Bi\+Consumer$<$ Connection, Statement $>$}]{consumer}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Executes custom operations on a database statement. 
+
+This method creates a connection and statement, then passes them to the provided consumer for custom database operations. The connection is automatically closed after execution.
+
+
+\begin{DoxyParams}{Parameters}
+{\em consumer} & A Bi\+Consumer that accepts a Connection and Statement to perform database operations\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+The connection and statement are automatically managed, including proper closing of resources 
+
+Any exceptions during execution are caught, logged, and printed to stack trace 
+\end{DoxyNote}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a9289741ffda14c18e07555ddabb2c04e}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!processUpdate@{processUpdate}}
+\index{processUpdate@{processUpdate}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{processUpdate()}{processUpdate()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a9289741ffda14c18e07555ddabb2c04e} 
+int com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+process\+Update (\begin{DoxyParamCaption}\item[{String}]{sql}{, }\item[{List$<$ Object $>$}]{params}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Executes an SQL update statement with the provided parameters. 
+
+This method executes SQL statements that modify the database (INSERT, UPDATE, DELETE). It logs the SQL statement and parameters for debugging purposes.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sql} & The SQL update statement to execute \\
+\hline
+{\em params} & List of parameters to be set in the prepared statement\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of rows affected by the SQL statement, or -\/1 if an error occurs
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em SQLException} & Handled internally, errors are logged \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a3f148e5a22f9899be16c8b50fad920e0}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!select@{select}}
+\index{select@{select}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{select()}{select()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a3f148e5a22f9899be16c8b50fad920e0} 
+List$<$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} $>$ com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+select (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}}}]{builder}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a23b0bae5f469133beb467a9489a5c49d}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!select@{select}}
+\index{select@{select}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{select()}{select()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a23b0bae5f469133beb467a9489a5c49d} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+select (\begin{DoxyParamCaption}\item[{String}]{table}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a2a3cf506eaded0465d0110e5b079bac7}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!select@{select}}
+\index{select@{select}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{select()}{select()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a2a3cf506eaded0465d0110e5b079bac7} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+select (\begin{DoxyParamCaption}\item[{String}]{table}{, }\item[{List$<$ String $>$}]{columns}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a6f483d127b202466c2d89ac9a711567d}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!selectOne@{selectOne}}
+\index{selectOne@{selectOne}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{selectOne()}{selectOne()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a6f483d127b202466c2d89ac9a711567d} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+select\+One (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}}}]{builder}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a47fe86f54d51ed280a49fd6dc7b02c95}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!setSource@{setSource}}
+\index{setSource@{setSource}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{setSource()}{setSource()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a47fe86f54d51ed280a49fd6dc7b02c95} 
+void com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+set\+Source (\begin{DoxyParamCaption}\item[{Hikari\+Data\+Source}]{source}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Sets the data source for the database.
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & The Hikari\+Data\+Source to be used for database connections \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a59890bf9ae2d11b2cf5a386d8ac4785b}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!setup@{setup}}
+\index{setup@{setup}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{setup()}{setup()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a59890bf9ae2d11b2cf5a386d8ac4785b} 
+void com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+setup (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Initializes the database by setting up all tables. 
+
+This method retrieves all tables that need to be set up, sets their database context, creates the database structures for each table, and stores them in the tables map indexed by their names. \Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ac8ae4dfab71f691e80b41651a9ef48e5}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!setupTables@{setupTables}}
+\index{setupTables@{setupTables}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{setupTables()}{setupTables()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_ac8ae4dfab71f691e80b41651a9ef48e5} 
+abstract List$<$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table}{Not\+Table}} $>$ com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+setup\+Tables (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [abstract]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_af5c6e46e3b40c23fc830696192ef93ee}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!update@{update}}
+\index{update@{update}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_af5c6e46e3b40c23fc830696192ef93ee} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+update (\begin{DoxyParamCaption}\item[{String}]{table}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a8a7ada96c6de0a5522ee5cc2117365cd}\index{com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}!source@{source}}
+\index{source@{source}!com.notmarra.notlib.database.NotDatabase@{com.notmarra.notlib.database.NotDatabase}}
+\doxysubsubsection{\texorpdfstring{source}{source}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_a8a7ada96c6de0a5522ee5cc2117365cd} 
+Hikari\+Data\+Source com.\+notmarra.\+notlib.\+database.\+Not\+Database.\+source\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/com/notmarra/notlib/database/\mbox{\hyperlink{_not_database_8java}{Not\+Database.\+java}}\end{DoxyCompactItemize}

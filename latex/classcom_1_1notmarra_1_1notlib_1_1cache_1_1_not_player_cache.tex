@@ -1,0 +1,105 @@
+\doxysection{com.\+notmarra.\+notlib.\+cache.\+Not\+Player\+Cache Class Reference}
+\hypertarget{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache}{}\label{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache}\index{com.notmarra.notlib.cache.NotPlayerCache@{com.notmarra.notlib.cache.NotPlayerCache}}
+Inheritance diagram for com.\+notmarra.\+notlib.\+cache.\+Not\+Player\+Cache\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_1_1_not_player_cache_player_result}{Not\+Player\+Cache\+Player\+Result}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_a23beb4f9a0c372cceae5b5eeecd242cf}{Not\+Player\+Cache}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_plugin}{Not\+Plugin}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_base_not_cache_a2a3fb8b763fab0d441ef1d86fb841410}{plugin}})
+\item 
+String \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_a10b7ad2afc579c1503ace81643f813cc}{hash}} (Player source)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_1_1_not_player_cache_player_result}{Not\+Player\+Cache\+Player\+Result}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_a0974a88feadc080be2e898634da74599}{connected}} (UUID player\+UUID)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_1_1_not_player_cache_player_result}{Not\+Player\+Cache\+Player\+Result}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_ae614c12e85e239798d51d0896b5a31da}{connected}} (String player\+Name)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_1_1_not_player_cache_player_result}{Not\+Player\+Cache\+Player\+Result}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_afff88352bd9e61165d4d936eb2349c31}{connected}} (Player player)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_base_not_cache}{com.\+notmarra.\+notlib.\+cache.\+Base\+Not\+Cache$<$ Player $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_base_not_cache_a6790282fc33f1d47371ffef044661c42}{Base\+Not\+Cache}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_plugin}{Not\+Plugin}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_base_not_cache_a2a3fb8b763fab0d441ef1d86fb841410}{plugin}})
+\item 
+abstract String \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_base_not_cache_af8b67d0e1fa7d34597b3f82b25f29ea0}{hash}} (T source)
+\item 
+T \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_base_not_cache_a8e4de279693978aef5a07b6936382891}{get}} (String \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_base_not_cache_af8b67d0e1fa7d34597b3f82b25f29ea0}{hash}})
+\item 
+T \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_base_not_cache_aef1b56a2fc5f4daf160f124d9af79033}{store}} (T source)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+final Map$<$ UUID, Player $>$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_a631d9a79051add4e7032ad1dd1dd58e8}{cached\+Players\+By\+UUID}} = new Hash\+Map$<$$>$()
+\item 
+final Map$<$ String, Player $>$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_a74adbbd14b10287f0385ab3799c42967}{cached\+Players\+By\+Name}} = new Hash\+Map$<$$>$()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_base_not_cache}{com.\+notmarra.\+notlib.\+cache.\+Base\+Not\+Cache$<$ Player $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+final \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_plugin}{Not\+Plugin}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_base_not_cache_a2a3fb8b763fab0d441ef1d86fb841410}{plugin}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_a23beb4f9a0c372cceae5b5eeecd242cf}\index{com.notmarra.notlib.cache.NotPlayerCache@{com.notmarra.notlib.cache.NotPlayerCache}!NotPlayerCache@{NotPlayerCache}}
+\index{NotPlayerCache@{NotPlayerCache}!com.notmarra.notlib.cache.NotPlayerCache@{com.notmarra.notlib.cache.NotPlayerCache}}
+\doxysubsubsection{\texorpdfstring{NotPlayerCache()}{NotPlayerCache()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_a23beb4f9a0c372cceae5b5eeecd242cf} 
+com.\+notmarra.\+notlib.\+cache.\+Not\+Player\+Cache.\+Not\+Player\+Cache (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_plugin}{Not\+Plugin}}}]{plugin}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_afff88352bd9e61165d4d936eb2349c31}\index{com.notmarra.notlib.cache.NotPlayerCache@{com.notmarra.notlib.cache.NotPlayerCache}!connected@{connected}}
+\index{connected@{connected}!com.notmarra.notlib.cache.NotPlayerCache@{com.notmarra.notlib.cache.NotPlayerCache}}
+\doxysubsubsection{\texorpdfstring{connected()}{connected()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_afff88352bd9e61165d4d936eb2349c31} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_1_1_not_player_cache_player_result}{Not\+Player\+Cache\+Player\+Result}} com.\+notmarra.\+notlib.\+cache.\+Not\+Player\+Cache.\+connected (\begin{DoxyParamCaption}\item[{Player}]{player}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_ae614c12e85e239798d51d0896b5a31da}\index{com.notmarra.notlib.cache.NotPlayerCache@{com.notmarra.notlib.cache.NotPlayerCache}!connected@{connected}}
+\index{connected@{connected}!com.notmarra.notlib.cache.NotPlayerCache@{com.notmarra.notlib.cache.NotPlayerCache}}
+\doxysubsubsection{\texorpdfstring{connected()}{connected()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_ae614c12e85e239798d51d0896b5a31da} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_1_1_not_player_cache_player_result}{Not\+Player\+Cache\+Player\+Result}} com.\+notmarra.\+notlib.\+cache.\+Not\+Player\+Cache.\+connected (\begin{DoxyParamCaption}\item[{String}]{player\+Name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_a0974a88feadc080be2e898634da74599}\index{com.notmarra.notlib.cache.NotPlayerCache@{com.notmarra.notlib.cache.NotPlayerCache}!connected@{connected}}
+\index{connected@{connected}!com.notmarra.notlib.cache.NotPlayerCache@{com.notmarra.notlib.cache.NotPlayerCache}}
+\doxysubsubsection{\texorpdfstring{connected()}{connected()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_a0974a88feadc080be2e898634da74599} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_1_1_not_player_cache_player_result}{Not\+Player\+Cache\+Player\+Result}} com.\+notmarra.\+notlib.\+cache.\+Not\+Player\+Cache.\+connected (\begin{DoxyParamCaption}\item[{UUID}]{player\+UUID}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_a10b7ad2afc579c1503ace81643f813cc}\index{com.notmarra.notlib.cache.NotPlayerCache@{com.notmarra.notlib.cache.NotPlayerCache}!hash@{hash}}
+\index{hash@{hash}!com.notmarra.notlib.cache.NotPlayerCache@{com.notmarra.notlib.cache.NotPlayerCache}}
+\doxysubsubsection{\texorpdfstring{hash()}{hash()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_a10b7ad2afc579c1503ace81643f813cc} 
+String com.\+notmarra.\+notlib.\+cache.\+Not\+Player\+Cache.\+hash (\begin{DoxyParamCaption}\item[{Player}]{source}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_a74adbbd14b10287f0385ab3799c42967}\index{com.notmarra.notlib.cache.NotPlayerCache@{com.notmarra.notlib.cache.NotPlayerCache}!cachedPlayersByName@{cachedPlayersByName}}
+\index{cachedPlayersByName@{cachedPlayersByName}!com.notmarra.notlib.cache.NotPlayerCache@{com.notmarra.notlib.cache.NotPlayerCache}}
+\doxysubsubsection{\texorpdfstring{cachedPlayersByName}{cachedPlayersByName}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_a74adbbd14b10287f0385ab3799c42967} 
+final Map$<$String, Player$>$ com.\+notmarra.\+notlib.\+cache.\+Not\+Player\+Cache.\+cached\+Players\+By\+Name = new Hash\+Map$<$$>$()}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_a631d9a79051add4e7032ad1dd1dd58e8}\index{com.notmarra.notlib.cache.NotPlayerCache@{com.notmarra.notlib.cache.NotPlayerCache}!cachedPlayersByUUID@{cachedPlayersByUUID}}
+\index{cachedPlayersByUUID@{cachedPlayersByUUID}!com.notmarra.notlib.cache.NotPlayerCache@{com.notmarra.notlib.cache.NotPlayerCache}}
+\doxysubsubsection{\texorpdfstring{cachedPlayersByUUID}{cachedPlayersByUUID}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_a631d9a79051add4e7032ad1dd1dd58e8} 
+final Map$<$UUID, Player$>$ com.\+notmarra.\+notlib.\+cache.\+Not\+Player\+Cache.\+cached\+Players\+By\+UUID = new Hash\+Map$<$$>$()}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/com/notmarra/notlib/cache/\mbox{\hyperlink{_not_player_cache_8java}{Not\+Player\+Cache.\+java}}\end{DoxyCompactItemize}

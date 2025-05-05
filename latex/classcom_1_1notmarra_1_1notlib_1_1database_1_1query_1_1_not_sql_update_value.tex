@@ -1,0 +1,293 @@
+\doxysection{com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Update\+Value Class Reference}
+\hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{}\label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}\index{com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}}
+
+
+Represents a value to be updated in a SQL UPDATE statement.  
+
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a7c79676f88f9adf0c501672a2a3d5f50}{Not\+Sql\+Update\+Value}} (String column, String new\+Value, Object value, boolean is\+Raw)
+\begin{DoxyCompactList}\small\item\em Constructor for creating an update value with a single parameter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a72515147407329473a29095f2cabd807}{Not\+Sql\+Update\+Value}} (String column, String new\+Value, List$<$ Object $>$ values, boolean is\+Raw)
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value} class. \end{DoxyCompactList}\item 
+boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a3474b4af75fcee230403d071111a8a03}{is\+Multi}} ()
+\begin{DoxyCompactList}\small\item\em Checks if this update operation involves multiple values. \end{DoxyCompactList}\item 
+String \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a1781f72e2df9cc14f997d710abf3c937}{get\+Column}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the column name for this SQL update value. \end{DoxyCompactList}\item 
+String \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_ac25326d1b2acf8e5c9730dbdea7374a2}{get\+New\+Value}} ()
+\begin{DoxyCompactList}\small\item\em Gets the new value. \end{DoxyCompactList}\item 
+List$<$ Object $>$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a8c4507f5d089efb6872460596a72f079}{get\+Values}} ()
+\item 
+boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a620b5ba964935db5a33b5b8cfc7622e8}{is\+Raw}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_ab78f8cdd1a46b0bac9a58cbe80096fee}{of}} (String column, Object value)
+\item 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_ad8acf213d252213afe832b2b03088473}{of}} (String column, String new\+Value, Object value)
+\begin{DoxyCompactList}\small\item\em Creates a new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value} instance with the specified column, SQL expression, and parameter value. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_aa7feb947ae11160e8c3e397ddfcea96c}{of}} (String column, String new\+Value, List$<$ Object $>$ values)
+\item 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_ae122aefb5ddbec64ca1705fd8624321e}{of\+Raw}} (String column, Object value)
+\item 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a3b1dfade6c0c24ab3bcdbafc41e15ae0}{of\+Raw}} (String column, String new\+Value, String raw\+Value)
+\item 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a637dc70244cbac6c2df1aa92b05fbd82}{of\+Raw}} (String column, String new\+Value, List$<$ Object $>$ values)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a value to be updated in a SQL UPDATE statement. 
+
+This class encapsulates the information needed to create a SQL UPDATE parameter, including the column name, the new value expression, and the actual values to be used. It supports both prepared statement values and raw SQL expressions.
+
+The class provides several factory methods for different update scenarios\+:
+\begin{DoxyItemize}
+\item Simple column=? updates
+\item Custom expressions with placeholders
+\item Raw SQL expressions
+\item Support for multiple values 
+\end{DoxyItemize}
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a7c79676f88f9adf0c501672a2a3d5f50}\index{com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}!NotSqlUpdateValue@{NotSqlUpdateValue}}
+\index{NotSqlUpdateValue@{NotSqlUpdateValue}!com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}}
+\doxysubsubsection{\texorpdfstring{NotSqlUpdateValue()}{NotSqlUpdateValue()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a7c79676f88f9adf0c501672a2a3d5f50} 
+com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Update\+Value.\+Not\+Sql\+Update\+Value (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{String}]{new\+Value}{, }\item[{Object}]{value}{, }\item[{boolean}]{is\+Raw}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor for creating an update value with a single parameter. 
+
+This constructor initializes a \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value} object with a column name, new value expression, and a single parameter value.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The name of the column to be updated \\
+\hline
+{\em new\+Value} & The SQL expression representing the new value \\
+\hline
+{\em value} & The parameter value to be bound to the expression \\
+\hline
+{\em is\+Raw} & Flag indicating whether the new\+Value should be treated as raw SQL (true) or as a parameterized statement (false) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a72515147407329473a29095f2cabd807}\index{com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}!NotSqlUpdateValue@{NotSqlUpdateValue}}
+\index{NotSqlUpdateValue@{NotSqlUpdateValue}!com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}}
+\doxysubsubsection{\texorpdfstring{NotSqlUpdateValue()}{NotSqlUpdateValue()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a72515147407329473a29095f2cabd807} 
+com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Update\+Value.\+Not\+Sql\+Update\+Value (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{String}]{new\+Value}{, }\item[{List$<$ Object $>$}]{values}{, }\item[{boolean}]{is\+Raw}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor for \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value} class. 
+
+Creates a new instance of \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value} with the specified column, value, parameters, and raw flag.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The name of the column to update. \\
+\hline
+{\em new\+Value} & The new value or placeholder to set for the column. \\
+\hline
+{\em values} & List of parameter values associated with the update operation. \\
+\hline
+{\em is\+Raw} & Flag indicating whether the new value should be treated as raw SQL (true) or as a parameter (false). \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a1781f72e2df9cc14f997d710abf3c937}\index{com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}!getColumn@{getColumn}}
+\index{getColumn@{getColumn}!com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}}
+\doxysubsubsection{\texorpdfstring{getColumn()}{getColumn()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a1781f72e2df9cc14f997d710abf3c937} 
+String com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Update\+Value.\+get\+Column (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retrieves the column name for this SQL update value. 
+
+\begin{DoxyReturn}{Returns}
+The column name as a String. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_ac25326d1b2acf8e5c9730dbdea7374a2}\index{com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}!getNewValue@{getNewValue}}
+\index{getNewValue@{getNewValue}!com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}}
+\doxysubsubsection{\texorpdfstring{getNewValue()}{getNewValue()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_ac25326d1b2acf8e5c9730dbdea7374a2} 
+String com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Update\+Value.\+get\+New\+Value (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Gets the new value. 
+
+\begin{DoxyReturn}{Returns}
+The new value as a string. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a8c4507f5d089efb6872460596a72f079}\index{com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}!getValues@{getValues}}
+\index{getValues@{getValues}!com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}}
+\doxysubsubsection{\texorpdfstring{getValues()}{getValues()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a8c4507f5d089efb6872460596a72f079} 
+List$<$ Object $>$ com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Update\+Value.\+get\+Values (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Retrieves the list of values for this update operation.
+
+\begin{DoxyReturn}{Returns}
+List of values to be used in the SQL UPDATE statement 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a3474b4af75fcee230403d071111a8a03}\index{com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}!isMulti@{isMulti}}
+\index{isMulti@{isMulti}!com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}}
+\doxysubsubsection{\texorpdfstring{isMulti()}{isMulti()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a3474b4af75fcee230403d071111a8a03} 
+boolean com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Update\+Value.\+is\+Multi (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Checks if this update operation involves multiple values. 
+
+\begin{DoxyReturn}{Returns}
+true if multiple values are being updated, false if only one value is being updated 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a620b5ba964935db5a33b5b8cfc7622e8}\index{com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}!isRaw@{isRaw}}
+\index{isRaw@{isRaw}!com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}}
+\doxysubsubsection{\texorpdfstring{isRaw()}{isRaw()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a620b5ba964935db5a33b5b8cfc7622e8} 
+boolean com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Update\+Value.\+is\+Raw (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Determines if the value is a raw SQL expression.
+
+\begin{DoxyReturn}{Returns}
+true if the value represents a raw SQL expression rather than a literal value, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_ab78f8cdd1a46b0bac9a58cbe80096fee}\index{com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}!of@{of}}
+\index{of@{of}!com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}}
+\doxysubsubsection{\texorpdfstring{of()}{of()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_ab78f8cdd1a46b0bac9a58cbe80096fee} 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Update\+Value.\+of (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Creates a new SQL update value for a specified column with a value to be replaced by a placeholder.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The name of the column to update \\
+\hline
+{\em value} & The value to set for the column (will be represented as a placeholder) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value} object representing this update operation 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_aa7feb947ae11160e8c3e397ddfcea96c}\index{com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}!of@{of}}
+\index{of@{of}!com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}}
+\doxysubsubsection{\texorpdfstring{of()}{of()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_aa7feb947ae11160e8c3e397ddfcea96c} 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Update\+Value.\+of (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{String}]{new\+Value}{, }\item[{List$<$ Object $>$}]{values}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Creates a new Sql\+Update\+Value with a string value.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The column name to update. \\
+\hline
+{\em new\+Value} & The SQL expression or placeholder for the new value. \\
+\hline
+{\em values} & The list of values to bind to placeholders in the expression. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value} instance. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_ad8acf213d252213afe832b2b03088473}\index{com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}!of@{of}}
+\index{of@{of}!com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}}
+\doxysubsubsection{\texorpdfstring{of()}{of()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_ad8acf213d252213afe832b2b03088473} 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Update\+Value.\+of (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{String}]{new\+Value}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Creates a new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value} instance with the specified column, SQL expression, and parameter value. 
+
+This factory method creates an update value where the right side of the assignment is a raw SQL expression that may contain parameter placeholders, along with the value to be bound to that placeholder.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The database column name to update \\
+\hline
+{\em new\+Value} & A SQL expression string representing the new value (may contain parameter placeholders) \\
+\hline
+{\em value} & The parameter value to bind to the SQL expression \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value} instance
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a7c79676f88f9adf0c501672a2a3d5f50}{Not\+Sql\+Update\+Value.\+Not\+Sql\+Update\+Value(\+String, String, Object, boolean)} 
+\end{DoxySeeAlso}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_ae122aefb5ddbec64ca1705fd8624321e}\index{com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}!ofRaw@{ofRaw}}
+\index{ofRaw@{ofRaw}!com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}}
+\doxysubsubsection{\texorpdfstring{ofRaw()}{ofRaw()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_ae122aefb5ddbec64ca1705fd8624321e} 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Update\+Value.\+of\+Raw (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{Object}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Creates a raw update value for an SQL UPDATE statement.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The column name to be updated \\
+\hline
+{\em value} & The value to update the column with \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value} instance that represents a raw value assignment 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a637dc70244cbac6c2df1aa92b05fbd82}\index{com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}!ofRaw@{ofRaw}}
+\index{ofRaw@{ofRaw}!com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}}
+\doxysubsubsection{\texorpdfstring{ofRaw()}{ofRaw()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a637dc70244cbac6c2df1aa92b05fbd82} 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Update\+Value.\+of\+Raw (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{String}]{new\+Value}{, }\item[{List$<$ Object $>$}]{values}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Creates a new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value} instance with raw SQL for the new value.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The name of the column to update \\
+\hline
+{\em new\+Value} & Raw SQL expression for the new value (will not be escaped) \\
+\hline
+{\em values} & List of parameter values to be bound to the SQL expression \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value} instance with the given column and raw SQL value 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a3b1dfade6c0c24ab3bcdbafc41e15ae0}\index{com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}!ofRaw@{ofRaw}}
+\index{ofRaw@{ofRaw}!com.notmarra.notlib.database.query.NotSqlUpdateValue@{com.notmarra.notlib.database.query.NotSqlUpdateValue}}
+\doxysubsubsection{\texorpdfstring{ofRaw()}{ofRaw()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value_a3b1dfade6c0c24ab3bcdbafc41e15ae0} 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Update\+Value.\+of\+Raw (\begin{DoxyParamCaption}\item[{String}]{column}{, }\item[{String}]{new\+Value}{, }\item[{String}]{raw\+Value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Creates a new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value} with raw SQL value. This method allows you to use raw SQL expressions as values in your update queries.
+
+
+\begin{DoxyParams}{Parameters}
+{\em column} & The name of the column to update \\
+\hline
+{\em new\+Value} & The new value as a string representation \\
+\hline
+{\em raw\+Value} & The raw SQL value/expression to use in the query \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value}{Not\+Sql\+Update\+Value} instance with raw SQL value 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/com/notmarra/notlib/database/query/\mbox{\hyperlink{_not_sql_update_value_8java}{Not\+Sql\+Update\+Value.\+java}}\end{DoxyCompactItemize}

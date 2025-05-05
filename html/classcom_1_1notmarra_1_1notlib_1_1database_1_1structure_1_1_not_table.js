@@ -1,0 +1,28 @@
+var classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table =
+[
+    [ "NotTable", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#ab291815ba1e1db47029033ff8d04eedf", null ],
+    [ "addColumn", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a95f9f8f14d07919eb7bf25078205e218", null ],
+    [ "addColumns", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#abdf118a1da868e845b6a1152bb1f6a62", null ],
+    [ "addPrimaryKeys", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a5e83dc9f5fadb7a6eb9aad3c8e79e9e7", null ],
+    [ "createDb", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a5e60744ac17c037b320ecf990bdfc11e", null ],
+    [ "db", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#adf81644f3377e980aa585306a440a531", null ],
+    [ "delete", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a21e137f2f7f02f45cd7b7a69cf184c80", null ],
+    [ "deleteSucceded", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a40b0d40609fa0321040505b85f464394", null ],
+    [ "executor", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a39e3b7de81131e0a5757cb16a84f2df6", null ],
+    [ "exists", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#ab8c5c0ccc9040c036f17837e02a959e0", null ],
+    [ "getColumns", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a067256c778e05c6fb1c5deebba3b4119", null ],
+    [ "getInsertList", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a716e9054e4652fd392012e6e356189f2", null ],
+    [ "getName", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a721f4f6cd1e758748489c53be0632d47", null ],
+    [ "getPrimaryKeys", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a6f1fe44fb538da6279ccca9808988c87", null ],
+    [ "initialInsert", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a55a82485cc06824f8c57403d06a5cc6d", null ],
+    [ "initialInsertList", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#afd0c62e578f903eccf7fca91085ca277", null ],
+    [ "insertRow", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a53f0d3e9e36195c641f16c7ea2f20f4f", null ],
+    [ "insertRows", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a75805a1c195bdff07cc3d462892cf3a7", null ],
+    [ "select", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#af106d7e7af60460132130cc49fd28e15", null ],
+    [ "select", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a408300e841a2b14758867924b1d5aa06", null ],
+    [ "selectOne", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a7cc6e173ee33febe29340799798e0e04", null ],
+    [ "selectOneOrNull", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#ac5ac3339065380a6a56dd20c9ebae115", null ],
+    [ "setDbCtx", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#af09f225cae781fc96032db58de4e9cf5", null ],
+    [ "update", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#a7fcc5532c943f09d96c8cbe80937d12c", null ],
+    [ "updateSucceded", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html#aceafa7414cff00e1c7b7c8331e074444", null ]
+];

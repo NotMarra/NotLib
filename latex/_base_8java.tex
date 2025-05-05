@@ -1,0 +1,108 @@
+\doxysection{src/main/java/com/notmarra/notlib/utils/command/\+Base.java File Reference}
+\hypertarget{_base_8java}{}\label{_base_8java}\index{src/main/java/com/notmarra/notlib/utils/command/Base.java@{src/main/java/com/notmarra/notlib/utils/command/Base.java}}
+{\ttfamily import com.\+destroystokyo.\+paper.\+profile.\+Player\+Profile;}\newline
+{\ttfamily import com.\+mojang.\+brigadier.\+context.\+Command\+Context;}\newline
+{\ttfamily import com.\+mojang.\+brigadier.\+tree.\+Command\+Node;}\newline
+{\ttfamily import com.\+notmarra.\+notlib.\+utils.\+command.\+arguments.\+Not\+Argument;}\newline
+{\ttfamily import com.\+notmarra.\+notlib.\+utils.\+command.\+arguments.\+Not\+Bool\+Arg;}\newline
+{\ttfamily import com.\+notmarra.\+notlib.\+utils.\+command.\+arguments.\+Not\+Double\+Arg;}\newline
+{\ttfamily import com.\+notmarra.\+notlib.\+utils.\+command.\+arguments.\+Not\+Entities\+Arg;}\newline
+{\ttfamily import com.\+notmarra.\+notlib.\+utils.\+command.\+arguments.\+Not\+Entity\+Arg;}\newline
+{\ttfamily import com.\+notmarra.\+notlib.\+utils.\+command.\+arguments.\+Not\+Float\+Arg;}\newline
+{\ttfamily import com.\+notmarra.\+notlib.\+utils.\+command.\+arguments.\+Not\+Greedy\+String\+Arg;}\newline
+{\ttfamily import com.\+notmarra.\+notlib.\+utils.\+command.\+arguments.\+Not\+Int\+Arg;}\newline
+{\ttfamily import com.\+notmarra.\+notlib.\+utils.\+command.\+arguments.\+Not\+Literal\+Arg;}\newline
+{\ttfamily import com.\+notmarra.\+notlib.\+utils.\+command.\+arguments.\+Not\+Long\+Arg;}\newline
+{\ttfamily import com.\+notmarra.\+notlib.\+utils.\+command.\+arguments.\+Not\+Player\+Arg;}\newline
+{\ttfamily import com.\+notmarra.\+notlib.\+utils.\+command.\+arguments.\+Not\+Player\+Profiles\+Arg;}\newline
+{\ttfamily import com.\+notmarra.\+notlib.\+utils.\+command.\+arguments.\+Not\+Players\+Arg;}\newline
+{\ttfamily import com.\+notmarra.\+notlib.\+utils.\+command.\+arguments.\+Not\+String\+Arg;}\newline
+{\ttfamily import io.\+papermc.\+paper.\+command.\+brigadier.\+Command\+Source\+Stack;}\newline
+{\ttfamily import javax.\+annotation.\+Nullable;}\newline
+{\ttfamily import org.\+bukkit.\+command.\+Command\+Sender;}\newline
+{\ttfamily import org.\+bukkit.\+entity.\+Entity;}\newline
+{\ttfamily import org.\+bukkit.\+entity.\+Player;}\newline
+{\ttfamily import java.\+util.\+Hash\+Map;}\newline
+{\ttfamily import java.\+util.\+List;}\newline
+{\ttfamily import java.\+util.\+Map;}\newline
+{\ttfamily import java.\+util.\+function.\+Consumer;}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1utils_1_1command_1_1_base_3_01_t_01extends_01_base}{com.\+notmarra.\+notlib.\+utils.\+command.\+Base$<$ T extends Base}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Packages}
+\begin{DoxyCompactItemize}
+\item 
+package \mbox{\hyperlink{namespacecom_1_1notmarra_1_1notlib_1_1utils_1_1command}{com.\+notmarra.\+notlib.\+utils.\+command}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Base$<$?$>$ \mbox{\hyperlink{_base_8java_af3080c0980452e8c7fdadd805a25b4c2}{parent}}
+\item 
+final String \mbox{\hyperlink{_base_8java_aee5f0118454ca188d26b7db28c890faa}{name}}
+\item 
+Object \mbox{\hyperlink{_base_8java_a15b8b2ee925eed0edebc2ff8f2dde8ad}{description}}
+\item 
+Hash\+Map$<$ String, Not\+Argument$<$ Object $>$ $>$ \mbox{\hyperlink{_base_8java_a99633fa165e4a6b56e0d74ef6776d2e6}{arguments}} = new Hash\+Map$<$$>$()
+\item 
+Consumer$<$ T $>$ \mbox{\hyperlink{_base_8java_ab145eecedc991ab8d2ec361a79bc64b6}{executor}}
+\item 
+List$<$ String $>$ \mbox{\hyperlink{_base_8java_abd5da63b6a4b0b3a3b2f0ce16868c945}{suggestions}} = List.\+of()
+\item 
+String \mbox{\hyperlink{_base_8java_a14e5853278e2bb4a1eefaafad7953664}{permission}}
+\item 
+Command\+Context$<$ Command\+Source\+Stack $>$ \mbox{\hyperlink{_base_8java_a3b21ed2449959bf503392d01b06ddbac}{ctx}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{_base_8java_a99633fa165e4a6b56e0d74ef6776d2e6}\index{Base.java@{Base.java}!arguments@{arguments}}
+\index{arguments@{arguments}!Base.java@{Base.java}}
+\doxysubsubsection{\texorpdfstring{arguments}{arguments}}
+{\footnotesize\ttfamily \label{_base_8java_a99633fa165e4a6b56e0d74ef6776d2e6} 
+Hash\+Map$<$String, Not\+Argument$<$Object$>$ $>$ arguments = new Hash\+Map$<$$>$()}
+
+\Hypertarget{_base_8java_a3b21ed2449959bf503392d01b06ddbac}\index{Base.java@{Base.java}!ctx@{ctx}}
+\index{ctx@{ctx}!Base.java@{Base.java}}
+\doxysubsubsection{\texorpdfstring{ctx}{ctx}}
+{\footnotesize\ttfamily \label{_base_8java_a3b21ed2449959bf503392d01b06ddbac} 
+Command\+Context$<$Command\+Source\+Stack$>$ ctx}
+
+\Hypertarget{_base_8java_a15b8b2ee925eed0edebc2ff8f2dde8ad}\index{Base.java@{Base.java}!description@{description}}
+\index{description@{description}!Base.java@{Base.java}}
+\doxysubsubsection{\texorpdfstring{description}{description}}
+{\footnotesize\ttfamily \label{_base_8java_a15b8b2ee925eed0edebc2ff8f2dde8ad} 
+Object description}
+
+\Hypertarget{_base_8java_ab145eecedc991ab8d2ec361a79bc64b6}\index{Base.java@{Base.java}!executor@{executor}}
+\index{executor@{executor}!Base.java@{Base.java}}
+\doxysubsubsection{\texorpdfstring{executor}{executor}}
+{\footnotesize\ttfamily \label{_base_8java_ab145eecedc991ab8d2ec361a79bc64b6} 
+Consumer$<$T$>$ executor}
+
+\Hypertarget{_base_8java_aee5f0118454ca188d26b7db28c890faa}\index{Base.java@{Base.java}!name@{name}}
+\index{name@{name}!Base.java@{Base.java}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily \label{_base_8java_aee5f0118454ca188d26b7db28c890faa} 
+final String name}
+
+\Hypertarget{_base_8java_af3080c0980452e8c7fdadd805a25b4c2}\index{Base.java@{Base.java}!parent@{parent}}
+\index{parent@{parent}!Base.java@{Base.java}}
+\doxysubsubsection{\texorpdfstring{parent}{parent}}
+{\footnotesize\ttfamily \label{_base_8java_af3080c0980452e8c7fdadd805a25b4c2} 
+Base$<$?$>$ parent}
+
+\Hypertarget{_base_8java_a14e5853278e2bb4a1eefaafad7953664}\index{Base.java@{Base.java}!permission@{permission}}
+\index{permission@{permission}!Base.java@{Base.java}}
+\doxysubsubsection{\texorpdfstring{permission}{permission}}
+{\footnotesize\ttfamily \label{_base_8java_a14e5853278e2bb4a1eefaafad7953664} 
+String permission}
+
+\Hypertarget{_base_8java_abd5da63b6a4b0b3a3b2f0ce16868c945}\index{Base.java@{Base.java}!suggestions@{suggestions}}
+\index{suggestions@{suggestions}!Base.java@{Base.java}}
+\doxysubsubsection{\texorpdfstring{suggestions}{suggestions}}
+{\footnotesize\ttfamily \label{_base_8java_abd5da63b6a4b0b3a3b2f0ce16868c945} 
+List$<$String$>$ suggestions = List.\+of()}
+

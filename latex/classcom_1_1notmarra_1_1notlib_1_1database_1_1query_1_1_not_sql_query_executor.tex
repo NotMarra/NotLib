@@ -1,0 +1,286 @@
+\doxysection{com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Query\+Executor Class Reference}
+\hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor}{}\label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor}\index{com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}}
+
+
+Provides methods to execute SQL queries on a \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database} instance.  
+
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a29b496e6e8ebc1fdd7929809516960ed}{Not\+Sql\+Query\+Executor}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database}} database)
+\begin{DoxyCompactList}\small\item\em Constructor for the \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor}{Not\+Sql\+Query\+Executor} class. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_af02c0c64331dd5374342abbf8bbd4118}{select\+One}} (String sql)
+\begin{DoxyCompactList}\small\item\em Executes a SQL query that is expected to return a single record. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_ad08a631886d0ef8eb4cad29c96b2fcaf}{select\+One}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} builder)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a4aa9c629520c3bab571cd27fa2c99383}{select\+One\+Or\+Null}} (String sql)
+\begin{DoxyCompactList}\small\item\em Executes an SQL query and returns the first record or null if no records are found. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a88feafda047867d3173e465c488b7d60}{select\+One\+Or\+Null}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} builder)
+\begin{DoxyCompactList}\small\item\em Executes a SQL query and returns the first record or null if no records are found. \end{DoxyCompactList}\item 
+List$<$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} $>$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a253264e59d4a719dc21e799646bcf424}{select}} (String sql)
+\begin{DoxyCompactList}\small\item\em Executes a SQL SELECT query and returns the results as a list of records. \end{DoxyCompactList}\item 
+List$<$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} $>$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a744dacfa54a6f9a3f7475c0e5fa643fc}{select}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} builder)
+\item 
+int \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_abe064082b0481140eb6b3141df8931d9}{update}} (String sql)
+\begin{DoxyCompactList}\small\item\em Executes an SQL update statement without parameters. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a78677fa968725a9feeb0dce438d7b671}{update}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} builder)
+\begin{DoxyCompactList}\small\item\em Updates database records using the provided SQL builder. \end{DoxyCompactList}\item 
+boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a2058f45bf8869bf3709774569e27ff56}{exists}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} builder)
+\item 
+boolean \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a4f74b1214129a638f2e6a74e378c2acc}{succeeded}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} builder)
+\begin{DoxyCompactList}\small\item\em Checks if the SQL query execution succeeded. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a651489c400d113d978ece164d40fc6d8}{count}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} builder)
+\begin{DoxyCompactList}\small\item\em Counts the number of results from a SQL query. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Provides methods to execute SQL queries on a \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database} instance. 
+
+The \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor}{Not\+Sql\+Query\+Executor} class provides a simplified interface for executing SQL queries against a \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database}. It supports operations such as selecting records (returning single results or lists), updating data, checking existence of records, and counting results.
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database} 
+
+\doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record} 
+
+\doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder} 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a29b496e6e8ebc1fdd7929809516960ed}\index{com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}!NotSqlQueryExecutor@{NotSqlQueryExecutor}}
+\index{NotSqlQueryExecutor@{NotSqlQueryExecutor}!com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}}
+\doxysubsubsection{\texorpdfstring{NotSqlQueryExecutor()}{NotSqlQueryExecutor()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a29b496e6e8ebc1fdd7929809516960ed} 
+com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Query\+Executor.\+Not\+Sql\+Query\+Executor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database}}}]{database}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor for the \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor}{Not\+Sql\+Query\+Executor} class. 
+
+Initializes a new instance of \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor}{Not\+Sql\+Query\+Executor} with the specified database connection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em database} & The \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database} instance to be used for executing SQL queries. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a651489c400d113d978ece164d40fc6d8}\index{com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}!count@{count}}
+\index{count@{count}!com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}}
+\doxysubsubsection{\texorpdfstring{count()}{count()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a651489c400d113d978ece164d40fc6d8} 
+int com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Query\+Executor.\+count (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}}}]{builder}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Counts the number of results from a SQL query. 
+
+This method executes a SELECT query using the provided SQL builder and returns the count of results in the result set.
+
+
+\begin{DoxyParams}{Parameters}
+{\em builder} & The \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder} containing the SQL query configuration \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of rows in the result set 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a2058f45bf8869bf3709774569e27ff56}\index{com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}!exists@{exists}}
+\index{exists@{exists}!com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}}
+\doxysubsubsection{\texorpdfstring{exists()}{exists()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a2058f45bf8869bf3709774569e27ff56} 
+boolean com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Query\+Executor.\+exists (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}}}]{builder}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Checks if a query result exists in the database.
+
+
+\begin{DoxyParams}{Parameters}
+{\em builder} & The SQL query builder containing the query to execute \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the query returns at least one row, false otherwise 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a744dacfa54a6f9a3f7475c0e5fa643fc}\index{com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}!select@{select}}
+\index{select@{select}!com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}}
+\doxysubsubsection{\texorpdfstring{select()}{select()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a744dacfa54a6f9a3f7475c0e5fa643fc} 
+List$<$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} $>$ com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Query\+Executor.\+select (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}}}]{builder}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Executes a SELECT SQL query using the provided \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em builder} & The \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder} instance containing the SELECT query to execute \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A List of \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record} objects representing the query results 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a253264e59d4a719dc21e799646bcf424}\index{com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}!select@{select}}
+\index{select@{select}!com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}}
+\doxysubsubsection{\texorpdfstring{select()}{select()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a253264e59d4a719dc21e799646bcf424} 
+List$<$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} $>$ com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Query\+Executor.\+select (\begin{DoxyParamCaption}\item[{String}]{sql}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Executes a SQL SELECT query and returns the results as a list of records. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sql} & The SQL SELECT statement to execute. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A list of \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record} objects representing the query results. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Database\+Exception} & If there is an error executing the query. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_ad08a631886d0ef8eb4cad29c96b2fcaf}\index{com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}!selectOne@{selectOne}}
+\index{selectOne@{selectOne}!com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}}
+\doxysubsubsection{\texorpdfstring{selectOne()}{selectOne()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_ad08a631886d0ef8eb4cad29c96b2fcaf} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Query\+Executor.\+select\+One (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}}}]{builder}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Executes a SELECT SQL query to retrieve a single record.
+
+
+\begin{DoxyParams}{Parameters}
+{\em builder} & The SQL builder containing the query to execute \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record} containing the result. If no record is found, returns an empty \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record} 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_af02c0c64331dd5374342abbf8bbd4118}\index{com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}!selectOne@{selectOne}}
+\index{selectOne@{selectOne}!com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}}
+\doxysubsubsection{\texorpdfstring{selectOne()}{selectOne()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_af02c0c64331dd5374342abbf8bbd4118} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Query\+Executor.\+select\+One (\begin{DoxyParamCaption}\item[{String}]{sql}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Executes a SQL query that is expected to return a single record. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sql} & The SQL query to execute. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record} A non-\/null \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record} containing the first row of the result set. If the query returns no results, an empty \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record} is returned. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a88feafda047867d3173e465c488b7d60}\index{com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}!selectOneOrNull@{selectOneOrNull}}
+\index{selectOneOrNull@{selectOneOrNull}!com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}}
+\doxysubsubsection{\texorpdfstring{selectOneOrNull()}{selectOneOrNull()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a88feafda047867d3173e465c488b7d60} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Query\+Executor.\+select\+One\+Or\+Null (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}}}]{builder}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Executes a SQL query and returns the first record or null if no records are found. 
+
+This method executes a SQL SELECT query built by the provided \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder} and returns the first record from the result set. If the query returns no records, null is returned.
+
+
+\begin{DoxyParams}{Parameters}
+{\em builder} & The \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder} instance containing the SQL query to execute. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The first \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record} from the result set or null if the result set is empty. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder} 
+
+\doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record} 
+
+\doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a744dacfa54a6f9a3f7475c0e5fa643fc}{select(\+Not\+Sql\+Builder)} 
+\end{DoxySeeAlso}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a4aa9c629520c3bab571cd27fa2c99383}\index{com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}!selectOneOrNull@{selectOneOrNull}}
+\index{selectOneOrNull@{selectOneOrNull}!com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}}
+\doxysubsubsection{\texorpdfstring{selectOneOrNull()}{selectOneOrNull()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a4aa9c629520c3bab571cd27fa2c99383} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record}{Not\+Record}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Query\+Executor.\+select\+One\+Or\+Null (\begin{DoxyParamCaption}\item[{String}]{sql}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Executes an SQL query and returns the first record or null if no records are found. 
+
+This method executes the provided SQL query and returns the first record from the result set. If the query returns no records, null is returned instead.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sql} & The SQL query to execute \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The first record from the result set, or null if the result set is empty 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a4f74b1214129a638f2e6a74e378c2acc}\index{com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}!succeeded@{succeeded}}
+\index{succeeded@{succeeded}!com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}}
+\doxysubsubsection{\texorpdfstring{succeeded()}{succeeded()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a4f74b1214129a638f2e6a74e378c2acc} 
+boolean com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Query\+Executor.\+succeeded (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}}}]{builder}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Checks if the SQL query execution succeeded. 
+
+Executes the update query and checks if it affected at least one row. 
+\begin{DoxyParams}{Parameters}
+{\em builder} & The SQL query builder containing the query to be executed. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the update affected at least one row, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a78677fa968725a9feeb0dce438d7b671}\index{com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}!update@{update}}
+\index{update@{update}!com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_a78677fa968725a9feeb0dce438d7b671} 
+int com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Query\+Executor.\+update (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}}}]{builder}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Updates database records using the provided SQL builder. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em builder} & The \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder} instance containing the UPDATE query and parameters \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of rows affected by the update operation 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_abe064082b0481140eb6b3141df8931d9}\index{com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}!update@{update}}
+\index{update@{update}!com.notmarra.notlib.database.query.NotSqlQueryExecutor@{com.notmarra.notlib.database.query.NotSqlQueryExecutor}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_query_executor_abe064082b0481140eb6b3141df8931d9} 
+int com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Sql\+Query\+Executor.\+update (\begin{DoxyParamCaption}\item[{String}]{sql}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Executes an SQL update statement without parameters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sql} & The SQL update statement to execute. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of rows affected by the update operation. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/com/notmarra/notlib/database/query/\mbox{\hyperlink{_not_sql_query_executor_8java}{Not\+Sql\+Query\+Executor.\+java}}\end{DoxyCompactItemize}

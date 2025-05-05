@@ -17,6 +17,18 @@ import com.notmarra.notlib.utils.NotDebugger;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+/**
+ * @class NotMySQL
+ * @brief An abstract class for MySQL database implementation using HikariCP connection pooling.
+ * 
+ * This class extends NotDatabase and provides MySQL-specific functionality for database operations.
+ * It handles MySQL connection configurations, table creation with appropriate column types,
+ * and data insertion operations.
+ * 
+ * @note The class uses HikariCP for efficient connection pooling with optimized configurations.
+ * 
+ * @see NotDatabase
+ */
 public abstract class NotMySQL extends NotDatabase {
     public static final String ID = "MySQL";
 
@@ -25,6 +37,23 @@ public abstract class NotMySQL extends NotDatabase {
     @Override
     public String getId() { return ID; }
 
+    /**
+     * @brief Establishes a connection to a MySQL database using HikariCP.
+     * 
+     * This method reads database configuration from the provided configuration section
+     * and sets up a HikariCP connection pool with optimized settings for MySQL.
+     * It configures connection properties, statement caching, and pool size parameters
+     * to ensure efficient database operations.
+     * 
+     * The connection uses the following properties from configuration:
+     *   - host: Database server hostname
+     *   - port: Database server port
+     *   - database: Database name
+     *   - username: Database username
+     *   - password: Database password
+     * 
+     * @note The method initializes the 'source' field with a new HikariDataSource.
+     */
     @Override
     public void connect() {
         ConfigurationSection configSection = getDatabaseConfig();
@@ -58,6 +87,25 @@ public abstract class NotMySQL extends NotDatabase {
         source = new HikariDataSource(hikariConfig);
     }
 
+    /**
+     * @brief Creates a new table in the MySQL database if it doesn't exist
+     * 
+     * This method generates and executes a SQL statement to create a table based on the provided
+     * NotTable specification. The method handles various column types, constraints, and attributes
+     * including:
+     * - Column types with appropriate length/precision/scale parameters
+     * - Primary key constraints (both at column level and table level)
+     * - Auto increment columns
+     * - NOT NULL constraints
+     * - UNIQUE constraints
+     * - DEFAULT values (both raw and quoted)
+     * 
+     * @param table The NotTable object containing the table schema definition
+     * @return true if the table was created successfully, false otherwise
+     * @see NotTable
+     * @see NotColumn
+     * @see NotColumnType
+     */
     @Override
     public boolean createTable(NotTable table) {
         StringBuilder sql = new StringBuilder("CREATE TABLE IF NOT EXISTS " + table.getName() + " (");
@@ -99,6 +147,18 @@ public abstract class NotMySQL extends NotDatabase {
         return processResult(sql.toString());
     }
 
+    /**
+     * @brief Inserts a row into the specified table.
+     *
+     * Constructs an SQL INSERT statement based on the table structure and the provided row data.
+     * Automatically skips auto-increment columns during SQL generation.
+     * The method logs the generated SQL and parameter values if debugging is enabled.
+     *
+     * @param table The NotTable object representing the table to insert into
+     * @param row A list of objects containing the values to be inserted in the same order as the table columns
+     * @return true if the row was successfully inserted, false otherwise
+     * @throws SQLException handled internally, prints stack trace and returns false
+     */
     @Override
     public boolean insertRow(NotTable table, List<Object> row) {
         StringBuilder sql = new StringBuilder("INSERT INTO " + table.getName() + " (");

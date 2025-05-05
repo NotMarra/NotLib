@@ -1,0 +1,136 @@
+\doxysection{com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Query\+Batch Class Reference}
+\hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch}{}\label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch}\index{com.notmarra.notlib.database.query.NotQueryBatch@{com.notmarra.notlib.database.query.NotQueryBatch}}
+
+
+Batch processor for SQL queries that executes multiple queries in a single transaction.  
+
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_ada29bdc606b688315fd66ad26f347653}{Not\+Query\+Batch}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database}} database)
+\begin{DoxyCompactList}\small\item\em Constructs a new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch}{Not\+Query\+Batch} with the specified database. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch}{Not\+Query\+Batch}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_a2cb5474e6ee368661265aa755bc6816e}{add}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}} builder)
+\item 
+int \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_a4c413efb86123b68825f5360586eb4a9}{execute}} ()
+\item 
+void \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_a57f1cb6594a5c5e3fbdae5e686544e89}{clear}} ()
+\begin{DoxyCompactList}\small\item\em Clears all query builders from the batch. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_a7b1c3127781fc1a0ec4e7f2a6797a068}{size}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Batch processor for SQL queries that executes multiple queries in a single transaction. 
+
+This class allows collecting multiple SQL queries and executing them as a single atomic transaction. If any query in the batch fails, the entire transaction will be rolled back to ensure data integrity.
+
+The \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch}{Not\+Query\+Batch} manages a collection of SQL builder objects and executes all of them within a single database transaction. This provides ACID guarantees and better performance for multiple related database operations.
+
+Usage example\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_ada29bdc606b688315fd66ad26f347653}{NotQueryBatch}}\ batch\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_ada29bdc606b688315fd66ad26f347653}{NotQueryBatch}}(database);}
+\DoxyCodeLine{batch.add(insert1)}
+\DoxyCodeLine{\ \ \ \ \ .add(insert2)}
+\DoxyCodeLine{\ \ \ \ \ .add(update1);}
+\DoxyCodeLine{\textcolor{keywordtype}{int}\ affectedRows\ =\ batch.execute();}
+
+\end{DoxyCode}
+
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder} 
+
+\doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database} 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_ada29bdc606b688315fd66ad26f347653}\index{com.notmarra.notlib.database.query.NotQueryBatch@{com.notmarra.notlib.database.query.NotQueryBatch}!NotQueryBatch@{NotQueryBatch}}
+\index{NotQueryBatch@{NotQueryBatch}!com.notmarra.notlib.database.query.NotQueryBatch@{com.notmarra.notlib.database.query.NotQueryBatch}}
+\doxysubsubsection{\texorpdfstring{NotQueryBatch()}{NotQueryBatch()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_ada29bdc606b688315fd66ad26f347653} 
+com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Query\+Batch.\+Not\+Query\+Batch (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database}}}]{database}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructs a new \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch}{Not\+Query\+Batch} with the specified database. 
+
+This constructor initializes a query batch that will operate on the provided database. The query batch allows for executing multiple database operations as a single unit.
+
+
+\begin{DoxyParams}{Parameters}
+{\em database} & The \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database} instance to associate with this query batch \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_a2cb5474e6ee368661265aa755bc6816e}\index{com.notmarra.notlib.database.query.NotQueryBatch@{com.notmarra.notlib.database.query.NotQueryBatch}!add@{add}}
+\index{add@{add}!com.notmarra.notlib.database.query.NotQueryBatch@{com.notmarra.notlib.database.query.NotQueryBatch}}
+\doxysubsubsection{\texorpdfstring{add()}{add()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_a2cb5474e6ee368661265aa755bc6816e} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch}{Not\+Query\+Batch}} com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Query\+Batch.\+add (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder}}}]{builder}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Adds a \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder} to this batch of queries.
+
+
+\begin{DoxyParams}{Parameters}
+{\em builder} & The \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder}{Not\+Sql\+Builder} to add to the batch. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+This \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch}{Not\+Query\+Batch} instance for method chaining. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_a57f1cb6594a5c5e3fbdae5e686544e89}\index{com.notmarra.notlib.database.query.NotQueryBatch@{com.notmarra.notlib.database.query.NotQueryBatch}!clear@{clear}}
+\index{clear@{clear}!com.notmarra.notlib.database.query.NotQueryBatch@{com.notmarra.notlib.database.query.NotQueryBatch}}
+\doxysubsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_a57f1cb6594a5c5e3fbdae5e686544e89} 
+void com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Query\+Batch.\+clear (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Clears all query builders from the batch. 
+
+This method removes all previously added query builders from the batch, effectively resetting it to an empty state. After calling this method, the batch will contain no query builders to execute. \Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_a4c413efb86123b68825f5360586eb4a9}\index{com.notmarra.notlib.database.query.NotQueryBatch@{com.notmarra.notlib.database.query.NotQueryBatch}!execute@{execute}}
+\index{execute@{execute}!com.notmarra.notlib.database.query.NotQueryBatch@{com.notmarra.notlib.database.query.NotQueryBatch}}
+\doxysubsubsection{\texorpdfstring{execute()}{execute()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_a4c413efb86123b68825f5360586eb4a9} 
+int com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Query\+Batch.\+execute (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Executes all SQL statements in the batch as a single transaction.
+
+This method performs the following operations\+:
+\begin{DoxyEnumerate}
+\item Gets a database connection and disables auto-\/commit
+\item For each SQL builder in the batch\+:
+\begin{DoxyItemize}
+\item Builds the SQL statement
+\item Prepares the statement with the connection
+\item Sets all parameters
+\item Executes the statement and counts affected rows
+\end{DoxyItemize}
+\item Commits the transaction if all statements execute successfully
+\end{DoxyEnumerate}
+
+If any statement fails, the entire transaction is rolled back. All resources (statements and connection) are properly closed in the finally block.
+
+\begin{DoxyReturn}{Returns}
+The total number of rows affected by all statements, or 0 if the batch is empty or execution fails 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_a7b1c3127781fc1a0ec4e7f2a6797a068}\index{com.notmarra.notlib.database.query.NotQueryBatch@{com.notmarra.notlib.database.query.NotQueryBatch}!size@{size}}
+\index{size@{size}!com.notmarra.notlib.database.query.NotQueryBatch@{com.notmarra.notlib.database.query.NotQueryBatch}}
+\doxysubsubsection{\texorpdfstring{size()}{size()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch_a7b1c3127781fc1a0ec4e7f2a6797a068} 
+int com.\+notmarra.\+notlib.\+database.\+query.\+Not\+Query\+Batch.\+size (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the number of query builders contained in this batch.
+
+\begin{DoxyReturn}{Returns}
+the number of query builders in this batch 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/com/notmarra/notlib/database/query/\mbox{\hyperlink{_not_query_batch_8java}{Not\+Query\+Batch.\+java}}\end{DoxyCompactItemize}

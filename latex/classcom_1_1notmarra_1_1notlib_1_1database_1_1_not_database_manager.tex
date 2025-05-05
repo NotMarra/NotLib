@@ -1,0 +1,245 @@
+\doxysection{com.\+notmarra.\+notlib.\+database.\+Not\+Database\+Manager Class Reference}
+\hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager}{}\label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager}\index{com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}}
+
+
+Manages multiple database connections.  
+
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a84f7c8cbb81e5a8bd4d110b3bb9eab84}{Not\+Database\+Manager}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_plugin}{Not\+Plugin}} plugin)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager}{Not\+Database\+Manager}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a2cdb6949cf147a23e04463f990a6741b}{add\+Database}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database}} new\+Database)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager}{Not\+Database\+Manager}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a86d8e84a6067cf593c4ffa4a458176f5}{register\+Database}} (String db\+Id)
+\begin{DoxyCompactList}\small\item\em Registers and sets up a database by its identifier. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager}{Not\+Database\+Manager}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_ae19b46714bfd577369d19c6ea39b2219}{register\+Database}} (\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database}} new\+Database)
+\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a584600789302afddebbd39e085eb3648}{first\+Connected}} ()
+\begin{DoxyCompactList}\small\item\em Returns the first connected database found in the databases collection. \end{DoxyCompactList}\item 
+Map$<$ String, \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database}} $>$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a5543ad82b6b004983f0ef7be84199b37}{get\+Databases}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves all databases managed by this instance. \end{DoxyCompactList}\item 
+List$<$ String $>$ \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a79d561d49c3e41f73394cb0974b85995}{get\+Database\+Ids}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the IDs of all registered databases. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a3efaf0d967c71043bc3fcba7cb456f4b}{get\+Database}} (String db\+Id)
+\item 
+Connection \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_aefe168aa8eb9fce9039f7e63ae4117a5}{get\+Connection}} (String db\+Id)  throws SQLException 
+\begin{DoxyCompactList}\small\item\em Retrieves a database connection for the specified database ID. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a9881daf2fe7410849fd3f57347310135}{close}} ()
+\begin{DoxyCompactList}\small\item\em Closes all databases and clears the database collection. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_af6b97a349ee115e6dfb751ae765aaef8}{close}} (String db\+Id)
+\begin{DoxyCompactList}\small\item\em Closes and removes a database with the specified ID. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager}{Not\+Database\+Manager}} \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_abea00e68e4557ea3e79bcf55cdcd80f4}{get\+Instance}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Manages multiple database connections. 
+
+This class follows the singleton pattern and provides functionality to\+:
+\begin{DoxyItemize}
+\item Register and manage multiple database instances
+\item Connect and set up databases
+\item Retrieve connections from registered databases
+\item Close database connections when no longer needed 
+\end{DoxyItemize}
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a84f7c8cbb81e5a8bd4d110b3bb9eab84}\index{com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}!NotDatabaseManager@{NotDatabaseManager}}
+\index{NotDatabaseManager@{NotDatabaseManager}!com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}}
+\doxysubsubsection{\texorpdfstring{NotDatabaseManager()}{NotDatabaseManager()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a84f7c8cbb81e5a8bd4d110b3bb9eab84} 
+com.\+notmarra.\+notlib.\+database.\+Not\+Database\+Manager.\+Not\+Database\+Manager (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_plugin}{Not\+Plugin}}}]{plugin}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a2cdb6949cf147a23e04463f990a6741b}\index{com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}!addDatabase@{addDatabase}}
+\index{addDatabase@{addDatabase}!com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}}
+\doxysubsubsection{\texorpdfstring{addDatabase()}{addDatabase()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a2cdb6949cf147a23e04463f990a6741b} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager}{Not\+Database\+Manager}} com.\+notmarra.\+notlib.\+database.\+Not\+Database\+Manager.\+add\+Database (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database}}}]{new\+Database}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Adds a new database to the manager.
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+Database} & The database to add to the manager \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current instance of the database manager for chaining 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Illegal\+Argument\+Exception} & If a database with the same ID already exists in the manager \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a9881daf2fe7410849fd3f57347310135}\index{com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}!close@{close}}
+\index{close@{close}!com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}}
+\doxysubsubsection{\texorpdfstring{close()}{close()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a9881daf2fe7410849fd3f57347310135} 
+void com.\+notmarra.\+notlib.\+database.\+Not\+Database\+Manager.\+close (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Closes all databases and clears the database collection. 
+
+Iterates through all the database instances in the collection, closes each one if it\textquotesingle{}s not null, and then clears the entire collection. \Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_af6b97a349ee115e6dfb751ae765aaef8}\index{com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}!close@{close}}
+\index{close@{close}!com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}}
+\doxysubsubsection{\texorpdfstring{close()}{close()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_af6b97a349ee115e6dfb751ae765aaef8} 
+void com.\+notmarra.\+notlib.\+database.\+Not\+Database\+Manager.\+close (\begin{DoxyParamCaption}\item[{String}]{db\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Closes and removes a database with the specified ID. 
+
+This method retrieves the database with the given ID, closes it if found, and removes it from the managed databases collection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em db\+Id} & The identifier of the database to close \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a584600789302afddebbd39e085eb3648}\index{com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}!firstConnected@{firstConnected}}
+\index{firstConnected@{firstConnected}!com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}}
+\doxysubsubsection{\texorpdfstring{firstConnected()}{firstConnected()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a584600789302afddebbd39e085eb3648} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database}} com.\+notmarra.\+notlib.\+database.\+Not\+Database\+Manager.\+first\+Connected (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns the first connected database found in the databases collection. 
+
+This method searches through all databases and returns the first one that has an active connection. If no connected database is found, null is returned.
+
+\begin{DoxyReturn}{Returns}
+The first connected \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database} instance or null if none are connected. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_aefe168aa8eb9fce9039f7e63ae4117a5}\index{com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}!getConnection@{getConnection}}
+\index{getConnection@{getConnection}!com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}}
+\doxysubsubsection{\texorpdfstring{getConnection()}{getConnection()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_aefe168aa8eb9fce9039f7e63ae4117a5} 
+Connection com.\+notmarra.\+notlib.\+database.\+Not\+Database\+Manager.\+get\+Connection (\begin{DoxyParamCaption}\item[{String}]{db\+Id}{}\end{DoxyParamCaption}) throws SQLException\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retrieves a database connection for the specified database ID. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em db\+Id} & The identifier of the database to connect to. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A Connection object representing the connection to the specified database. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em SQLException} & If the database with the specified ID is not configured or if a database access error occurs. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a3efaf0d967c71043bc3fcba7cb456f4b}\index{com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}!getDatabase@{getDatabase}}
+\index{getDatabase@{getDatabase}!com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}}
+\doxysubsubsection{\texorpdfstring{getDatabase()}{getDatabase()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a3efaf0d967c71043bc3fcba7cb456f4b} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database}} com.\+notmarra.\+notlib.\+database.\+Not\+Database\+Manager.\+get\+Database (\begin{DoxyParamCaption}\item[{String}]{db\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Retrieves a database by its identifier.
+
+
+\begin{DoxyParams}{Parameters}
+{\em db\+Id} & The unique identifier of the database to retrieve. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The database with the specified ID, or null if no database with the given ID exists. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a79d561d49c3e41f73394cb0974b85995}\index{com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}!getDatabaseIds@{getDatabaseIds}}
+\index{getDatabaseIds@{getDatabaseIds}!com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}}
+\doxysubsubsection{\texorpdfstring{getDatabaseIds()}{getDatabaseIds()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a79d561d49c3e41f73394cb0974b85995} 
+List$<$ String $>$ com.\+notmarra.\+notlib.\+database.\+Not\+Database\+Manager.\+get\+Database\+Ids (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retrieves the IDs of all registered databases. 
+
+\begin{DoxyReturn}{Returns}
+A list containing the IDs of all registered databases. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a5543ad82b6b004983f0ef7be84199b37}\index{com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}!getDatabases@{getDatabases}}
+\index{getDatabases@{getDatabases}!com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}}
+\doxysubsubsection{\texorpdfstring{getDatabases()}{getDatabases()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a5543ad82b6b004983f0ef7be84199b37} 
+Map$<$ String, \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database}} $>$ com.\+notmarra.\+notlib.\+database.\+Not\+Database\+Manager.\+get\+Databases (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retrieves all databases managed by this instance. 
+
+\begin{DoxyReturn}{Returns}
+A map containing all databases, where keys are database names and values are the corresponding \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database} instances. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_abea00e68e4557ea3e79bcf55cdcd80f4}\index{com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}}
+\doxysubsubsection{\texorpdfstring{getInstance()}{getInstance()}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_abea00e68e4557ea3e79bcf55cdcd80f4} 
+static \mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager}{Not\+Database\+Manager}} com.\+notmarra.\+notlib.\+database.\+Not\+Database\+Manager.\+get\+Instance (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_ae19b46714bfd577369d19c6ea39b2219}\index{com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}!registerDatabase@{registerDatabase}}
+\index{registerDatabase@{registerDatabase}!com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}}
+\doxysubsubsection{\texorpdfstring{registerDatabase()}{registerDatabase()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_ae19b46714bfd577369d19c6ea39b2219} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager}{Not\+Database\+Manager}} com.\+notmarra.\+notlib.\+database.\+Not\+Database\+Manager.\+register\+Database (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database}{Not\+Database}}}]{new\+Database}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Registers a new database to the manager. This method adds the database to the manager and registers it with its ID.
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+Database} & The database to register \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+This instance of \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager}{Not\+Database\+Manager} for method chaining 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a2cdb6949cf147a23e04463f990a6741b}{add\+Database(\+Not\+Database)} 
+
+\doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a86d8e84a6067cf593c4ffa4a458176f5}{register\+Database(\+String)} 
+\end{DoxySeeAlso}
+\Hypertarget{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a86d8e84a6067cf593c4ffa4a458176f5}\index{com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}!registerDatabase@{registerDatabase}}
+\index{registerDatabase@{registerDatabase}!com.notmarra.notlib.database.NotDatabaseManager@{com.notmarra.notlib.database.NotDatabaseManager}}
+\doxysubsubsection{\texorpdfstring{registerDatabase()}{registerDatabase()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager_a86d8e84a6067cf593c4ffa4a458176f5} 
+\mbox{\hyperlink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager}{Not\+Database\+Manager}} com.\+notmarra.\+notlib.\+database.\+Not\+Database\+Manager.\+register\+Database (\begin{DoxyParamCaption}\item[{String}]{db\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Registers and sets up a database by its identifier. 
+
+This method attempts to register a database by its ID. If the database is found in the registry, it will close any existing connections, reconnect, and perform setup operations. If the database is not found or if there is an error during setup, appropriate error handling is performed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em db\+Id} & The unique identifier of the database to register \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current \doxylink{classcom_1_1notmarra_1_1notlib_1_1database_1_1_not_database_manager}{Not\+Database\+Manager} instance for method chaining 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Illegal\+Argument\+Exception} & If the database with the given ID is not registered \\
+\hline
+\end{DoxyExceptions}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/com/notmarra/notlib/database/\mbox{\hyperlink{_not_database_manager_8java}{Not\+Database\+Manager.\+java}}\end{DoxyCompactItemize}

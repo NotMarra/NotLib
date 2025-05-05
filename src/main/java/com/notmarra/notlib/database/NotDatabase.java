@@ -26,6 +26,26 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+/**
+ * @class NotDatabase
+ * @brief An abstract base class for database operations with configurable settings.
+ * 
+ * NotDatabase provides a foundation for database interactions with built-in connection pooling via HikariCP.
+ * It supports common SQL operations including select, insert, update, and delete operations through
+ * a fluent SQL builder interface.
+ * 
+ * @extends NotConfigurable
+ * 
+ * @details The class manages database connections and provides methods for:
+ *   - Connection management via HikariCP
+ *   - Table creation and management
+ *   - SQL query execution
+ *   - Data type conversion
+ *   - Configuration handling
+ * 
+ * Implementations must provide database-specific logic for connecting, creating tables, and inserting data.
+ * 
+ */
 public abstract class NotDatabase extends NotConfigurable {
     private final String defaultConfig;
     protected HikariDataSource source;
@@ -66,6 +86,13 @@ public abstract class NotDatabase extends NotConfigurable {
     public Map<String, NotTable> getTables() { return tables; }
     public NotTable getTable(String tableName) { return tables.get(tableName); }
 
+    /**
+     * @brief Initializes the database by setting up all tables.
+     * 
+     * This method retrieves all tables that need to be set up, sets their database context,
+     * creates the database structures for each table, and stores them in the tables map
+     * indexed by their names.
+     */
     public void setup() {
         for (NotTable table : setupTables()) {
             table.setDbCtx(this);
@@ -74,12 +101,30 @@ public abstract class NotDatabase extends NotConfigurable {
         }
     }
     
+    /**
+     * @brief Handles the configuration reload event.
+     * 
+     * This method is called when configurations are reloaded. It closes the current database
+     * connection and establishes a new connection to reflect any changes in the configuration.
+     * 
+     * @param reloadedConfigs List of configuration files that were reloaded
+     */
     @Override
     public void onConfigReload(List<String> reloadedConfigs) {
         close();
         connect();
     }
 
+    /**
+     * @brief Retrieves the database-specific configuration section.
+     * 
+     * This method gets the configuration section from the main configuration file
+     * that is specific to this database instance. The section is identified by
+     * "database.[database_id]" where [database_id] is the ID returned by getId().
+     * 
+     * @return ConfigurationSection containing database-specific configuration.
+     * If the section doesn't exist, returns an empty YamlConfiguration.
+     */
     public ConfigurationSection getDatabaseConfig() {
         FileConfiguration config = getConfig(getConfigPaths().get(0));
         ConfigurationSection section = config.getConfigurationSection("database." + getId());
@@ -87,8 +132,19 @@ public abstract class NotDatabase extends NotConfigurable {
         return section;
     }
     
+    /**
+     * Sets the data source for the database.
+     *
+     * @param source The HikariDataSource to be used for database connections
+     */
     public void setSource(HikariDataSource source) { this.source = source; }
     
+    /**
+     * @brief Retrieves a connection from the underlying DataSource.
+     * 
+     * @return A Connection object representing a connection to the database.
+     * @throws SQLException If the DataSource is not initialized, is closed, or if a database access error occurs.
+     */
     public Connection getConnection() throws SQLException {
         if (source == null || source.isClosed()) {
             throw new SQLException("DataSource is not initialized or closed");
@@ -96,14 +152,40 @@ public abstract class NotDatabase extends NotConfigurable {
         return source.getConnection();
     }
 
+    /**
+     * Closes the database connection.
+     * 
+     * This method safely closes the data source if it exists and is not already closed.
+     * It's recommended to call this method when the database is no longer needed to 
+     * release resources and prevent memory leaks.
+     * 
+     * @see javax.sql.DataSource#close()
+     */
     public void close() {
         if (source != null && !source.isClosed()) source.close();
     }
 
+    /**
+     * @brief Checks if the database connection is active
+     * @return true if the connection is established and open, false otherwise
+     */
     public boolean isConnected() {
         return source != null && !source.isClosed();
     }
 
+    /**
+     * @brief Converts a value to the appropriate Java type based on a SQL column type.
+     *
+     * This method takes a SQL column type and a value and converts the value to the appropriate Java type
+     * that corresponds to that column type. For example, it converts values for "INT" columns to Integer objects,
+     * values for "FLOAT" columns to Float objects, etc.
+     *
+     * @param columnType The SQL data type of the column (e.g., "TEXT", "INT", "FLOAT")
+     * @param value The value to convert to the appropriate Java type
+     * @return The value converted to the appropriate Java type based on the column type,
+     *         or null if the input value is null. If the column type is not supported,
+     *         the value is returned as a String and an error is logged.
+     */
     public Object convertValue(String columnType, Object value) {
         if (value == null) {
             return null;
@@ -145,6 +227,16 @@ public abstract class NotDatabase extends NotConfigurable {
     }
 }
 
+    /**
+     * @brief Processes a database operation using a provided consumer.
+     * 
+     * This method opens a database connection, passes it to the provided consumer for processing,
+     * and ensures the connection is properly closed afterwards. Any exceptions during processing
+     * are caught, logged, and the stack trace is printed.
+     * 
+     * @param consumer A Consumer functional interface that accepts a Connection object to perform
+     *                 database operations.
+     */
     public void process(Consumer<Connection> consumer) {
         try (Connection connection = getConnection()) {
             consumer.accept(connection);
@@ -154,6 +246,17 @@ public abstract class NotDatabase extends NotConfigurable {
         }
     }
 
+    /**
+     * @brief Executes custom operations on a database statement.
+     * 
+     * This method creates a connection and statement, then passes them to the provided consumer 
+     * for custom database operations. The connection is automatically closed after execution.
+     * 
+     * @param consumer A BiConsumer that accepts a Connection and Statement to perform database operations
+     * 
+     * @note The connection and statement are automatically managed, including proper closing of resources
+     * @note Any exceptions during execution are caught, logged, and printed to stack trace
+     */
     public void processStatement(BiConsumer<Connection, Statement> consumer) {
         try (Connection connection = getConnection()) {
             consumer.accept(connection, connection.createStatement());
@@ -163,6 +266,17 @@ public abstract class NotDatabase extends NotConfigurable {
         }
     }
 
+    /**
+     * @brief Executes a SQL statement that returns a boolean value.
+     * 
+     * This method executes the specified SQL statement on the database connection
+     * and returns the boolean result. The SQL statement is debugged if logging is enabled.
+     * 
+     * @param sql The SQL statement to execute
+     * @return true if the first result is a ResultSet object; false if it is an update count or there are no results
+     * @throws SQLException if a database access error occurs or the given SQL statement produces a ResultSet object that is then automatically closed
+     * @see java.sql.Statement#execute(String)
+     */
     public boolean processResult(String sql) {
         NotLib.dbg().log(NotDebugger.C_DATABASE, "[processResult] SQL: " + sql);
 
@@ -175,6 +289,19 @@ public abstract class NotDatabase extends NotConfigurable {
         }
     }
 
+    /**
+     * @brief Executes an SQL update statement with the provided parameters.
+     * 
+     * This method executes SQL statements that modify the database (INSERT, UPDATE, DELETE).
+     * It logs the SQL statement and parameters for debugging purposes.
+     * 
+     * @param sql The SQL update statement to execute
+     * @param params List of parameters to be set in the prepared statement
+     * 
+     * @return The number of rows affected by the SQL statement, or -1 if an error occurs
+     * 
+     * @throws SQLException Handled internally, errors are logged
+     */
     public int processUpdate(String sql, List<Object> params) {
         NotLib.dbg().log(NotDebugger.C_DATABASE, "[processUpdate] SQL: " + sql);
         if (!params.isEmpty()) {
@@ -197,6 +324,18 @@ public abstract class NotDatabase extends NotConfigurable {
         }
     }
 
+    /**
+     * Executes a SELECT SQL query and returns the results as a list of NotRecord objects.
+     * 
+     * This method prepares and executes the provided SQL query with the given parameters.
+     * It processes the ResultSet and converts each row into a NotRecord object with appropriate 
+     * type conversions for different SQL data types.
+     * 
+     * @param sql The SELECT SQL query to execute
+     * @param params List of parameters to bind to the prepared statement. Can be empty if no parameters are needed.
+     * @return A List of NotRecord objects containing the query results. Returns an empty list if an error occurs.
+     * @throws SQLException If a database access error occurs (caught internally and logged)
+     */
     public List<NotRecord> processSelect(String sql, List<Object> params) {
         NotLib.dbg().log(NotDebugger.C_DATABASE, "[processSelect] SQL: " + sql);
         if (!params.isEmpty()) {

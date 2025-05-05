@@ -7,19 +7,74 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @class NotQueryBatch
+ * @brief Batch processor for SQL queries that executes multiple queries in a single transaction.
+ * 
+ * This class allows collecting multiple SQL queries and executing them as a
+ * single atomic transaction. If any query in the batch fails, the entire
+ * transaction will be rolled back to ensure data integrity.
+ * 
+ * @details The NotQueryBatch manages a collection of SQL builder objects and executes
+ * all of them within a single database transaction. This provides ACID guarantees
+ * and better performance for multiple related database operations.
+ * 
+ * Usage example:
+ * @code
+ *     NotQueryBatch batch = new NotQueryBatch(database);
+ *     batch.add(insert1)
+ *          .add(insert2)
+ *          .add(update1);
+ *     int affectedRows = batch.execute();
+ * @endcode
+ * 
+ * @see NotSqlBuilder
+ * @see NotDatabase
+ */
 public class NotQueryBatch {
     private final NotDatabase database;
     private final List<NotSqlBuilder> builders = new ArrayList<>();
     
+    /**
+     * @brief Constructs a new NotQueryBatch with the specified database.
+     * 
+     * This constructor initializes a query batch that will operate on the provided database.
+     * The query batch allows for executing multiple database operations as a single unit.
+     * 
+     * @param database The NotDatabase instance to associate with this query batch
+     */
     public NotQueryBatch(NotDatabase database) {
         this.database = database;
     }
     
+    /**
+     * Adds a NotSqlBuilder to this batch of queries.
+     *
+     * @param builder The NotSqlBuilder to add to the batch.
+     * @return This NotQueryBatch instance for method chaining.
+     */
     public NotQueryBatch add(NotSqlBuilder builder) {
         builders.add(builder);
         return this;
     }
     
+    /**
+     * Executes all SQL statements in the batch as a single transaction.
+     * 
+     * This method performs the following operations:
+     * 1. Gets a database connection and disables auto-commit
+     * 2. For each SQL builder in the batch:
+     *    - Builds the SQL statement
+     *    - Prepares the statement with the connection
+     *    - Sets all parameters
+     *    - Executes the statement and counts affected rows
+     * 3. Commits the transaction if all statements execute successfully
+     * 
+     * If any statement fails, the entire transaction is rolled back.
+     * All resources (statements and connection) are properly closed in the finally block.
+     * 
+     * @return The total number of rows affected by all statements, or 0 if the batch is empty or execution fails
+     */
     public int execute() {
         if (builders.isEmpty()) {
             return 0;
@@ -85,12 +140,20 @@ public class NotQueryBatch {
         }
     }
     
+    /**
+     * @brief Clears all query builders from the batch.
+     * 
+     * This method removes all previously added query builders from the batch, effectively resetting it to an empty state.
+     * After calling this method, the batch will contain no query builders to execute.
+     */
     public void clear() {
         builders.clear();
     }
     
     /**
-     * Get the number of queries in the batch
+     * Returns the number of query builders contained in this batch.
+     *
+     * @return the number of query builders in this batch
      */
     public int size() {
         return builders.size();
