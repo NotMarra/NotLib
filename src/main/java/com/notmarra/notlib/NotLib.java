@@ -19,19 +19,19 @@ public final class NotLib extends NotPlugin {
     public void initNotPlugin() {
         instance = this;
         this.debugger = new NotDebugger(this);
-        NotCache.initialize(this);
+        //NotCache.initialize(this);
 
         // listeners
-        addListener(new NotGUIListener(this));
+        //addListener(new NotGUIListener(this));
 
-        addListener(new NotQuestListener(this));
+        //addListener(new NotQuestListener(this));
 
         // commands
         addCommandGroup(new NotLibCommandGroup(this));
-        addCommandGroup(new NotDevCommandGroup(this));
+        //addCommandGroup(new NotDevCommandGroup(this));
 
         // TODO: test stuff, remove
-        addListener(new NotDevListener(this));
+        //addListener(new NotDevListener(this));
         // db().registerDatabase(new NotDevTestMySQL(this, CONFIG_YML));
 
         // plugin callbacks

@@ -71,6 +71,10 @@ public class NotBossBar {
         return new NotBossBar(title, progress, NotColor.BLUE, NotOverlay.PROGRESS);
     }
 
+    public static NotBossBar create(Component title, NotColor color) {
+        return new NotBossBar(title, 1.0f, color, NotOverlay.PROGRESS);
+    }
+
     public static NotBossBar create(Component title) {
         return new NotBossBar(title, 1.0f, NotColor.BLUE, NotOverlay.PROGRESS);
     }
