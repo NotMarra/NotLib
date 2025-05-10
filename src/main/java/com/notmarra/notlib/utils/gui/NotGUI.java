@@ -294,7 +294,7 @@ public class NotGUI implements InventoryHolder {
                 NotGUIPatternMatchInfo info = new NotGUIPatternMatchInfo(
                     this,
                     ch, x, y,
-                    counts.get(ch), totals.get(ch), slot
+                    counts.get(ch), totals.get(ch), slot, totals 
                 );
 
                 NotGUIItem matched = onPatternMatch.apply(info);
@@ -392,11 +392,13 @@ public class NotGUI implements InventoryHolder {
         public final int count; // kolikátý
         public final int total; // celkem stejných
         public final int slot;
+        public final Map<Character, Integer> totals;
 
         public NotGUIPatternMatchInfo(
             NotGUI gui,
             char ch, int x, int y,
-            int count, int total, int slot
+            int count, int total, int slot,
+            Map<Character, Integer> totals
         ) {
             this.gui = gui;
             this.ch = ch;
@@ -405,6 +407,7 @@ public class NotGUI implements InventoryHolder {
             this.count = count;
             this.total = total;
             this.slot = slot;
+            this.totals = totals;
         }
 
         public NotVector2 pos() {
