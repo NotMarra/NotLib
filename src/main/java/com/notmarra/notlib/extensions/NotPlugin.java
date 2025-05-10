@@ -1,10 +1,14 @@
 package com.notmarra.notlib.extensions;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -145,5 +149,35 @@ public abstract class NotPlugin extends JavaPlugin {
             CONFIGURABLES.get(file).forEach(c -> c.onConfigReload(List.of(file)));
         }
         return CONFIGS.get(file);
+    }
+
+    public List<String> listResources(String folderPath) {
+        List<String> resources = new ArrayList<>();
+        
+        try {
+            // Get the JAR file of your plugin
+            JarFile jarFile = new JarFile(this.getClass().getProtectionDomain()
+                    .getCodeSource().getLocation().getPath());
+            
+            // Get all entries in the JAR
+            Enumeration<JarEntry> entries = jarFile.entries();
+            
+            // Loop through all entries
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
+                String name = entry.getName();
+                
+                // Check if this entry is in the specified folder and is not a directory
+                if (name.startsWith(folderPath) && !name.endsWith("/")) {
+                    resources.add(name);
+                }
+            }
+            
+            jarFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    
+        return resources;
     }
 }
