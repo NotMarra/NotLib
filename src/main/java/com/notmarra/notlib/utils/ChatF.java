@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import javax.annotation.Nullable;
 
@@ -52,6 +54,12 @@ public class ChatF {
     public static final TextColor C_LIGHTPURPLE = TextColor.color(255, 182, 193);
     public static final TextColor C_LIGHTBLUE = TextColor.color(173, 216, 230);
     public static final TextColor C_LIGHTRED = TextColor.color(255, 182, 193);
+
+    private static final Pattern LEGACY_COLOR_PATTERN = Pattern.compile("&([0-9a-fklmnor])");
+    private static final Pattern LEGACY_HEX_PATTERN = Pattern.compile("&x(&[0-9a-f]){6}", Pattern.CASE_INSENSITIVE);
+    private static final Pattern LEGACY_HEX_SHORT_PATTERN = Pattern.compile("&#([0-9a-f]{6})", Pattern.CASE_INSENSITIVE);
+    private static final Pattern LEGACY_GRADIENT_PATTERN = Pattern.compile("&@#([0-9a-f]{6})-([^-]+)-([^&]+)&", Pattern.CASE_INSENSITIVE);
+    
 
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
 
@@ -400,7 +408,7 @@ public class ChatF {
     }
 
     public static Component toComponent(String inputString) {
-        return miniMessage.deserialize(inputString);
+        return miniMessage.deserialize(convertLegacyColors(inputString));
     }
 
     public static Component toComponent(String inputString, TextColor color) {
@@ -412,7 +420,7 @@ public class ChatF {
     }
 
     public static Component toComponent(Character inputCharacter) {
-        return miniMessage.deserialize(String.valueOf(inputCharacter));
+        return miniMessage.deserialize(convertLegacyColors(String.valueOf(inputCharacter)));
     }
 
     public static Component toComponent(Character inputCharacter, TextColor color) {
@@ -429,6 +437,148 @@ public class ChatF {
 
     public static Component toComponentBold(String inputString, TextColor color) {
         return toComponent(inputString).style(Style.style(TextDecoration.BOLD)).color(color);
+    }
+
+    public static String convertLegacyColors(String i) {
+        if (i == null) return null;
+
+        String result = i;
+
+        result = convertLegacyGradients(result);
+        result = convertLegacyHexColors(result);
+        result = convertLegacyHexShort(result);
+        result = convertLegacyBasicColors(result);
+
+        return result;
+    }
+
+    private static String convertLegacyGradients(String i) {
+        Matcher matcher = LEGACY_GRADIENT_PATTERN.matcher(i);
+        StringBuffer sb = new StringBuffer();
+
+        while (matcher.find()) {
+            String startColor = matcher.group(1);
+            String middleColor = matcher.group(2);
+            String endColor = matcher.group(3);
+
+            middleColor = convertColorNameToHex(middleColor);
+            endColor = convertColorNameToHex(endColor);
+
+            String replacement = String.format("<gradient:#%s:%s:%s>", startColor, middleColor, endColor);
+            matcher.appendReplacement(sb, replacement);
+        }
+        matcher.appendTail(sb);
+
+        return sb.toString();
+    }
+
+    private static String convertLegacyHexColors(String i) {
+        Matcher matcher = LEGACY_HEX_PATTERN.matcher(i);
+        StringBuffer sb = new StringBuffer();
+        
+        while (matcher.find()) {
+            String hexCode = matcher.group(0);
+            String hex = hexCode.replaceAll("&[x]?", "");
+            String replacement = "<color:#" + hex + ">";
+            matcher.appendReplacement(sb, replacement);
+        }
+        matcher.appendTail(sb);
+        
+        return sb.toString();        
+    }
+
+    private static String convertLegacyHexShort(String i) {
+        Matcher matcher = LEGACY_HEX_SHORT_PATTERN.matcher(i);
+        StringBuffer sb = new StringBuffer();
+        
+        while (matcher.find()) {
+            String hex = matcher.group(1);
+            String replacement = "<color:#" + hex + ">";
+            matcher.appendReplacement(sb, replacement);
+        }
+        matcher.appendTail(sb);
+        
+        return sb.toString();
+    }
+
+    private static String convertLegacyBasicColors(String input) {
+        return input
+            .replace("&0", "<black>")
+            .replace("&1", "<dark_blue>")
+            .replace("&2", "<dark_green>")
+            .replace("&3", "<dark_aqua>")
+            .replace("&4", "<dark_red>")
+            .replace("&5", "<dark_purple>")
+            .replace("&6", "<gold>")
+            .replace("&7", "<gray>")
+            .replace("&8", "<dark_gray>")
+            .replace("&9", "<blue>")
+            .replace("&a", "<green>")
+            .replace("&b", "<aqua>")
+            .replace("&c", "<red>")
+            .replace("&d", "<light_purple>")
+            .replace("&e", "<yellow>")
+            .replace("&f", "<white>")
+            
+            .replace("&l", "<b>")
+            .replace("&n", "<u>")
+            .replace("&m", "<st>")
+            .replace("&o", "<i>")
+            .replace("&k", "<obf>")
+            .replace("&r", "<reset>");
+    }
+
+    private static String convertColorNameToHex(String colorName) {
+        return switch (colorName.toLowerCase()) {
+            case "black" -> "000000";
+            case "dark_blue" -> "0000AA";
+            case "dark_green" -> "00AA00";
+            case "dark_aqua" -> "00AAAA";
+            case "dark_red" -> "AA0000";
+            case "dark_purple" -> "AA00AA";
+            case "gold" -> "FFAA00";
+            case "gray" -> "AAAAAA";
+            case "dark_gray" -> "555555";
+            case "blue" -> "5555FF";
+            case "green" -> "55FF55";
+            case "aqua" -> "55FFFF";
+            case "red" -> "FF5555";
+            case "light_purple" -> "FF55FF";
+            case "yellow" -> "FFFF55";
+            case "white" -> "FFFFFF";
+            default -> colorName;
+        };
+    }
+
+    public static ChatF ofLegacy(String inputString) {
+        return new ChatF(toComponent(convertLegacyColors(inputString)));
+    }
+    
+    public static ChatF ofLegacy(String inputString, TextColor color) {
+        return new ChatF(toComponent(convertLegacyColors(inputString), color));
+    }
+    
+    public static ChatF ofLegacy(String inputString, Style style) {
+        return new ChatF(toComponent(convertLegacyColors(inputString), style));
+    }
+    
+    public ChatF appendLegacy(String string) {
+        appendComponents.add(toComponent(convertLegacyColors(string)));
+        return this;
+    }
+    
+    public ChatF appendLegacy(String string, TextColor color) {
+        appendComponents.add(toComponent(convertLegacyColors(string), color));
+        return this;
+    }
+    
+    public ChatF appendLegacy(String string, Style style) {
+        appendComponents.add(toComponent(convertLegacyColors(string), style));
+        return this;
+    }
+    
+    public static Component toComponentWithLegacy(String inputString) {
+        return toComponent(convertLegacyColors(inputString));
     }
 
     // shorthands
