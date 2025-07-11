@@ -55,7 +55,7 @@ public class ChatF {
     public static final TextColor C_LIGHTBLUE = TextColor.color(173, 216, 230);
     public static final TextColor C_LIGHTRED = TextColor.color(255, 182, 193);
 
-    private static final Pattern LEGACY_COLOR_PATTERN = Pattern.compile("&([0-9a-fklmnor])");
+    // private static final Pattern LEGACY_COLOR_PATTERN = Pattern.compile("&([0-9a-fklmnor])");
     private static final Pattern LEGACY_HEX_PATTERN = Pattern.compile("&x(&[0-9a-f]){6}", Pattern.CASE_INSENSITIVE);
     private static final Pattern LEGACY_HEX_SHORT_PATTERN = Pattern.compile("&#([0-9a-f]{6})", Pattern.CASE_INSENSITIVE);
     private static final Pattern LEGACY_GRADIENT_PATTERN = Pattern.compile("&@#([0-9a-f]{6})-([^-]+)-([^&]+)&", Pattern.CASE_INSENSITIVE);
@@ -420,7 +420,7 @@ public class ChatF {
     }
 
     public static Component toComponent(Character inputCharacter) {
-        return miniMessage.deserialize(convertLegacyColors(String.valueOf(inputCharacter)));
+        return miniMessage.deserialize(convertLegacyColors(String.valueOf(inputCharacter))).decoration(TextDecoration.ITALIC, false);
     }
 
     public static Component toComponent(Character inputCharacter, TextColor color) {
