@@ -6,7 +6,9 @@ import org.bukkit.scheduler.BukkitTask;
 
 import com.notmarra.notlib.extensions.NotPlugin;
 
+// TODO: change to this: https://docs.papermc.io/paper/dev/folia-support/
 /**
+ * @deprecated
  * Provides static methods to easily schedule various types of tasks.
  */
 public final class NotScheduler {

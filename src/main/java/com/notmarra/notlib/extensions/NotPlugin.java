@@ -98,6 +98,7 @@ public abstract class NotPlugin extends JavaPlugin {
 
     public abstract void initNotPlugin();
     public abstract void onNotPluginEnable();
+    public abstract void onNotPluginDisable();
 
     public ComponentLogger log() { return getComponentLogger(); }
 
@@ -138,6 +139,7 @@ public abstract class NotPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         db().close();
+        onNotPluginDisable();
     }
 
     public FileConfiguration getSubConfig(String file) { return CONFIGS.get(file); }

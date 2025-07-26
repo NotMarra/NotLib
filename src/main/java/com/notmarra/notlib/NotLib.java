@@ -4,6 +4,7 @@ import com.notmarra.notlib.cache.NotCache;
 import com.notmarra.notlib.extensions.NotPlugin;
 import com.notmarra.notlib.utils.ChatF;
 import com.notmarra.notlib.utils.NotDebugger;
+import com.notmarra.notlib.utils.NotUpdater;
 import com.notmarra.notlib.utils.gui.NotGUIListener;
 
 public final class NotLib extends NotPlugin {
@@ -41,10 +42,14 @@ public final class NotLib extends NotPlugin {
     @Override
     public void onNotPluginEnable() {
         log().info(ChatF.of("Enabled!").build());
+
+        NotUpdater updater = new NotUpdater(this, "NotLib", this.getPluginMeta().getVersion(), "https://github.com/NotMarra/NotLib", "https://api.github.com/repos/NotMarra/NotLib/releases/latest");
+        
+        updater.checkForUpdate();
     }
 
     @Override
-    public void onDisable() {
+    public void onNotPluginDisable() {
         log().info(ChatF.of("Disabled!").build());
     }
 
