@@ -2,7 +2,8 @@ package com.notmarra.notlib.utils;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.plugin.Plugin;
+
+import com.notmarra.notlib.extensions.NotPlugin;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,10 +12,10 @@ import java.util.concurrent.TimeUnit;
  * Supports both Paper/Spigot and Folia platforms without BukkitTask dependencies.
  */
 public final class NotScheduler {
-    private final Plugin plugin;
+    private final NotPlugin plugin;
     private final boolean isFolia;
 
-    public NotScheduler(Plugin plugin) {
+    public NotScheduler(NotPlugin plugin) {
         this.plugin = plugin;
         this.isFolia = isFolia();
     }
@@ -247,7 +248,7 @@ public final class NotScheduler {
      *
      * @return The plugin instance
      */
-    public Plugin getPlugin() {
+    public NotPlugin getPlugin() {
         return plugin;
     }
 
@@ -259,7 +260,7 @@ public final class NotScheduler {
      * @param plugin The plugin to create scheduler for
      * @return A new NotScheduler instance
      */
-    public static NotScheduler create(Plugin plugin) {
+    public static NotScheduler create(NotPlugin plugin) {
         return new NotScheduler(plugin);
     }
 
