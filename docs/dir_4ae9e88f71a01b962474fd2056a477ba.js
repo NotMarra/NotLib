@@ -9,6 +9,6 @@ var dir_4ae9e88f71a01b962474fd2056a477ba =
     [ "NotPlaceholder.java", "_not_placeholder_8java.html", "_not_placeholder_8java" ],
     [ "NotScheduler.java", "_not_scheduler_8java.html", "_not_scheduler_8java" ],
     [ "NotSize.java", "_not_size_8java.html", "_not_size_8java" ],
-    [ "NotVector2.java", "_not_vector2_8java.html", "_not_vector2_8java" ],
-    [ "Updater.java", "_updater_8java.html", "_updater_8java" ]
+    [ "NotUpdater.java", "_not_updater_8java.html", "_not_updater_8java" ],
+    [ "NotVector2.java", "_not_vector2_8java.html", "_not_vector2_8java" ]
 ];

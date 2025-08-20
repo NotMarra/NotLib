@@ -34,7 +34,6 @@ var hierarchy =
     ] ],
     [ "Listener", null, [
       [ "com.notmarra.notlib.extensions.NotListener", "classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_listener.html", [
-        [ "com.notmarra.notlib.quests.NotQuestListener", "classcom_1_1notmarra_1_1notlib_1_1quests_1_1_not_quest_listener.html", null ],
         [ "com.notmarra.notlib.utils.gui.NotGUIListener", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1_not_g_u_i_listener.html", null ]
       ] ]
     ] ],
@@ -85,7 +84,6 @@ var hierarchy =
         [ "com.notmarra.notlib.database.source.NotSQLite", "classcom_1_1notmarra_1_1notlib_1_1database_1_1source_1_1_not_s_q_lite.html", null ]
       ] ],
       [ "com.notmarra.notlib.extensions.NotCommandGroup", "classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_command_group.html", [
-        [ "com.notmarra.notlib.NotDevCommandGroup", "classcom_1_1notmarra_1_1notlib_1_1_not_dev_command_group.html", null ],
         [ "com.notmarra.notlib.NotLibCommandGroup", "classcom_1_1notmarra_1_1notlib_1_1_not_lib_command_group.html", null ]
       ] ],
       [ "com.notmarra.notlib.extensions.NotListener", "classcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_listener.html", null ],
@@ -119,7 +117,6 @@ var hierarchy =
     [ "com.notmarra.notlib.utils.NotBossBar.NotOverlay", "enumcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_boss_bar_1_1_not_overlay.html", null ],
     [ "com.notmarra.notlib.cache.NotPlayerCache.NotPlayerCachePlayerResult", "classcom_1_1notmarra_1_1notlib_1_1cache_1_1_not_player_cache_1_1_not_player_cache_player_result.html", null ],
     [ "com.notmarra.notlib.database.query.NotQueryBatch", "classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_query_batch.html", null ],
-    [ "com.notmarra.notlib.quests.NotQuestGUI", "classcom_1_1notmarra_1_1notlib_1_1quests_1_1_not_quest_g_u_i.html", null ],
     [ "com.notmarra.notlib.database.structure.NotRecord", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_record.html", null ],
     [ "com.notmarra.notlib.utils.NotScheduler", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler.html", null ],
     [ "com.notmarra.notlib.utils.NotSize", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_size.html", null ],
@@ -128,16 +125,16 @@ var hierarchy =
     [ "com.notmarra.notlib.database.query.NotSqlUpdateValue", "classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_update_value.html", null ],
     [ "com.notmarra.notlib.database.query.NotSqlWhereBuilder", "classcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_where_builder.html", null ],
     [ "com.notmarra.notlib.database.structure.NotTable", "classcom_1_1notmarra_1_1notlib_1_1database_1_1structure_1_1_not_table.html", null ],
+    [ "com.notmarra.notlib.utils.NotUpdater", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_updater.html", null ],
     [ "com.notmarra.notlib.utils.NotVector2", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_vector2.html", null ],
     [ "PlaceholderExpansion", null, [
       [ "com.notmarra.notlib.utils.NotPlaceholder", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_placeholder.html", null ]
     ] ],
     [ "com.notmarra.notlib.utils.gui.NotGUISlotIDs.PlayerSlots", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1_not_g_u_i_slot_i_ds_1_1_player_slots.html", null ],
     [ "com.notmarra.notlib.database.query.NotSqlBuilder.QueryType", "enumcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder_1_1_query_type.html", null ],
-    [ "com.notmarra.notlib.quests.NotQuestGUI.QuestStatus", "enumcom_1_1notmarra_1_1notlib_1_1quests_1_1_not_quest_g_u_i_1_1_quest_status.html", null ],
     [ "com.notmarra.notlib.utils.gui.NotGUISlotIDs.ShulkerBoxSlots", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1_not_g_u_i_slot_i_ds_1_1_shulker_box_slots.html", null ],
     [ "com.notmarra.notlib.utils.gui.NotGUISlotIDs.SmithingTableSlots", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1_not_g_u_i_slot_i_ds_1_1_smithing_table_slots.html", null ],
     [ "com.notmarra.notlib.utils.gui.NotGUISlotIDs.SmokerSlots", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1_not_g_u_i_slot_i_ds_1_1_smoker_slots.html", null ],
     [ "com.notmarra.notlib.utils.gui.NotGUISlotIDs.StonecutterSlots", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1gui_1_1_not_g_u_i_slot_i_ds_1_1_stonecutter_slots.html", null ],
-    [ "com.notmarra.notlib.utils.Updater", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_updater.html", null ]
+    [ "com.notmarra.notlib.utils.NotUpdater.UpdateType", "enumcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_updater_1_1_update_type.html", null ]
 ];

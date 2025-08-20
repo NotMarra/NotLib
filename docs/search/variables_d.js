@@ -38,10 +38,11 @@ var searchData=
   ['netherrack_35',['NETHERRACK',['../classcom_1_1notmarra_1_1notlib_1_1font_1_1_not_font_block.html#a3ffcc15d6331da632d00d04d16a4ad6d',1,'com::notmarra::notlib::font::NotFontBlock']]],
   ['nl_36',['NL',['../enumcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_lang_id.html#a3f44390206217800d4e10d90db0c96ab',1,'com::notmarra::notlib::extensions::NotLangId']]],
   ['no_37',['NO',['../enumcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_lang_id.html#ae571008dd36eea60c5a65fff7595636f',1,'com::notmarra::notlib::extensions::NotLangId']]],
-  ['notched_5f10_38',['NOTCHED_10',['../enumcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_boss_bar_1_1_not_overlay.html#a29c3157eb7beb6f95eea67fa524bdc5f',1,'com::notmarra::notlib::utils::NotBossBar::NotOverlay']]],
-  ['notched_5f12_39',['NOTCHED_12',['../enumcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_boss_bar_1_1_not_overlay.html#a1b3ff92883f57ae3c50de1465ba498a2',1,'com::notmarra::notlib::utils::NotBossBar::NotOverlay']]],
-  ['notched_5f20_40',['NOTCHED_20',['../enumcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_boss_bar_1_1_not_overlay.html#ae6cdf3a46598bd40fe842caacb1bfaad',1,'com::notmarra::notlib::utils::NotBossBar::NotOverlay']]],
-  ['notched_5f6_41',['NOTCHED_6',['../enumcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_boss_bar_1_1_not_overlay.html#a8846182ba21bb658bc4e9726d517a269',1,'com::notmarra::notlib::utils::NotBossBar::NotOverlay']]],
-  ['note_5fblock_42',['NOTE_BLOCK',['../classcom_1_1notmarra_1_1notlib_1_1font_1_1_not_font_block.html#a7ba78ef8472b59a4c23862d9d4d93c20',1,'com::notmarra::notlib::font::NotFontBlock']]],
-  ['ny_43',['NY',['../enumcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_lang_id.html#ae3bbb7c473c56281914457a61c3d03bf',1,'com::notmarra::notlib::extensions::NotLangId']]]
+  ['none_38',['NONE',['../enumcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_updater_1_1_update_type.html#a630fdd03828123f7e5a4c220b162920e',1,'com::notmarra::notlib::utils::NotUpdater::UpdateType']]],
+  ['notched_5f10_39',['NOTCHED_10',['../enumcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_boss_bar_1_1_not_overlay.html#a29c3157eb7beb6f95eea67fa524bdc5f',1,'com::notmarra::notlib::utils::NotBossBar::NotOverlay']]],
+  ['notched_5f12_40',['NOTCHED_12',['../enumcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_boss_bar_1_1_not_overlay.html#a1b3ff92883f57ae3c50de1465ba498a2',1,'com::notmarra::notlib::utils::NotBossBar::NotOverlay']]],
+  ['notched_5f20_41',['NOTCHED_20',['../enumcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_boss_bar_1_1_not_overlay.html#ae6cdf3a46598bd40fe842caacb1bfaad',1,'com::notmarra::notlib::utils::NotBossBar::NotOverlay']]],
+  ['notched_5f6_42',['NOTCHED_6',['../enumcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_boss_bar_1_1_not_overlay.html#a8846182ba21bb658bc4e9726d517a269',1,'com::notmarra::notlib::utils::NotBossBar::NotOverlay']]],
+  ['note_5fblock_43',['NOTE_BLOCK',['../classcom_1_1notmarra_1_1notlib_1_1font_1_1_not_font_block.html#a7ba78ef8472b59a4c23862d9d4d93c20',1,'com::notmarra::notlib::font::NotFontBlock']]],
+  ['ny_44',['NY',['../enumcom_1_1notmarra_1_1notlib_1_1extensions_1_1_not_lang_id.html#ae3bbb7c473c56281914457a61c3d03bf',1,'com::notmarra::notlib::extensions::NotLangId']]]
 ];

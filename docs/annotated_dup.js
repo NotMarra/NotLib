@@ -43,10 +43,6 @@ var annotated_dup =
             [ "NotFontBlock", "classcom_1_1notmarra_1_1notlib_1_1font_1_1_not_font_block.html", null ],
             [ "NotFontItem", "classcom_1_1notmarra_1_1notlib_1_1font_1_1_not_font_item.html", null ]
           ] ],
-          [ "quests", "namespacecom_1_1notmarra_1_1notlib_1_1quests.html", [
-            [ "NotQuestGUI", "classcom_1_1notmarra_1_1notlib_1_1quests_1_1_not_quest_g_u_i.html", "classcom_1_1notmarra_1_1notlib_1_1quests_1_1_not_quest_g_u_i" ],
-            [ "NotQuestListener", "classcom_1_1notmarra_1_1notlib_1_1quests_1_1_not_quest_listener.html", "classcom_1_1notmarra_1_1notlib_1_1quests_1_1_not_quest_listener" ]
-          ] ],
           [ "utils", "namespacecom_1_1notmarra_1_1notlib_1_1utils.html", [
             [ "command", "namespacecom_1_1notmarra_1_1notlib_1_1utils_1_1command.html", [
               [ "arguments", "namespacecom_1_1notmarra_1_1notlib_1_1utils_1_1command_1_1arguments.html", [
@@ -93,10 +89,9 @@ var annotated_dup =
             [ "NotPlaceholder", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_placeholder.html", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_placeholder" ],
             [ "NotScheduler", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler.html", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler" ],
             [ "NotSize", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_size.html", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_size" ],
-            [ "NotVector2", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_vector2.html", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_vector2" ],
-            [ "Updater", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_updater.html", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_updater" ]
+            [ "NotUpdater", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_updater.html", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_updater" ],
+            [ "NotVector2", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_vector2.html", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_vector2" ]
           ] ],
-          [ "NotDevCommandGroup", "classcom_1_1notmarra_1_1notlib_1_1_not_dev_command_group.html", "classcom_1_1notmarra_1_1notlib_1_1_not_dev_command_group" ],
           [ "NotLib", "classcom_1_1notmarra_1_1notlib_1_1_not_lib.html", "classcom_1_1notmarra_1_1notlib_1_1_not_lib" ],
           [ "NotLibCommandGroup", "classcom_1_1notmarra_1_1notlib_1_1_not_lib_command_group.html", "classcom_1_1notmarra_1_1notlib_1_1_not_lib_command_group" ]
         ] ]

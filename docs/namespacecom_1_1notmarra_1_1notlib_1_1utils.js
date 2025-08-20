@@ -9,6 +9,6 @@ var namespacecom_1_1notmarra_1_1notlib_1_1utils =
     [ "NotPlaceholder", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_placeholder.html", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_placeholder" ],
     [ "NotScheduler", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler.html", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_scheduler" ],
     [ "NotSize", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_size.html", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_size" ],
-    [ "NotVector2", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_vector2.html", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_vector2" ],
-    [ "Updater", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_updater.html", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_updater" ]
+    [ "NotUpdater", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_updater.html", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_updater" ],
+    [ "NotVector2", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_vector2.html", "classcom_1_1notmarra_1_1notlib_1_1utils_1_1_not_vector2" ]
 ];

@@ -7,7 +7,5 @@ var searchData=
   ['quartz_5fbricks_4',['QUARTZ_BRICKS',['../classcom_1_1notmarra_1_1notlib_1_1font_1_1_not_font_block.html#a062c3c49867ef25d99fa411f37cd7f87',1,'com::notmarra::notlib::font::NotFontBlock']]],
   ['quartz_5fpillar_5',['QUARTZ_PILLAR',['../classcom_1_1notmarra_1_1notlib_1_1font_1_1_not_font_block.html#a89317469162b7aa29d94b04ee0522f2c',1,'com::notmarra::notlib::font::NotFontBlock']]],
   ['quartz_5fpillar_5ftop_6',['QUARTZ_PILLAR_TOP',['../classcom_1_1notmarra_1_1notlib_1_1font_1_1_not_font_block.html#aa6df03e06b4965017a50fcd1a80923e6',1,'com::notmarra::notlib::font::NotFontBlock']]],
-  ['querytype_7',['QueryType',['../enumcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder_1_1_query_type.html',1,'com::notmarra::notlib::database::query::NotSqlBuilder']]],
-  ['questguicommand_8',['questGUICommand',['../classcom_1_1notmarra_1_1notlib_1_1quests_1_1_not_quest_listener.html#a3b39a75bbfe812f3efd25e80d48a78ac',1,'com::notmarra::notlib::quests::NotQuestListener']]],
-  ['queststatus_9',['QuestStatus',['../enumcom_1_1notmarra_1_1notlib_1_1quests_1_1_not_quest_g_u_i_1_1_quest_status.html',1,'com::notmarra::notlib::quests::NotQuestGUI']]]
+  ['querytype_7',['QueryType',['../enumcom_1_1notmarra_1_1notlib_1_1database_1_1query_1_1_not_sql_builder_1_1_query_type.html',1,'com::notmarra::notlib::database::query::NotSqlBuilder']]]
 ];
