@@ -1,5 +1,5 @@
 name: NotLib
-version: "0.1-DEV"
+version: ${project.version}
 main: com.notmarra.notlib.NotLib
 api-version: "1.21"
 authors: [NotMarra, TheNoiselessNoise]

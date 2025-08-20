@@ -11,6 +11,8 @@ public final class NotLib extends NotPlugin {
     private static NotLib instance;
     private static Boolean hasPlaceholderAPI = false;
     private static Boolean hasVault = false;
+    private static String PLUGINURL = "https://github.com/NotMarra/NotLib";
+    private static String FETCHURL = "https://api.github.com/repos/NotMarra/NotLib/releases";
 
     private NotDebugger debugger;
     public NotDebugger getDebugger() { return debugger; }
@@ -21,18 +23,10 @@ public final class NotLib extends NotPlugin {
         this.debugger = new NotDebugger(this);
         NotCache.initialize(this);
 
-        // listeners
         addListener(new NotGUIListener(this));
 
-        //addListener(new NotQuestListener(this));
-
-        // commands
         addCommandGroup(new NotLibCommandGroup(this));
         //addCommandGroup(new NotDevCommandGroup(this));
-
-        // TODO: test stuff, remove
-        //addListener(new NotDevListener(this));
-        // db().registerDatabase(new NotDevTestMySQL(this, CONFIG_YML));
 
         // plugin callbacks
         addPluginEnabledCallback("PlaceholderAPI", () -> hasPlaceholderAPI = true);
@@ -43,9 +37,7 @@ public final class NotLib extends NotPlugin {
     public void onNotPluginEnable() {
         log().info(ChatF.of("Enabled!").build());
 
-        NotUpdater updater = new NotUpdater(this, "NotLib", this.getPluginMeta().getVersion(), "https://github.com/NotMarra/NotLib", "https://api.github.com/repos/NotMarra/NotLib/releases/latest");
-        
-        updater.checkForUpdate();
+        NotUpdater.check(instance, PLUGINURL, FETCHURL);
     }
 
     @Override

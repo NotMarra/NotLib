@@ -33,6 +33,10 @@ public abstract class NotPlugin extends JavaPlugin {
     // <path, [configurable]>
     private final Map<String, List<NotConfigurable>> CONFIGURABLES = new HashMap<>();
 
+    public List<String> getConfigFilePaths() {
+        return CONFIGS.keySet().stream().toList();
+    }
+
     private NotTranslationManager translationManager;
     public NotTranslationManager tm() { return translationManager; }
     public String tm(String key) { return tm().get(key); }

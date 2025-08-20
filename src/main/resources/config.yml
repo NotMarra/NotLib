@@ -1,84 +1,8 @@
-database:
-  # Configuration for SQLite
-  SQLite:
-    # name of the file with the saved data
-    file: "notlibtest"
-    # name of the table with the saved data
-    table: 'NotCredits'
-
-  MySQL:
-    # host of the MySQL server
-    host: '127.0.0.1'
-    # port of the MySQL server
-    port: 3306
-    # username of the MySQL server
-    username: 'root'
-    # password of the MySQL server
-    password: ''
-    # database of the MySQL server
-    database: 'notlib'
-
-  NotDevTestMySQL:
-    # host of the MySQL server
-    host: '127.0.0.1'
-    # port of the MySQL server
-    port: 3306
-    # username of the MySQL server
-    username: 'root'
-    # password of the MySQL server
-    password: ''
-    # database of the MySQL server
-    database: 'notlib'
-
-test-gui-pattern:
-  pattern:
-    - '#########'
-    - '#########'
-    - '#X##P##X#'
-    - '#########'
-    - '##A###A##'
-    - '#########'
-  items:
-    X:
-      type: 'DIAMOND_AXE'
-      take: false
-      amount: 1
-      name: 'Axe %count%/%total%_X_%x%_Y_%y%_SLOT_%slot%'
-      lore:
-        - '<red>Some beautiful axe it is'
-        - ''
-        - ''
-        - '<blue>Lulz'
-    P:
-      type: 'ACACIA_LOG'
-      take: false
-      amount: 4
-      name: 'Log %count%/%total%_X_%x%_Y_%y%_SLOT_%slot%'
-      lore:
-        - '<red>Some beautiful log it is'
-        - ''
-        - ''
-        - '<blue>Lulz'
-    A:
-      - 0:
-        type: 'APPLE'
-        take: false
-        amount: 8
-        name: 'Apple 1 %count%/%total%_X_%x%_Y_%y%_SLOT_%slot%'
-        lore:
-          - '<red>Some beautiful first apple it is'
-        canTake: false
-      - 1:
-        type: 'APPLE'
-        take: false
-        amount: 16
-        name: 'Apple 2 %count%/%total%_X_%x%_Y_%y%_SLOT_%slot%'
-        lore:
-          - '<red>Some beautiful second apple it is'
 debug:
   global:
-    enabled: false
-    file: 'global.log'
+    enabled: true
+    console: true
+    file: "global.log"
   categories:
     DEBUG:
       enabled: false
@@ -88,28 +12,28 @@ debug:
       #   - _XYZT_
       # file: 'debug.log'
     INFO:
-      enabled: false
+      enabled: true
     SUCCESS:
-      enabled: false
+      enabled: true
     WARN:
-      enabled: false
+      enabled: true
     ERROR:
-      enabled: false
+      enabled: true
     FATAL:
-      enabled: false
+      enabled: true
     PLAYER:
-      enabled: false
+      enabled: true
     COMMAND:
-      enabled: false
+      enabled: true
     EVENT:
-      enabled: false
+      enabled: true
     PERMISSION:
-      enabled: false
+      enabled: true
     CONFIG:
-      enabled: false
+      enabled: true
     METRICS:
-      enabled: false
+      enabled: true
     DATABASE:
-      enabled: false
+      enabled: true
     DEV:
       enabled: false
