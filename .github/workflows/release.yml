@@ -52,14 +52,12 @@ jobs:
           echo "✅ JAR Founded: $JAR_FILE"
 
       - name: Upload JAR to Release
-        uses: actions/upload-release-asset@v1
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.find_jar.outputs.jar_file }}
+          name: ${{ steps.project_info.outputs.name }}-${{ steps.project_info.outputs.version }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ steps.find_jar.outputs.jar_file }}
-          asset_name: ${{ steps.project_info.outputs.name }}-${{ steps.project_info.outputs.version }}.jar
-          asset_content_type: application/java-archive
 
       - name: Create Build Info
         run: |
@@ -76,11 +74,8 @@ jobs:
           echo "- **Size:** $(ls -lh ${{ steps.find_jar.outputs.jar_file }} | awk '{print $5}')" >> build_info.md
 
       - name: Upload Build Info
-        uses: actions/upload-release-asset@v1
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build_info.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: build_info.md
-          asset_name: build-info.md
-          asset_content_type: text/markdown
