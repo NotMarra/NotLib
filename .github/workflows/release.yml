@@ -1,0 +1,82 @@
+name: Build and Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
+
+      - name: Get project info
+        id: project_info
+        run: |
+          echo "version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
+          echo "name=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> $GITHUB_OUTPUT
+
+      - name: Find JAR file
+        id: find_jar
+        run: |
+          # Najdi hlavní JAR soubor (ne sources ani javadoc)
+          JAR_FILE=$(find target -name "*.jar" -not -name "*-sources.jar" -not -name "*-javadoc.jar" | head -1)
+          if [ -z "$JAR_FILE" ]; then
+            echo "❌ JAR not founded!"
+            exit 1
+          fi
+          echo "jar_file=$JAR_FILE" >> $GITHUB_OUTPUT
+          echo "jar_name=$(basename $JAR_FILE)" >> $GITHUB_OUTPUT
+          echo "✅ JAR Founded: $JAR_FILE"
+
+      - name: Upload JAR to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ steps.find_jar.outputs.jar_file }}
+          asset_name: ${{ steps.project_info.outputs.name }}-${{ steps.project_info.outputs.version }}.jar
+          asset_content_type: application/java-archive
+
+      - name: Create Build Info
+        run: |
+          echo "## 📦 Build Information" >> build_info.md
+          echo "" >> build_info.md
+          echo "- **Project:** ${{ steps.project_info.outputs.name }}" >> build_info.md
+          echo "- **Version:** ${{ steps.project_info.outputs.version }}" >> build_info.md
+          echo "- **Build Date:** $(date)" >> build_info.md
+          echo "- **Java Version:** $(java -version 2>&1 | head -1)" >> build_info.md
+          echo "- **Maven Version:** $(mvn -version | head -1)" >> build_info.md
+          echo "" >> build_info.md
+          echo "### 📋 JAR Details:" >> build_info.md
+          echo "- **File:** ${{ steps.find_jar.outputs.jar_name }}" >> build_info.md
+          echo "- **Size:** $(ls -lh ${{ steps.find_jar.outputs.jar_file }} | awk '{print $5}')" >> build_info.md
+
+      - name: Upload Build Info
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: build_info.md
+          asset_name: build-info.md
+          asset_content_type: text/markdown
