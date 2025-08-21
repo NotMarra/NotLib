@@ -63,7 +63,7 @@ public class NotDebugger extends NotConfigurable {
                 for (String key : categoriesSection.getKeys(false)) {
                     ConfigurationSection section = categoriesSection.getConfigurationSection(key);
                     if (section != null) {
-                        categories.put(key, new NotDebuggerCategory(section));
+                        categories.put(key, new NotDebuggerCategory(key, section));
                     }
                 }
             }
@@ -72,17 +72,16 @@ public class NotDebugger extends NotConfigurable {
 
     public NotDebuggerCategory getCategory(String name) {
         NotDebuggerCategory category = categories.get(name);
-        return category != null ? category : NotDebuggerCategory.empty();
+        return category != null ? category : NotDebuggerCategory.empty(name);
     }
 
     public boolean isEnabled(String name) { return getCategory(name).isEnabled(); }
-    public String getColor(String name) { return getCategory(name).getColor(); }
     public boolean isConsole(String name) { return getCategory(name).isConsole(); }
     public List<String> forChat(String name) { return getCategory(name).forChat(); }
 
     private void send(NotDebuggerCategory category, ChatF message) {
         if (category.isConsole()) {
-            plugin.getComponentLogger().info(message.build());
+            sendConsoleLog(category, message);
         }
 
         for (String playerName : category.forChat()) {
@@ -116,39 +115,50 @@ public class NotDebugger extends NotConfigurable {
         if (!globalEnabled) return;
         if (!category.isEnabled()) return;
 
-        ChatF format = ChatF.empty()
-            .append("<" + category.getColor() + ">")
-            .append(message);
+        ChatF format = ChatF
+            .from(message);
 
         send(category, format);
         save(category, format);
     }
 
+    private void sendConsoleLog(NotDebuggerCategory category, Object message) {
+        String m = ChatF.from(message).buildString();
+        if (category.name.equals(C_WARN)) {
+            plugin.getLogger().warning(m);
+            return;
+        }
+        if (category.name.equals(C_ERROR) || category.name.equals(C_FATAL)) {
+            plugin.getLogger().severe(m);
+            return;
+        }
+        plugin.getLogger().info(m);
+    }
+
     public static class NotDebuggerCategory {
+        public final String name;
         private final ConfigurationSection section;
 
         public static final String N_ENABLED = "enabled";
         public static final boolean DEF_ENABLED = false;
-        public static final String N_COLOR = "color";
-        public static final String DEF_COLOR = "#ffffff";
         public static final String N_CONSOLE = "console";
         public static final boolean DEF_CONSOLE = false;
         public static final String N_CHAT = "chat";
         public static final List<String> DEF_CHAT = List.of();
         public static final String N_FILE = "file";
 
-        public NotDebuggerCategory(ConfigurationSection section) {
+        public NotDebuggerCategory(String name, ConfigurationSection section) {
+            this.name = name;
             this.section = section;
         }
 
         public boolean isEnabled() { return this.section.getBoolean(N_ENABLED, DEF_ENABLED); }
-        public String getColor() { return this.section.getString(N_COLOR, DEF_COLOR); }
         public boolean isConsole() { return this.section.getBoolean(N_CONSOLE, DEF_CONSOLE); }
         public List<String> forChat() { return this.section.getStringList(N_CHAT); }
         public String file() { return this.section.getString(N_FILE); }
 
-        public static NotDebuggerCategory empty() {
-            return new NotDebuggerCategory(new YamlConfiguration());
+        public static NotDebuggerCategory empty(String name) {
+            return new NotDebuggerCategory(name, new YamlConfiguration());
         }
     }
 }

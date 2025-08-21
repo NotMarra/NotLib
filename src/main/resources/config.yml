@@ -13,27 +13,39 @@ debug:
       # file: 'debug.log'
     INFO:
       enabled: true
+      console: true
     SUCCESS:
       enabled: true
+      console: true
     WARN:
       enabled: true
+      console: true
     ERROR:
       enabled: true
+      console: true
     FATAL:
       enabled: true
+      console: true
     PLAYER:
       enabled: true
+      console: true
     COMMAND:
       enabled: true
+      console: true
     EVENT:
       enabled: true
+      console: true
     PERMISSION:
       enabled: true
+      console: true
     CONFIG:
       enabled: true
+      console: true
     METRICS:
       enabled: true
+      console: true
     DATABASE:
       enabled: true
+      console: true
     DEV:
       enabled: false

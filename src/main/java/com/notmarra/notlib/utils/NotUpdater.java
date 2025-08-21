@@ -49,7 +49,7 @@ public class NotUpdater {
 
         UpdateInfo updateInfo = getUpdateInfo();
         if (updateInfo == null) {
-            NotLib.dbg().log(NotDebugger.C_WARN,"Failed to check for updates, please check manually at " + pluginURL);
+            NotLib.dbg().log(NotDebugger.C_WARN,"Failed to check for updates, please check them manually at " + pluginURL);
             return;
         }
 
