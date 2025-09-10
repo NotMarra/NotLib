@@ -13,14 +13,26 @@ public class NotCache {
         this.playerCache = new NotPlayerCache(plugin);
     }
 
-    public NotPlayerCache playerCache() { return playerCache; }
+    public NotPlayerCache playerCache() { 
+        return playerCache; 
+    }
 
     public static NotCache initialize(NotPlugin plugin) {
+        if (NotCache.instance != null) {
+            NotCache.instance.playerCache().clearCache();
+        }
         NotCache.instance = new NotCache(plugin);
         return NotCache.instance;
     }
 
     public static NotPlayerCache player() {
         return NotCache.instance.playerCache();
+    }
+
+    public static void shutdown() {
+        if (NotCache.instance != null) {
+            NotCache.instance.playerCache().clearCache();
+            NotCache.instance = null;
+        }
     }
 }
