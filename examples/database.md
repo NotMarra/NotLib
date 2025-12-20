@@ -1,78 +1,86 @@
-Base example of a NotDatabase for SQLite
+# Documentation: Working with NotDatabase API
 
-## config.yml
-```yml
-database:
-  <id>:
-    # name of the file with the saved data
-    file: "notlibtest"
+This documentation describes how to properly set up and initialize database connections (MySQL or SQLite) using the NotLib library.
+
+## 1. Configuration Structure (config.yml)
+
+All database settings are now centralized under the `data` section. The `type` key determines which driver to use. The `databaseId` key is optional; if omitted, the library defaults to using the plugin's name.
+
+```yaml
+data:
+  # Database type: SQLite or MySQL
+  type: "SQLite"
+
+  # Optional unique ID (useful if managing multiple databases in one plugin)
+  # databaseId: "MyUniqueDatabase"
+
+  # SQLite Configuration (Used if type is SQLite)
+  file: "data"
+
+  # MySQL Configuration (Used if type is MySQL)
+  mysql:
+    host: "127.0.0.1"
+    port: 3306
+    username: "root"
+    database: "minecraft_db"
+    password: ""
 ```
 
-## NotPlugin.java
+## 2. Implementing Your Database Class
+
+Create a class that extends either `NotSQLite` or `NotMySQL`. This is where you define your table schemas.
+
 ```java
-@Override
-public void initNotPlugin() {
-    db().registerDatabase(new MySQLite(this, "config.yml"));
-}
-```
+public class MyDatabase extends NotSQLite {
 
-## MySQLite.java
-```java
-public class MySQLite extends NotSQLite {
-    public static final String ID = "SQLite";
+    public final String T_CREDITS = "not_credits";
+    public final String C_UUID = "uuid";
+    public final String C_AMOUNT = "amount";
 
-    public final String T_USERS = "users";
-    public final String T_USERS_C_UUID = "uuid";
-    public final String T_USERS_C_PLAYER_NAME = "player_name";
-    public final String T_USERS_C_BALANCE = "balance";
-
-    public MySQLite(NotPlugin plugin, String defaultConfig) {
-        super(plugin, defaultConfig);
+    public MyDatabase(NotPlugin plugin, String configFileName) {
+        super(plugin, configFileName);
+        // Register this class within the NotLib configuration system
         registerConfigurable();
-    }
-
-    // NOTE: This is the id of the database in the config at path "database.<id>"
-    @Override
-    public String getId() { return ID; }
-
-    public double getPlayerBalance(Player player) {
-        return getTable(T_USERS)
-            .recordGet(T_USERS_C_UUID, "=", player.getUniqueId().toString())
-            .getDouble(T_USERS_C_BALANCE, 0.0);
-    }
-
-    public boolean existsPlayer(Player player) {
-        return getTable(T_USERS)
-            .recordExists(T_USERS_C_UUID, "=", player.getUniqueId().toString());
-    }
-
-    public boolean deletePlayer(String uuid) {
-        return getTable(T_USERS)
-            .recordDelete(T_USERS_C_UUID, "=", uuid);
-    }
-
-    public boolean insertPlayer(Player player) {
-        return getTable(T_USERS).insertRow(List.of(
-            player.getUniqueId().toString(),
-            player.getName(),
-            0.0
-        ));
     }
 
     @Override
     public List<NotTable> setupTables() {
         return List.of(
-            NotTable.createNew(T_USERS, List.of(
-                NotColumn.varchar(T_USERS_C_UUID, 36).primaryKey().notNull(),
-                NotColumn.varchar(T_USERS_C_PLAYER_NAME, 36).notNull(),
-                NotColumn.doubleType(T_USERS_C_BALANCE).notNull().defaultValue("0")
-            ))
-            .initialInsertList(List.of(
-                List.of("123e4567-e89b-12d3-a456-426614174000", "Player1", 100.0),
-                List.of("123e4567-e89b-12d3-a456-426614174001", "Player2", 200.0),
-                List.of("123e4567-e89b-12d3-a456-426614174002", "Player3", 300.0)
-            ))
+            new NotTable(T_CREDITS)
+                .addColumn(NotColumn.varchar(C_UUID, 36).primaryKey().notNull())
+                .addColumn(NotColumn.integer(C_AMOUNT).notNull().defaultValue("0"))
         );
     }
+
+    // Example helper method to retrieve data
+    public int getCredits(UUID uuid) {
+        NotRecord record = getTable(T_CREDITS).selectOne(builder ->
+            builder.where(C_UUID, "=", uuid.toString())
+        );
+        return record.getInteger(C_AMOUNT, 0);
+    }
+}
+```
+
+## 3. Initialization in the Plugin
+
+In your main plugin class (`NotPlugin`), register and initialize the database within the `initNotPlugin` method.
+
+```java
+@Override
+public void initNotPlugin() {
+    // 1. Determine the database type from the config
+    String type = getConfig().getString("data.type", "SQLite");
+    NotDatabase myDb;
+
+    // 2. Instantiate the correct implementation
+    if (type.equalsIgnoreCase("MySQL")) {
+        myDb = new MyMySQLDatabase(this, "config.yml");
+    } else {
+        myDb = new MyDatabase(this, "config.yml");
+    }
+
+    // 3. Register with the manager (this triggers connect() and setupTables())
+    NotDatabaseManager.getInstance().registerDatabase(myDb);
 }
 ```
