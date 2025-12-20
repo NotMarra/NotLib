@@ -14,7 +14,42 @@ public class NotCache {
 
     public NotCache(NotPlugin plugin) {
         this.plugin = plugin;
-        this.playerCache = new NotPlayerCache(plugin);
+        
+        registerCacheType(DefaultCacheTypes.PLAYER, NotPlayerCache::new);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public <T extends BaseNotCache<?>> void registerCacheType(ICacheType cacheType, Function<NotPlugin, T> factory) {
+        cacheFactories.put(cacheType.getCacheKey(), (Function<NotPlugin, BaseNotCache<?>>) factory);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public <T extends BaseNotCache<?>> T getCache(ICacheType cacheType) {
+        String key = cacheType.getCacheKey();
+        
+        BaseNotCache<?> cache = caches.get(key);
+        if (cache != null) {
+            return (T) cache;
+        }
+        
+        Function<NotPlugin, BaseNotCache<?>> factory = cacheFactories.get(key);
+        if (factory == null) {
+            throw new IllegalArgumentException("Cache type '" + key + "' is not registered");
+        }
+        
+        cache = factory.apply(plugin);
+        caches.put(key, cache);
+        return (T) cache;
+    }
+
+    public NotPlayerCache playerCache() {
+        return getCache(DefaultCacheTypes.PLAYER);
+    }
+
+    public void clearAll() {
+        caches.values().forEach(BaseNotCache::clear);
     }
 
     public NotPlayerCache playerCache() {
@@ -71,6 +106,9 @@ public class NotCache {
     }
 
     public static NotCache initialize(NotPlugin plugin) {
+        if (NotCache.instance != null) {
+            NotCache.instance.clearAll();
+        }
         NotCache.instance = new NotCache(plugin);
         return NotCache.instance;
     }
