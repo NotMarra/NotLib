@@ -4,7 +4,7 @@ main: com.notmarra.notlib.NotLib
 api-version: "1.21"
 authors: [NotMarra, TheNoiselessNoise]
 description: Library for NotPlugins
-website: www.notmarra.com, www.notworks.dev
+website: www.notmarra.com
 dependencies:
   server:
     PlaceholderAPI:

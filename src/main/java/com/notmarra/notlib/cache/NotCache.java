@@ -2,6 +2,7 @@ package com.notmarra.notlib.cache;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 import com.notmarra.notlib.extensions.NotPlugin;
 
@@ -9,36 +10,35 @@ public class NotCache {
     public final NotPlugin plugin;
     public static NotCache instance;
 
-    private final NotPlayerCache playerCache;
+    private final Map<String, BaseNotCache<?>> caches = new ConcurrentHashMap<>();
+    private final Map<String, Function<NotPlugin, BaseNotCache<?>>> cacheFactories = new ConcurrentHashMap<>();
     private final Map<String, BaseNotCache<?>> customCaches = new ConcurrentHashMap<>();
 
     public NotCache(NotPlugin plugin) {
         this.plugin = plugin;
-        
+
         registerCacheType(DefaultCacheTypes.PLAYER, NotPlayerCache::new);
     }
-
 
     @SuppressWarnings("unchecked")
     public <T extends BaseNotCache<?>> void registerCacheType(ICacheType cacheType, Function<NotPlugin, T> factory) {
         cacheFactories.put(cacheType.getCacheKey(), (Function<NotPlugin, BaseNotCache<?>>) factory);
     }
 
-
     @SuppressWarnings("unchecked")
     public <T extends BaseNotCache<?>> T getCache(ICacheType cacheType) {
         String key = cacheType.getCacheKey();
-        
+
         BaseNotCache<?> cache = caches.get(key);
         if (cache != null) {
             return (T) cache;
         }
-        
+
         Function<NotPlugin, BaseNotCache<?>> factory = cacheFactories.get(key);
         if (factory == null) {
             throw new IllegalArgumentException("Cache type '" + key + "' is not registered");
         }
-        
+
         cache = factory.apply(plugin);
         caches.put(key, cache);
         return (T) cache;
@@ -50,10 +50,7 @@ public class NotCache {
 
     public void clearAll() {
         caches.values().forEach(BaseNotCache::clear);
-    }
-
-    public NotPlayerCache playerCache() {
-        return playerCache;
+        customCaches.values().forEach(BaseNotCache::clear);
     }
 
     /**

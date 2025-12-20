@@ -37,7 +37,7 @@ public class NotUpdater {
     }
 
     public void checkForUpdate() {
-        if(currentVersion.equalsIgnoreCase("SNAPSHOT")) {
+        if (currentVersion.equalsIgnoreCase("SNAPSHOT")) {
             NotLib.dbg().log(NotDebugger.C_WARN, "You are running a snapshot build, skipping update check.");
             return;
         }
@@ -49,48 +49,52 @@ public class NotUpdater {
 
         UpdateInfo updateInfo = getUpdateInfo();
         if (updateInfo == null) {
-            NotLib.dbg().log(NotDebugger.C_WARN,"Failed to check for updates, please check them manually at " + pluginURL);
+            NotLib.dbg().log(NotDebugger.C_WARN,
+                    "Failed to check for updates, please check them manually at " + pluginURL);
             return;
         }
 
         UpdateType updateType = compareVersions(currentVersion, updateInfo.version);
-        
+
         switch (updateType) {
             case NONE:
-                NotLib.dbg().log(NotDebugger.C_INFO,"You are running the latest version of " + pluginName + " (" + currentVersion + ")");
+                NotLib.dbg().log(NotDebugger.C_INFO,
+                        "You are running the latest version of " + pluginName + " (" + currentVersion + ")");
                 break;
             case PATCH:
-                NotLib.dbg().log(NotDebugger.C_INFO,"A minor update (patch) is available for " + pluginName + "! " + 
-                    currentVersion + " -> " + updateInfo.version);
+                NotLib.dbg().log(NotDebugger.C_INFO, "A minor update (patch) is available for " + pluginName + "! " +
+                        currentVersion + " -> " + updateInfo.version);
                 handleUpdate(updateInfo, "patch update");
                 break;
             case MINOR:
-                NotLib.dbg().log(NotDebugger.C_WARN,"A feature update is available for " + pluginName + "! " + 
-                    currentVersion + " -> " + updateInfo.version);
+                NotLib.dbg().log(NotDebugger.C_WARN, "A feature update is available for " + pluginName + "! " +
+                        currentVersion + " -> " + updateInfo.version);
                 handleUpdate(updateInfo, "feature update");
                 break;
             case MAJOR:
-                NotLib.dbg().log(NotDebugger.C_WARN,"A MAJOR update is available for " + pluginName + "! " + 
-                    currentVersion + " -> " + updateInfo.version + " - This may contain breaking changes!");
+                NotLib.dbg().log(NotDebugger.C_WARN, "A MAJOR update is available for " + pluginName + "! " +
+                        currentVersion + " -> " + updateInfo.version + " - This may contain breaking changes!");
                 handleUpdate(updateInfo, "major update");
                 break;
             case SNAP:
-                NotLib.dbg().log(NotDebugger.C_WARN, "Because you are using a snapshot, there is an new version of snapshot of " + pluginName + "! " + 
-                    currentVersion + " -> " + updateInfo.version + " - This may contain some bugs!");
+                NotLib.dbg().log(NotDebugger.C_WARN,
+                        "Because you are using a snapshot, there is an new version of snapshot of " + pluginName + "! "
+                                +
+                                currentVersion + " -> " + updateInfo.version + " - This may contain some bugs!");
                 handleUpdate(updateInfo, "snapshot update");
         }
-
 
         try {
             List<String> files = plugin.getConfigFilePaths();
             for (String file : files) {
                 InputStream defaultConfigStream = plugin.getResource(file);
                 if (defaultConfigStream != null) {
-                    FileConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultConfigStream, StandardCharsets.UTF_8));
+                    FileConfiguration defaultConfig = YamlConfiguration
+                            .loadConfiguration(new InputStreamReader(defaultConfigStream, StandardCharsets.UTF_8));
                     FileConfiguration actualConfig = plugin.getSubConfig(file);
 
                     for (String key : defaultConfig.getKeys(true)) {
-                        if(!actualConfig.contains(key)) {
+                        if (!actualConfig.contains(key)) {
                             actualConfig.set(key, defaultConfig.get(key));
                         }
                     }
@@ -104,7 +108,8 @@ public class NotUpdater {
     }
 
     private void handleUpdate(UpdateInfo updateInfo, String updateType) {
-        NotLib.dbg().log(NotDebugger.C_INFO,"You can download it at " + pluginURL + " to get newest features or bug fixes!");
+        NotLib.dbg().log(NotDebugger.C_INFO,
+                "You can download it at " + pluginURL + " to get newest features or bug fixes!");
     }
 
     private UpdateInfo getUpdateInfo() {
@@ -121,7 +126,7 @@ public class NotUpdater {
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
             connection.setRequestProperty("Accept", "application/vnd.github.v3+json");
-            
+
             String response = getStringFromURL(connection);
             if (response.contains("\"message\":\"Not Found\"")) {
                 return null;
@@ -131,15 +136,15 @@ public class NotUpdater {
             JSONArray json = (JSONArray) parser.parse(response);
             JSONObject jObject = (JSONObject) json.getFirst();
             String tagName = (String) jObject.get("tag_name");
-            
+
             if (tagName != null && tagName.startsWith("v")) {
                 tagName = tagName.substring(1);
             }
-            
+
             return new UpdateInfo(tagName);
-            
+
         } catch (Exception e) {
-            NotLib.dbg().log(NotDebugger.C_ERROR,"Error fetching update info: " + e.getMessage());
+            NotLib.dbg().log(NotDebugger.C_ERROR, "Error fetching update info: " + e.getMessage());
             return null;
         }
     }
@@ -148,20 +153,30 @@ public class NotUpdater {
         try {
             SemanticVersion currentVer = SemanticVersion.parse(current);
             SemanticVersion latestVer = SemanticVersion.parse(latest);
-            
-            if (latestVer.major != currentVer.major || latestVer.minor != currentVer.minor || latestVer.patch != currentVer.patch && latestVer.snap == currentVer.snap) {
-                return UpdateType.SNAP;
-            } else if (latestVer.major > currentVer.major) {
+
+            // If current is a snapshot and latest is a release with same version number
+            if (!currentVer.snap.isEmpty() && latestVer.snap.isEmpty()) {
+                if (latestVer.major == currentVer.major &&
+                        latestVer.minor == currentVer.minor &&
+                        latestVer.patch == currentVer.patch) {
+                    return UpdateType.SNAP; // Stable release available for this snapshot
+                }
+            }
+
+            // Regular version comparison
+            if (latestVer.major > currentVer.major) {
                 return UpdateType.MAJOR;
             } else if (latestVer.major == currentVer.major && latestVer.minor > currentVer.minor) {
                 return UpdateType.MINOR;
-            } else if (latestVer.major == currentVer.major && latestVer.minor == currentVer.minor && latestVer.patch > currentVer.patch) {
+            } else if (latestVer.major == currentVer.major && latestVer.minor == currentVer.minor
+                    && latestVer.patch > currentVer.patch) {
                 return UpdateType.PATCH;
-            }  else {
+            } else {
                 return UpdateType.NONE;
             }
         } catch (Exception e) {
-            NotLib.dbg().log(NotDebugger.C_ERROR,"Error comparing versions, falling back to string comparison: " + e.getMessage());
+            NotLib.dbg().log(NotDebugger.C_ERROR,
+                    "Error comparing versions, falling back to string comparison: " + e.getMessage());
             if (!current.equals(latest)) {
                 return UpdateType.MINOR;
             }
@@ -172,8 +187,8 @@ public class NotUpdater {
     @NotNull
     private static String getStringFromURL(HttpURLConnection connection) throws IOException {
         try (InputStream inputStream = connection.getInputStream();
-             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
+
             StringBuilder stringBuilder = new StringBuilder();
             String line;
             while ((line = bufferedReader.readLine()) != null) {
@@ -185,7 +200,7 @@ public class NotUpdater {
 
     private static class UpdateInfo {
         final String version;
-        
+
         UpdateInfo(String version) {
             this.version = SemanticVersion.parse(version).toString();
         }
@@ -200,14 +215,14 @@ public class NotUpdater {
         final int minor;
         final int patch;
         final String snap;
-        
+
         SemanticVersion(int major, int minor, int patch, String snap) {
             this.major = major;
             this.minor = minor;
             this.patch = patch;
             this.snap = snap;
         }
-        
+
         static SemanticVersion parse(String version) {
             if (version.startsWith("v")) {
                 version = version.substring(1);
@@ -215,7 +230,7 @@ public class NotUpdater {
 
             boolean isSnapshot = false;
 
-            if(version.contains("snap")) {
+            if (version.toLowerCase().contains("snap")) {
                 isSnapshot = true;
             }
 
@@ -225,10 +240,10 @@ public class NotUpdater {
             int minor = parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
             int patch = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
             String snapshot = isSnapshot ? "SNAPSHOT" : "";
-            
+
             return new SemanticVersion(major, minor, patch, snapshot);
         }
-        
+
         @Override
         public String toString() {
             return major + "." + minor + "." + patch + "-" + snap;
