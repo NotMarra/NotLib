@@ -41,15 +41,14 @@ jobs:
       - name: Find JAR file
         id: find_jar
         run: |
-          # Find the main JAR file (not sources or javadoc)
-          JAR_FILE=$(find target -name "*.jar" -not -name "*-sources.jar" -not -name "*-javadoc.jar" | head -1)
+          JAR_FILE=$(find target -name "*.jar" -not -name "*-sources.jar" -not -name "*-javadoc.jar" -not -name "original-*.jar" | head -1)
           if [ -z "$JAR_FILE" ]; then
-            echo "❌ JAR not founded!"
+            echo "❌ JAR not found!"
             exit 1
           fi
           echo "jar_file=$JAR_FILE" >> $GITHUB_OUTPUT
           echo "jar_name=$(basename $JAR_FILE)" >> $GITHUB_OUTPUT
-          echo "✅ JAR Founded: $JAR_FILE"
+          echo "✅ JAR Found: $JAR_FILE"
 
       - name: Upload JAR to Release
         uses: softprops/action-gh-release@v2
