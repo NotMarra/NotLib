@@ -35,14 +35,14 @@ public final class NotLib extends NotPlugin {
 
     @Override
     public void onNotPluginEnable() {
-        log().info(ChatF.of("Enabled!").build());
+        log().info(ChatF.of("NotLib started successfully!").build());
 
         NotUpdater.check(instance, PLUGINURL, FETCHURL);
     }
 
     @Override
     public void onNotPluginDisable() {
-        log().info(ChatF.of("Disabled!").build());
+        log().info(ChatF.of("NotLib shut down successfully!").build());
     }
 
     public NotGUIListener getNotGUIListener() { return (NotGUIListener)getListener(NotGUIListener.ID); }
