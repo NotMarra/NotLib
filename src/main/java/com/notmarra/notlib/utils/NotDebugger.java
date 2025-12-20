@@ -42,7 +42,9 @@ public class NotDebugger extends NotConfigurable {
         return List.of(plugin.CONFIG_YML);
     }
 
-    public File getLogFile(String subPath) { return plugin.getFile("logs/" + subPath); }
+    public File getLogFile(String subPath) {
+        return plugin.getFile("logs/" + subPath);
+    }
 
     @Override
     public void onConfigReload(List<String> reloadedConfigs) {
@@ -75,9 +77,17 @@ public class NotDebugger extends NotConfigurable {
         return category != null ? category : NotDebuggerCategory.empty(name);
     }
 
-    public boolean isEnabled(String name) { return getCategory(name).isEnabled(); }
-    public boolean isConsole(String name) { return getCategory(name).isConsole(); }
-    public List<String> forChat(String name) { return getCategory(name).forChat(); }
+    public boolean isEnabled(String name) {
+        return getCategory(name).isEnabled();
+    }
+
+    public boolean isConsole(String name) {
+        return getCategory(name).isConsole();
+    }
+
+    public List<String> forChat(String name) {
+        return getCategory(name).forChat();
+    }
 
     private void send(NotDebuggerCategory category, ChatF message) {
         if (category.isConsole()) {
@@ -95,28 +105,41 @@ public class NotDebugger extends NotConfigurable {
         try {
             if (!file.exists()) {
                 File parent = file.getParentFile();
-                if (parent != null && !parent.exists()) parent.mkdirs();
+                if (parent != null && !parent.exists())
+                    parent.mkdirs();
                 file.createNewFile();
             }
-            if (file.canWrite()) (new FileWriter(file, true))
-                .append(message.buildString())
-                .append(System.lineSeparator())
-                .close();
-        } catch (Exception e) {}
+            if (file.canWrite()) {
+                FileWriter writer = new FileWriter(file, true);
+                writer.append("[" + java.time.LocalDateTime.now()
+                        .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "] ");
+                writer.append(message.buildString());
+                writer.append(System.lineSeparator());
+                writer.close();
+            }
+        } catch (Exception e) {
+        }
     }
 
     private void save(NotDebuggerCategory category, ChatF message) {
-        if (globalOutFile != null) writeLog(globalOutFile, message);
-        if (category.file() != null) writeLog(getLogFile(category.file()), message);
+        if (globalOutFile != null)
+            writeLog(globalOutFile, message);
+        if (category.file() != null)
+            writeLog(getLogFile(category.file()), message);
     }
 
-    public void log(String name, Object message) { log(getCategory(name), message); }
+    public void log(String name, Object message) {
+        log(getCategory(name), message);
+    }
+
     public void log(NotDebuggerCategory category, Object message) {
-        if (!globalEnabled) return;
-        if (!category.isEnabled()) return;
+        if (!globalEnabled)
+            return;
+        if (!category.isEnabled())
+            return;
 
         ChatF format = ChatF
-            .from(message);
+                .from(message);
 
         send(category, format);
         save(category, format);
@@ -152,10 +175,21 @@ public class NotDebugger extends NotConfigurable {
             this.section = section;
         }
 
-        public boolean isEnabled() { return this.section.getBoolean(N_ENABLED, DEF_ENABLED); }
-        public boolean isConsole() { return this.section.getBoolean(N_CONSOLE, DEF_CONSOLE); }
-        public List<String> forChat() { return this.section.getStringList(N_CHAT); }
-        public String file() { return this.section.getString(N_FILE); }
+        public boolean isEnabled() {
+            return this.section.getBoolean(N_ENABLED, DEF_ENABLED);
+        }
+
+        public boolean isConsole() {
+            return this.section.getBoolean(N_CONSOLE, DEF_CONSOLE);
+        }
+
+        public List<String> forChat() {
+            return this.section.getStringList(N_CHAT);
+        }
+
+        public String file() {
+            return this.section.getString(N_FILE);
+        }
 
         public static NotDebuggerCategory empty(String name) {
             return new NotDebuggerCategory(name, new YamlConfiguration());

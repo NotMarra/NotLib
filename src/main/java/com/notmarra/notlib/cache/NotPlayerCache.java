@@ -1,8 +1,8 @@
 package com.notmarra.notlib.cache;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import org.bukkit.entity.Player;
@@ -13,8 +13,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import com.notmarra.notlib.extensions.NotPlugin;
 
 public class NotPlayerCache extends BaseNotCache<Player> implements Listener {
-    private final Map<UUID, Player> cachedPlayersByUUID = new HashMap<>();
-    private final Map<String, Player> cachedPlayersByName = new HashMap<>();
+    private final Map<String, UUID> nameToUUID = new ConcurrentHashMap<>();
 
     public NotPlayerCache(NotPlugin plugin) {
         super(plugin);
@@ -26,97 +25,85 @@ public class NotPlayerCache extends BaseNotCache<Player> implements Listener {
         return source.getUniqueId().toString();
     }
 
+    public NotPlayerCacheResult connected(UUID uuid) {
+        String hash = uuid.toString();
+        Player cached = get(hash);
+
+        if (cached != null && cached.isOnline()) {
+            return new NotPlayerCacheResult(cached);
+        }
+
+        if (cached != null) {
+            remove(hash);
+            nameToUUID.remove(cached.getName().toLowerCase());
+        }
+
+        Player player = plugin.getServer().getPlayer(uuid);
+        if (player != null && player.isOnline()) {
+            store(player);
+            nameToUUID.put(player.getName().toLowerCase(), uuid);
+            return new NotPlayerCacheResult(player);
+        }
+
+        return new NotPlayerCacheResult(null);
+    }
+
+    public NotPlayerCacheResult connected(String name) {
+        UUID uuid = nameToUUID.get(name.toLowerCase());
+        if (uuid != null) {
+            NotPlayerCacheResult result = connected(uuid);
+            if (result.isPresent()) {
+                return result;
+            }
+            nameToUUID.remove(name.toLowerCase());
+        }
+
+        Player player = plugin.getServer().getPlayer(name);
+        if (player != null && player.isOnline()) {
+            store(player);
+            nameToUUID.put(name.toLowerCase(), player.getUniqueId());
+            return new NotPlayerCacheResult(player);
+        }
+
+        return new NotPlayerCacheResult(null);
+    }
+
+    public NotPlayerCacheResult connected(Player player) {
+        return connected(player.getUniqueId());
+    }
+
     @Override
     public Player store(Player player) {
-        super.store(player);
-        
-        cachedPlayersByUUID.put(player.getUniqueId(), player);
-        cachedPlayersByName.put(player.getName().toLowerCase(), player);
-        
-        return player;
-    }
-
-    public NotPlayerCachePlayerResult connected(UUID playerUUID) {
-        Player cachedPlayer = cachedPlayersByUUID.get(playerUUID);
-        if (cachedPlayer != null) {
-            if (cachedPlayer.isConnected()) {
-                return new NotPlayerCachePlayerResult(cachedPlayer);
-            } else {
-                removeFromCache(cachedPlayer);
-            }
-        }
-
-        Player player = plugin.getServer().getPlayer(playerUUID);
-        if (player != null && player.isConnected()) {
-            store(player);
-            return new NotPlayerCachePlayerResult(player);
-        }
-
-        return new NotPlayerCachePlayerResult(null);
-    }
-
-    public NotPlayerCachePlayerResult connected(String playerName) {
-        String lowerName = playerName.toLowerCase();
-        
-        Player cachedPlayer = cachedPlayersByName.get(lowerName);
-        if (cachedPlayer != null) {
-            if (cachedPlayer.isConnected()) {
-                return new NotPlayerCachePlayerResult(cachedPlayer);
-            } else {
-                removeFromCache(cachedPlayer);
-            }
-        }
-
-        Player player = plugin.getServer().getPlayer(playerName);
-        if (player != null && player.isConnected()) {
-            store(player);
-            return new NotPlayerCachePlayerResult(player);
-        }
-
-        return new NotPlayerCachePlayerResult(null);
-    }
-
-    public NotPlayerCachePlayerResult connected(Player player) {
-        if (player == null) {
-            return new NotPlayerCachePlayerResult(null);
-        }
-        
-        if (player.isConnected()) {
-            store(player);
-            return new NotPlayerCachePlayerResult(player);
-        }
-        
-        return new NotPlayerCachePlayerResult(null);
-    }
-
-    private void removeFromCache(Player player) {
-        if (player == null) return;
-        
-        remove(player);
-        cachedPlayersByUUID.remove(player.getUniqueId());
-        cachedPlayersByName.remove(player.getName().toLowerCase());
+        nameToUUID.put(player.getName().toLowerCase(), player.getUniqueId());
+        return super.store(player);
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        removeFromCache(event.getPlayer());
+        Player player = event.getPlayer();
+        remove(player);
+        nameToUUID.remove(player.getName().toLowerCase());
     }
 
-    public int getCacheSize() {
-        return cachedPlayersByUUID.size();
+    @Override
+    public void clear() {
+        super.clear();
+        nameToUUID.clear();
     }
 
-    public void clearCache() {
-        storage.clear();
-        cachedPlayersByUUID.clear();
-        cachedPlayersByName.clear();
-    }
+    public static class NotPlayerCacheResult {
+        private final Player player;
 
-    public class NotPlayerCachePlayerResult {
-        public final Player player;
-
-        public NotPlayerCachePlayerResult(Player player) {
+        public NotPlayerCacheResult(Player player) {
             this.player = player;
+        }
+
+        public boolean isPresent() {
+            return player != null;
+        }
+
+        public Player get() {
+            return player;
         }
 
         public void then(Consumer<Player> consumer) {
@@ -125,12 +112,11 @@ public class NotPlayerCache extends BaseNotCache<Player> implements Listener {
             }
         }
 
-        public boolean isPresent() {
-            return player != null;
-        }
-
-        public Player orElse(Player defaultPlayer) {
-            return player != null ? player : defaultPlayer;
+        public NotPlayerCacheResult orElse(Runnable runnable) {
+            if (player == null) {
+                runnable.run();
+            }
+            return this;
         }
     }
 }
