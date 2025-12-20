@@ -1,17 +1,13 @@
 name: Build and Release
-
 on:
   release:
     types: [published]
-
 permissions:
   contents: write
   actions: read
-
 jobs:
   build-and-upload:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -38,31 +34,32 @@ jobs:
           echo "version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
           echo "name=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> $GITHUB_OUTPUT
 
-      - name: Find JAR file
+      - name: Find and Rename JAR file
         id: find_jar
         run: |
-          # Find the main JAR file (not sources, javadoc, or original)
-          JAR_FILE=$(find target -name "*.jar" \
-            -not -name "*-sources.jar" \
-            -not -name "*-javadoc.jar" \
-            -not -name "original-*.jar" \
-            | head -1)
+          # Find any JAR file
+          ORIGINAL_JAR=$(find target -name "*.jar" -not -name "*-sources.jar" -not -name "*-javadoc.jar" | head -1)
 
-          if [ -z "$JAR_FILE" ]; then
-            echo "❌ JAR not found!"
-            echo "Available JARs in target:"
-            find target -name "*.jar"
+          if [ -z "$ORIGINAL_JAR" ]; then
+            echo "❌ No JAR found!"
             exit 1
           fi
-          echo "jar_file=$JAR_FILE" >> $GITHUB_OUTPUT
-          echo "jar_name=$(basename $JAR_FILE)" >> $GITHUB_OUTPUT
-          echo "✅ JAR Found: $JAR_FILE"
+
+          # Create the desired filename
+          FINAL_NAME="${{ steps.project_info.outputs.name }}-${{ steps.project_info.outputs.version }}.jar"
+          FINAL_PATH="target/$FINAL_NAME"
+
+          # Copy to the correct name
+          cp "$ORIGINAL_JAR" "$FINAL_PATH"
+
+          echo "jar_file=$FINAL_PATH" >> $GITHUB_OUTPUT
+          echo "jar_name=$FINAL_NAME" >> $GITHUB_OUTPUT
+          echo "✅ JAR Created: $FINAL_PATH"
 
       - name: Upload JAR to Release
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ steps.find_jar.outputs.jar_file }}
-          name: ${{ steps.project_info.outputs.name }}-${{ steps.project_info.outputs.version }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
