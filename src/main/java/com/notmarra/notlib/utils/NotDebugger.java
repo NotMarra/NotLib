@@ -95,7 +95,7 @@ public class NotDebugger extends NotConfigurable {
         }
 
         for (String playerName : category.forChat()) {
-            NotCache.player().get(playerName).then(player -> {
+            NotCache.player().connected(playerName).then(player -> {
                 player.sendMessage(message.withEntity(player).build());
             });
         }
@@ -109,11 +109,14 @@ public class NotDebugger extends NotConfigurable {
                     parent.mkdirs();
                 file.createNewFile();
             }
-            if (file.canWrite())
-                (new FileWriter(file, true))
-                        .append(message.buildString())
-                        .append(System.lineSeparator())
-                        .close();
+            if (file.canWrite()) {
+                FileWriter writer = new FileWriter(file, true);
+                writer.append("[" + java.time.LocalDateTime.now()
+                        .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "] ");
+                writer.append(message.buildString());
+                writer.append(System.lineSeparator());
+                writer.close();
+            }
         } catch (Exception e) {
         }
     }

@@ -1,7 +1,6 @@
 package com.notmarra.notlib.cache;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
@@ -13,40 +12,46 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.notmarra.notlib.extensions.NotPlugin;
 
-public class NotPlayerCache implements Listener {
-    private final NotPlugin plugin;
-    private final Map<UUID, Player> cacheByUUID = new ConcurrentHashMap<>();
+public class NotPlayerCache extends BaseNotCache<Player> implements Listener {
     private final Map<String, UUID> nameToUUID = new ConcurrentHashMap<>();
 
     public NotPlayerCache(NotPlugin plugin) {
-        this.plugin = plugin;
+        super(plugin);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    public NotPlayerCacheResult get(UUID uuid) {
-        Player cached = cacheByUUID.get(uuid);
+    @Override
+    public String hash(Player source) {
+        return source.getUniqueId().toString();
+    }
+
+    public NotPlayerCacheResult connected(UUID uuid) {
+        String hash = uuid.toString();
+        Player cached = get(hash);
 
         if (cached != null && cached.isOnline()) {
             return new NotPlayerCacheResult(cached);
         }
 
         if (cached != null) {
-            remove(uuid);
+            remove(hash);
+            nameToUUID.remove(cached.getName().toLowerCase());
         }
 
         Player player = plugin.getServer().getPlayer(uuid);
         if (player != null && player.isOnline()) {
-            cache(player);
+            store(player);
+            nameToUUID.put(player.getName().toLowerCase(), uuid);
             return new NotPlayerCacheResult(player);
         }
 
         return new NotPlayerCacheResult(null);
     }
 
-    public NotPlayerCacheResult get(String name) {
+    public NotPlayerCacheResult connected(String name) {
         UUID uuid = nameToUUID.get(name.toLowerCase());
         if (uuid != null) {
-            NotPlayerCacheResult result = get(uuid);
+            NotPlayerCacheResult result = connected(uuid);
             if (result.isPresent()) {
                 return result;
             }
@@ -55,41 +60,35 @@ public class NotPlayerCache implements Listener {
 
         Player player = plugin.getServer().getPlayer(name);
         if (player != null && player.isOnline()) {
-            cache(player);
+            store(player);
+            nameToUUID.put(name.toLowerCase(), player.getUniqueId());
             return new NotPlayerCacheResult(player);
         }
 
         return new NotPlayerCacheResult(null);
     }
 
-    public NotPlayerCacheResult get(Player player) {
-        return get(player.getUniqueId());
+    public NotPlayerCacheResult connected(Player player) {
+        return connected(player.getUniqueId());
     }
 
-    public void cache(Player player) {
-        cacheByUUID.put(player.getUniqueId(), player);
+    @Override
+    public Player store(Player player) {
         nameToUUID.put(player.getName().toLowerCase(), player.getUniqueId());
-    }
-
-    public void remove(UUID uuid) {
-        Player removed = cacheByUUID.remove(uuid);
-        if (removed != null) {
-            nameToUUID.remove(removed.getName().toLowerCase());
-        }
+        return super.store(player);
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        remove(event.getPlayer().getUniqueId());
+        Player player = event.getPlayer();
+        remove(player);
+        nameToUUID.remove(player.getName().toLowerCase());
     }
 
+    @Override
     public void clear() {
-        cacheByUUID.clear();
+        super.clear();
         nameToUUID.clear();
-    }
-
-    public int size() {
-        return cacheByUUID.size();
     }
 
     public static class NotPlayerCacheResult {
@@ -105,10 +104,6 @@ public class NotPlayerCache implements Listener {
 
         public Player get() {
             return player;
-        }
-
-        public Optional<Player> toOptional() {
-            return Optional.ofNullable(player);
         }
 
         public void then(Consumer<Player> consumer) {
