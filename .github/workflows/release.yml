@@ -50,7 +50,9 @@ jobs:
           FINAL_PATH="target/$FINAL_NAME"
 
           # Copy to the correct name
-          cp "$ORIGINAL_JAR" "$FINAL_PATH"
+          if [ "$ORIGINAL_JAR" != "$FINAL_PATH" ]; then
+            cp "$ORIGINAL_JAR" "$FINAL_PATH"
+          fi
 
           echo "jar_file=$FINAL_PATH" >> $GITHUB_OUTPUT
           echo "jar_name=$FINAL_NAME" >> $GITHUB_OUTPUT
