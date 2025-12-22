@@ -37,26 +37,23 @@ jobs:
       - name: Find and Rename JAR file
         id: find_jar
         run: |
-          # Find any JAR file
-          ORIGINAL_JAR=$(find target -name "*.jar" -not -name "*-sources.jar" -not -name "*-javadoc.jar" | head -1)
+          ORIGINAL_JAR=$(find target -name "*.jar" ! -name "original-*" ! -name "*-sources.jar" ! -name "*-javadoc.jar" | head -1)
 
           if [ -z "$ORIGINAL_JAR" ]; then
             echo "❌ No JAR found!"
             exit 1
           fi
 
-          # Create the desired filename
           FINAL_NAME="${{ steps.project_info.outputs.name }}-${{ steps.project_info.outputs.version }}.jar"
           FINAL_PATH="target/$FINAL_NAME"
 
-          # Copy to the correct name
           if [ "$ORIGINAL_JAR" != "$FINAL_PATH" ]; then
-            cp "$ORIGINAL_JAR" "$FINAL_PATH"
+            mv "$ORIGINAL_JAR" "$FINAL_PATH"
           fi
 
           echo "jar_file=$FINAL_PATH" >> $GITHUB_OUTPUT
           echo "jar_name=$FINAL_NAME" >> $GITHUB_OUTPUT
-          echo "✅ JAR Created: $FINAL_PATH"
+          echo "✅ Final Shaded JAR: $FINAL_PATH"
 
       - name: Upload JAR to Release
         uses: softprops/action-gh-release@v2
