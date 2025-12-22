@@ -38,28 +38,58 @@ public abstract class NotPlugin extends JavaPlugin {
     }
 
     private NotTranslationManager translationManager;
-    public NotTranslationManager tm() { return translationManager; }
-    public String tm(String key) { return tm().get(key); }
-    public List<String> tmList(String key) { return tm().getList(key); }
+
+    public NotTranslationManager tm() {
+        return translationManager;
+    }
+
+    public String tm(String key) {
+        return tm().get(key);
+    }
+
+    public List<String> tmList(String key) {
+        return tm().getList(key);
+    }
 
     private NotDatabaseManager databaseManager;
-    public NotDatabaseManager db() { return databaseManager; }
-    public NotDatabase db(String dbId) { return databaseManager.getDatabase(dbId); }
+
+    public NotDatabaseManager db() {
+        return databaseManager;
+    }
+
+    public NotDatabase db(String dbId) {
+        return databaseManager.getDatabase(dbId);
+    }
 
     private NotScheduler scheduler;
-    public NotScheduler scheduler() { return scheduler; }
+
+    public NotScheduler scheduler() {
+        return scheduler;
+    }
 
     public final String CONFIG_YML = "config.yml";
 
-    public void addPluginEnabledCallback(String pluginId, Runnable callback) { ON_PLUGIN_ENABLED_CALLBACKS.put(pluginId, callback); }
+    public void addPluginEnabledCallback(String pluginId, Runnable callback) {
+        ON_PLUGIN_ENABLED_CALLBACKS.put(pluginId, callback);
+    }
 
     // addListener("listener_id", new Listener(this));
-    public void addListener(NotListener listener) { LISTENERS.put(listener.getId(), listener); }
-    public NotListener getListener(String id) { return LISTENERS.get(id); }
+    public void addListener(NotListener listener) {
+        LISTENERS.put(listener.getId(), listener);
+    }
+
+    public NotListener getListener(String id) {
+        return LISTENERS.get(id);
+    }
 
     // addCommandManager("cmdgroup_id", new CommandManager(this));
-    public void addCommandGroup(NotCommandGroup cmdGroup) { CMDGROUPS.put(cmdGroup.getId(), cmdGroup); }
-    public NotCommandGroup getCommandGroup(String id) { return CMDGROUPS.get(id); }
+    public void addCommandGroup(NotCommandGroup cmdGroup) {
+        CMDGROUPS.put(cmdGroup.getId(), cmdGroup);
+    }
+
+    public NotCommandGroup getCommandGroup(String id) {
+        return CMDGROUPS.get(id);
+    }
 
     public void registerConfigurable(NotConfigurable configurable, String configPath) {
         CONFIGURABLES.computeIfAbsent(configPath, k -> new ArrayList<>());
@@ -71,7 +101,8 @@ public abstract class NotPlugin extends JavaPlugin {
 
     public void registerConfigurable(NotConfigurable configurable) {
         List<String> configPaths = configurable.getConfigPaths();
-        if (configPaths.isEmpty()) return;
+        if (configPaths.isEmpty())
+            return;
         configPaths.forEach(path -> {
             registerConfigurable(configurable, path);
             loadConfigFile(path);
@@ -80,31 +111,47 @@ public abstract class NotPlugin extends JavaPlugin {
     }
 
     public void saveDefaultConfig(String forConfig) {
-        if (forConfig == null) return;
-        if (CONFIGS.containsKey(forConfig)) return;
+        if (forConfig == null)
+            return;
+        if (CONFIGS.containsKey(forConfig))
+            return;
         File configFile = new File(getDataFolder(), forConfig);
-        if (configFile.exists()) return;
-        if (getResource(forConfig) == null) return;
+        if (configFile.exists())
+            return;
+        if (getResource(forConfig) == null)
+            return;
         configFile.getParentFile().mkdirs();
         saveResource(forConfig, false);
     }
 
     private void loadConfigFile(String configPath) {
-        if (configPath == null) return;
-        if (CONFIGS.containsKey(configPath)) return;
+        if (configPath == null)
+            return;
+        if (CONFIGS.containsKey(configPath))
+            return;
         File configFile = new File(getDataFolder(), configPath);
-        if (!configFile.exists()) return;
+        if (!configFile.exists())
+            return;
         CONFIGS.put(configPath, YamlConfiguration.loadConfiguration(configFile));
     }
 
-    public File getFile(String child) { return new File(getDataFolder(), child); }
-    public String getAbsPath(String child) { return (new File(getDataFolder(), child)).getAbsolutePath(); }
+    public File getFile(String child) {
+        return new File(getDataFolder(), child);
+    }
+
+    public String getAbsPath(String child) {
+        return (new File(getDataFolder(), child)).getAbsolutePath();
+    }
 
     public abstract void initNotPlugin();
+
     public abstract void onNotPluginEnable();
+
     public abstract void onNotPluginDisable();
 
-    public ComponentLogger log() { return getComponentLogger(); }
+    public ComponentLogger log() {
+        return getComponentLogger();
+    }
 
     @Override
     public void onEnable() {
@@ -130,26 +177,31 @@ public abstract class NotPlugin extends JavaPlugin {
             onNotPluginEnable();
         } catch (Exception e) {
             getComponentLogger().error(
-                ChatF.empty()
-                    .append("[CRITICAL ERROR] Disabling plugin", ChatF.C_RED)
-                    .nl()
-                    .appendListString(List.of(e.getStackTrace()).stream().map(x -> "    " + x.toString() + '\n').toList(), ChatF.C_ORANGE)
-                    .build()
-            );
+                    ChatF.empty()
+                            .append("[CRITICAL ERROR] Disabling plugin", ChatF.C_RED)
+                            .nl()
+                            .appendListString(
+                                    List.of(e.getStackTrace()).stream().map(x -> "    " + x.toString() + '\n').toList(),
+                                    ChatF.C_ORANGE)
+                            .build());
             getServer().getPluginManager().disablePlugin(this);
         }
     }
 
     @Override
     public void onDisable() {
-        db().close();
         onNotPluginDisable();
+        db().close();
     }
 
-    public FileConfiguration getSubConfig(String file) { return CONFIGS.get(file); }
+    public FileConfiguration getSubConfig(String file) {
+        return CONFIGS.get(file);
+    }
+
     public FileConfiguration reloadConfig(String file) {
         File configFile = new File(getDataFolder(), file);
-        if (!configFile.exists()) return new YamlConfiguration();
+        if (!configFile.exists())
+            return new YamlConfiguration();
         CONFIGS.put(file, YamlConfiguration.loadConfiguration(configFile));
         if (CONFIGURABLES.containsKey(file)) {
             CONFIGURABLES.get(file).forEach(c -> c.onConfigReload(List.of(file)));
@@ -159,31 +211,31 @@ public abstract class NotPlugin extends JavaPlugin {
 
     public List<String> listResources(String folderPath) {
         List<String> resources = new ArrayList<>();
-        
+
         try {
             // Get the JAR file of your plugin
             JarFile jarFile = new JarFile(this.getClass().getProtectionDomain()
                     .getCodeSource().getLocation().getPath());
-            
+
             // Get all entries in the JAR
             Enumeration<JarEntry> entries = jarFile.entries();
-            
+
             // Loop through all entries
             while (entries.hasMoreElements()) {
                 JarEntry entry = entries.nextElement();
                 String name = entry.getName();
-                
+
                 // Check if this entry is in the specified folder and is not a directory
                 if (name.startsWith(folderPath) && !name.endsWith("/")) {
                     resources.add(name);
                 }
             }
-            
+
             jarFile.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    
+
         return resources;
     }
 }
