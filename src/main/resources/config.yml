@@ -45,7 +45,7 @@ debug:
       enabled: true
       console: true
     DATABASE:
-      enabled: true
+      enabled: false
       console: true
     DEV:
       enabled: false
