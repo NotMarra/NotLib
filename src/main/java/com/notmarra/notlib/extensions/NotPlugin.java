@@ -96,7 +96,11 @@ public abstract class NotPlugin extends JavaPlugin {
         if (!CONFIGURABLES.get(configPath).contains(configurable)) {
             CONFIGURABLES.get(configPath).add(configurable);
         }
-        saveDefaultConfig(configPath);
+
+        if (getResource(configPath) != null) {
+            saveDefaultConfig(configPath);
+        }
+        loadConfigFile(configPath);
     }
 
     public void registerConfigurable(NotConfigurable configurable) {
@@ -125,9 +129,7 @@ public abstract class NotPlugin extends JavaPlugin {
     }
 
     private void loadConfigFile(String configPath) {
-        if (configPath == null)
-            return;
-        if (CONFIGS.containsKey(configPath))
+        if (configPath == null || CONFIGS.containsKey(configPath))
             return;
 
         File configFile = new File(getDataFolder(), configPath);
@@ -138,12 +140,18 @@ public abstract class NotPlugin extends JavaPlugin {
 
         java.io.InputStream defaultStream = getResource(configPath);
 
+        if (defaultStream == null && translationManager != null) {
+            String langFolder = "lang/";
+            if (configPath.startsWith(langFolder)) {
+                defaultStream = getResource(langFolder + "en.yml");
+            }
+        }
+
         if (defaultStream != null) {
-            YamlConfiguration defaultConfig = YamlConfiguration
-                    .loadConfiguration(new java.io.InputStreamReader(defaultStream));
+            YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(
+                    new java.io.InputStreamReader(defaultStream));
 
             config.setDefaults(defaultConfig);
-
             config.options().copyDefaults(true);
 
             try {
@@ -185,6 +193,7 @@ public abstract class NotPlugin extends JavaPlugin {
 
             saveDefaultConfig(CONFIG_YML);
             loadConfigFile(CONFIG_YML);
+            tm().discoverAndRegisterLocalLangs();
             initNotPlugin();
 
             for (String pluginId : ON_PLUGIN_ENABLED_CALLBACKS.keySet()) {
