@@ -129,10 +129,31 @@ public abstract class NotPlugin extends JavaPlugin {
             return;
         if (CONFIGS.containsKey(configPath))
             return;
+
         File configFile = new File(getDataFolder(), configPath);
         if (!configFile.exists())
             return;
-        CONFIGS.put(configPath, YamlConfiguration.loadConfiguration(configFile));
+
+        FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+
+        java.io.InputStream defaultStream = getResource(configPath);
+
+        if (defaultStream != null) {
+            YamlConfiguration defaultConfig = YamlConfiguration
+                    .loadConfiguration(new java.io.InputStreamReader(defaultStream));
+
+            config.setDefaults(defaultConfig);
+
+            config.options().copyDefaults(true);
+
+            try {
+                config.save(configFile);
+            } catch (IOException e) {
+                getComponentLogger().error("Failed to update configuration file: " + configPath, e);
+            }
+        }
+
+        CONFIGS.put(configPath, config);
     }
 
     public File getFile(String child) {
