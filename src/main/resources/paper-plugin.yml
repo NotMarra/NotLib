@@ -1,12 +1,4 @@
 name: NotLib
-version: ${project.version}
-main: com.notmarra.notlib.NotLib
-api-version: "1.21"
-authors: [NotMarra, TheNoiselessNoise]
-description: Library for NotPlugins
-website: www.notmarra.com, www.notworks.dev
-dependencies:
-  server:
-    PlaceholderAPI:
-      load: BEFORE
-      required: false
+version: '1.0-DEV'
+main: dev.notmarra.notLib.NotLib
+api-version: '1.21'
