@@ -2,6 +2,7 @@ package dev.notmarra.notlib.database;
 
 import com.zaxxer.hikari.HikariDataSource;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -11,7 +12,7 @@ public abstract class Database {
     protected HikariDataSource ds;
     private static final Logger logger = Logger.getLogger(Database.class.getName());
 
-    public abstract void setup(Properties props);
+    public abstract Database setup(Properties props);
 
     public Connection getConnection() throws SQLException {
         return ds.getConnection();
@@ -53,6 +54,17 @@ public abstract class Database {
         props.setProperty("dataSource.databaseName", databaseName);
         props.setProperty("dataSource.portNumber", port);
         props.setProperty("dataSource.serverName", serverName);
+        return props;
+    }
+
+    public static Properties generateProperties(File dataFolder, String fileName) {
+        if (dataFolder == null) throw new IllegalArgumentException("DataFolder must not be empty");
+        if (fileName == null || fileName.isBlank()) throw new IllegalArgumentException("FileName must not be empty");
+
+        if (!fileName.endsWith(".db")) fileName += ".db";
+
+        Properties props = new Properties();
+        props.setProperty("dataSource.filePath", new File(dataFolder, fileName).getAbsolutePath());
         return props;
     }
 }

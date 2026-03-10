@@ -3,6 +3,7 @@ package dev.notmarra.notlib.database.type;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.notmarra.notlib.database.Database;
+import org.sqlite.SQLiteDataSource;
 
 import java.io.File;
 import java.sql.Connection;
@@ -14,7 +15,7 @@ public class SQLite extends Database {
     private static final Logger logger = Logger.getLogger(SQLite.class.getName());
 
     @Override
-    public void setup(Properties props) {
+    public SQLite setup(Properties props) {
         String filePath = props.getProperty("dataSource.filePath");
 
         if (filePath == null || filePath.isBlank()) {
@@ -22,10 +23,14 @@ public class SQLite extends Database {
         }
 
         File dbFile = new File(filePath);
-        dbFile.getParentFile().mkdirs();
+        if (dbFile.getParentFile() != null) {
+            dbFile.getParentFile().mkdirs();
+        }
 
         HikariConfig config = new HikariConfig();
-        config.setDriverClassName("org.sqlite.SQLiteDataSource");
+        SQLiteDataSource sqliteDs = new SQLiteDataSource();
+        sqliteDs.setUrl("jdbc:sqlite:" + filePath);
+        config.setDataSource(sqliteDs);
 
         config.setMaximumPoolSize(1);
         config.setMinimumIdle(1);
@@ -46,5 +51,6 @@ public class SQLite extends Database {
             ds.close();
             throw new RuntimeException("Failed to connect to SQLite: " + e.getMessage(), e);
         }
+        return this;
     }
 }

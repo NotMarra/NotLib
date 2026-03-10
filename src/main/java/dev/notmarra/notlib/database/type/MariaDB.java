@@ -13,7 +13,7 @@ public class MariaDB extends Database {
     private static final Logger logger = Logger.getLogger(MariaDB.class.getName());
 
     @Override
-    public void setup(Properties props) {
+    public MariaDB setup(Properties props) {
         props.setProperty("dataSourceClassName", "org.mariadb.jdbc.MariaDbDataSource");
 
         HikariConfig config = new HikariConfig(props);
@@ -34,5 +34,7 @@ public class MariaDB extends Database {
             ds.close();
             throw new RuntimeException("Failed to connect to MySQL: " + e.getMessage(), e);
         }
+
+        return this;
     }
 }
