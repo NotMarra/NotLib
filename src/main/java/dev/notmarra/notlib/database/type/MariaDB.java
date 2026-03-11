@@ -3,6 +3,7 @@ package dev.notmarra.notlib.database.type;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.notmarra.notlib.database.Database;
+import dev.notmarra.notlib.database.DbDialect;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -37,4 +38,7 @@ public class MariaDB extends Database {
 
         return this;
     }
+
+    @Override
+    public DbDialect getDialect() { return DbDialect.MARIADB; }
 }

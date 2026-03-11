@@ -1,7 +1,9 @@
 package dev.notmarra.notlib.database.repository;
 
+import dev.notmarra.notlib.database.DbDialect;
 import dev.notmarra.notlib.database.Database;
 import dev.notmarra.notlib.database.EntityTable;
+import dev.notmarra.notlib.database.TypeMapper;
 
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
@@ -19,7 +21,7 @@ public class EntityRepository<T> {
 
     public EntityRepository(Database database, Class<T> clazz) {
         this.database = database;
-        this.table = new EntityTable<>(clazz);
+        this.table = new EntityTable<>(clazz, database.getDialect());
     }
 
     public QueryBuilder<T> query() {
@@ -32,12 +34,11 @@ public class EntityRepository<T> {
         });
     }
 
+    // ── INSERT ───────────────────────────────────────────────────────────────
+
     public void insert(T entity) {
         List<EntityTable.FieldColumn> cols = table.getColumns();
-        String columns = cols.stream().map(fc -> fc.annotation().name()).collect(Collectors.joining(", "));
-        String placeholders = cols.stream().map(fc -> "?").collect(Collectors.joining(", "));
-        String sql = "INSERT INTO " + table.getTableName() + " (" + columns + ") VALUES (" + placeholders + ")";
-
+        String sql = buildInsertSql(cols);
         database.withConnection(conn -> {
             PreparedStatement stmt = conn.prepareStatement(sql);
             bindValues(stmt, entity, cols);
@@ -49,6 +50,72 @@ public class EntityRepository<T> {
         return CompletableFuture.runAsync(() -> insert(entity));
     }
 
+    // Bulk insert
+    public void insertAll(List<T> entities) {
+        if (entities.isEmpty()) return;
+        List<EntityTable.FieldColumn> cols = table.getColumns();
+        String sql = buildInsertSql(cols);
+        database.withConnection(conn -> {
+            conn.setAutoCommit(false);
+            try {
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                for (T entity : entities) {
+                    bindValues(stmt, entity, cols);
+                    stmt.addBatch();
+                }
+                stmt.executeBatch();
+                conn.commit();
+            } catch (Exception e) {
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> insertAllAsync(List<T> entities) {
+        return CompletableFuture.runAsync(() -> insertAll(entities));
+    }
+
+    // ── UPSERT ───────────────────────────────────────────────────────────────
+
+    public void upsert(T entity) {
+        List<EntityTable.FieldColumn> cols = table.getColumns();
+        List<EntityTable.FieldColumn> nonPkCols = cols.stream()
+                .filter(fc -> !fc.annotation().primaryKey()).toList();
+
+        String columns = cols.stream().map(fc -> fc.annotation().name()).collect(Collectors.joining(", "));
+        String placeholders = cols.stream().map(fc -> "?").collect(Collectors.joining(", "));
+
+        String sql;
+        if (database.getDialect() == DbDialect.SQLITE) {
+            // SQLite: INSERT OR REPLACE
+            sql = "INSERT OR REPLACE INTO " + table.getTableName()
+                    + " (" + columns + ") VALUES (" + placeholders + ")";
+        } else {
+            // MariaDB/MySQL: INSERT ... ON DUPLICATE KEY UPDATE
+            String updateClause = nonPkCols.stream()
+                    .map(fc -> fc.annotation().name() + " = VALUES(" + fc.annotation().name() + ")")
+                    .collect(Collectors.joining(", "));
+            sql = "INSERT INTO " + table.getTableName()
+                    + " (" + columns + ") VALUES (" + placeholders + ")"
+                    + " ON DUPLICATE KEY UPDATE " + updateClause;
+        }
+
+        database.withConnection(conn -> {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            bindValues(stmt, entity, cols);
+            stmt.executeUpdate();
+        });
+    }
+
+    public CompletableFuture<Void> upsertAsync(T entity) {
+        return CompletableFuture.runAsync(() -> upsert(entity));
+    }
+
+    // ── FIND ─────────────────────────────────────────────────────────────────
+
     public Optional<T> findById(Object id) {
         EntityTable.FieldColumn pk = table.getPrimaryKey()
                 .orElseThrow(() -> new IllegalStateException("Entity does not have a primary key"));
@@ -58,7 +125,7 @@ public class EntityRepository<T> {
         final Optional<T>[] result = new Optional[]{Optional.empty()};
         database.withConnection(conn -> {
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setObject(1, id);
+            stmt.setObject(1, id instanceof UUID ? id.toString() : id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) result[0] = Optional.of(mapRow(rs));
         });
@@ -83,6 +150,16 @@ public class EntityRepository<T> {
         return CompletableFuture.supplyAsync(this::findAll);
     }
 
+    public boolean exists(Object id) {
+        return findById(id).isPresent();
+    }
+
+    public CompletableFuture<Boolean> existsAsync(Object id) {
+        return CompletableFuture.supplyAsync(() -> exists(id));
+    }
+
+    // ── UPDATE ───────────────────────────────────────────────────────────────
+
     public void update(T entity) {
         EntityTable.FieldColumn pk = table.getPrimaryKey()
                 .orElseThrow(() -> new IllegalStateException("Entity does not have a primary key"));
@@ -98,7 +175,8 @@ public class EntityRepository<T> {
             PreparedStatement stmt = conn.prepareStatement(sql);
             bindValues(stmt, entity, nonPkCols);
             pk.field().setAccessible(true);
-            stmt.setObject(nonPkCols.size() + 1, pk.field().get(entity).toString());
+            Object pkValue = pk.field().get(entity);
+            stmt.setObject(nonPkCols.size() + 1, pkValue instanceof UUID ? pkValue.toString() : pkValue);
             stmt.executeUpdate();
         });
     }
@@ -107,6 +185,8 @@ public class EntityRepository<T> {
         return CompletableFuture.runAsync(() -> update(entity));
     }
 
+    // ── DELETE ───────────────────────────────────────────────────────────────
+
     public void delete(Object id) {
         EntityTable.FieldColumn pk = table.getPrimaryKey()
                 .orElseThrow(() -> new IllegalStateException("Entity does not have a primary key"));
@@ -114,13 +194,21 @@ public class EntityRepository<T> {
         String sql = "DELETE FROM " + table.getTableName() + " WHERE " + pk.annotation().name() + " = ?";
         database.withConnection(conn -> {
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setObject(1, id.toString());
+            stmt.setObject(1, id instanceof UUID ? id.toString() : id);
             stmt.executeUpdate();
         });
     }
 
     public CompletableFuture<Void> deleteAsync(Object id) {
         return CompletableFuture.runAsync(() -> delete(id));
+    }
+
+    // ── HELPERS ──────────────────────────────────────────────────────────────
+
+    private String buildInsertSql(List<EntityTable.FieldColumn> cols) {
+        String columns = cols.stream().map(fc -> fc.annotation().name()).collect(Collectors.joining(", "));
+        String placeholders = cols.stream().map(fc -> "?").collect(Collectors.joining(", "));
+        return "INSERT INTO " + table.getTableName() + " (" + columns + ") VALUES (" + placeholders + ")";
     }
 
     private void bindValues(PreparedStatement stmt, T entity, List<EntityTable.FieldColumn> cols) throws Exception {
@@ -137,9 +225,14 @@ public class EntityRepository<T> {
         for (EntityTable.FieldColumn fc : table.getColumns()) {
             fc.field().setAccessible(true);
             Object value = rs.getObject(fc.annotation().name());
-            if (fc.field().getType() == UUID.class && value instanceof String s) {
+            Class<?> targetType = fc.field().getType();
+
+            if (targetType == UUID.class && value instanceof String s) {
                 value = UUID.fromString(s);
+            } else {
+                value = TypeMapper.convertValue(value, targetType);
             }
+
             fc.field().set(instance, value);
         }
         return instance;

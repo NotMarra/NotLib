@@ -3,6 +3,7 @@ package dev.notmarra.notlib.database.type;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.notmarra.notlib.database.Database;
+import dev.notmarra.notlib.database.DbDialect;
 import org.sqlite.SQLiteDataSource;
 
 import java.io.File;
@@ -53,4 +54,7 @@ public class SQLite extends Database {
         }
         return this;
     }
+
+    @Override
+    public DbDialect getDialect() { return DbDialect.SQLITE; }
 }

@@ -13,4 +13,5 @@ public @interface Column {
     boolean autoIncrement() default false;
     boolean nullable() default true;
     boolean unique() default false;
+    int length() default 255;
 }

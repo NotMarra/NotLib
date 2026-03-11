@@ -13,6 +13,7 @@ public abstract class Database {
     private static final Logger logger = Logger.getLogger(Database.class.getName());
 
     public abstract Database setup(Properties props);
+    public abstract DbDialect getDialect();
 
     public Connection getConnection() throws SQLException {
         return ds.getConnection();

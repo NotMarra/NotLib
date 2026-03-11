@@ -9,13 +9,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class QueryBuilder<T> {
     private enum WhereMode { AND, OR }
 
-    private record WhereClause(String column, String operator, Object value, WhereMode mode) {}
+    private record WhereClause(String column, String operator, Object value, WhereMode mode, boolean isIn) {}
     private record OrderClause(String column, SortOrder order) {}
 
     private final Database database;
@@ -36,24 +37,28 @@ public class QueryBuilder<T> {
     // ── WHERE ────────────────────────────────────────────────────────────────
 
     public QueryBuilder<T> where(String column, String operator, Object value) {
-        whereClauses.add(new WhereClause(column, operator, value, WhereMode.AND));
+        whereClauses.add(new WhereClause(column, operator, value, WhereMode.AND, false));
         return this;
     }
 
     public QueryBuilder<T> orWhere(String column, String operator, Object value) {
-        whereClauses.add(new WhereClause(column, operator, value, WhereMode.OR));
+        whereClauses.add(new WhereClause(column, operator, value, WhereMode.OR, false));
         return this;
     }
 
     public QueryBuilder<T> whereIn(String column, Collection<?> values) {
-        String placeholders = values.stream().map(v -> "?").collect(Collectors.joining(", "));
-        whereClauses.add(new WhereClause(column, "IN(" + placeholders + ")", new ArrayList<>(values), WhereMode.AND));
+        List<Object> converted = values.stream()
+                .map(v -> v instanceof UUID ? v.toString() : v)
+                .collect(Collectors.toList());
+        whereClauses.add(new WhereClause(column, "IN", converted, WhereMode.AND, true));
         return this;
     }
 
     public QueryBuilder<T> orWhereIn(String column, Collection<?> values) {
-        String placeholders = values.stream().map(v -> "?").collect(Collectors.joining(", "));
-        whereClauses.add(new WhereClause(column, "IN(" + placeholders + ")", new ArrayList<>(values), WhereMode.OR));
+        List<Object> converted = values.stream()
+                .map(v -> v instanceof UUID ? v.toString() : v)
+                .collect(Collectors.toList());
+        whereClauses.add(new WhereClause(column, "IN", converted, WhereMode.OR, true));
         return this;
     }
 
@@ -82,8 +87,11 @@ public class QueryBuilder<T> {
         for (int i = 0; i < whereClauses.size(); i++) {
             WhereClause wc = whereClauses.get(i);
             if (i > 0) sb.append(" ").append(wc.mode().name()).append(" ");
-            if (wc.operator().startsWith("IN(")) {
-                sb.append(wc.column()).append(" ").append(wc.operator());
+            if (wc.isIn()) {
+                // IN potřebuje dynamický počet placeholderů podle počtu hodnot
+                List<?> list = (List<?>) wc.value();
+                String placeholders = list.stream().map(v -> "?").collect(Collectors.joining(", "));
+                sb.append(wc.column()).append(" IN (").append(placeholders).append(")");
             } else {
                 sb.append(wc.column()).append(" ").append(wc.operator()).append(" ?");
             }
@@ -108,8 +116,8 @@ public class QueryBuilder<T> {
     private void bindWhereValues(PreparedStatement stmt, int startIndex) throws Exception {
         int i = startIndex;
         for (WhereClause wc : whereClauses) {
-            if (wc.value() instanceof List<?> list) {
-                for (Object v : list) stmt.setObject(i++, v);
+            if (wc.isIn()) {
+                for (Object v : (List<?>) wc.value()) stmt.setObject(i++, v);
             } else {
                 stmt.setObject(i++, wc.value());
             }
@@ -135,9 +143,19 @@ public class QueryBuilder<T> {
     }
 
     public Optional<T> findFirst() {
-        limit(1);
-        List<T> results = findAll();
-        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
+        String sql = "SELECT * FROM " + table.getTableName()
+                + buildWhereClause()
+                + buildOrderClause()
+                + " LIMIT 1";
+
+        final Optional<T>[] result = new Optional[]{Optional.empty()};
+        database.withConnection(conn -> {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            bindWhereValues(stmt, 1);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) result[0] = Optional.of(repository.mapRow(rs));
+        });
+        return result[0];
     }
 
     public long count() {

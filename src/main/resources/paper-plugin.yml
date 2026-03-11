@@ -2,6 +2,7 @@ name: NotLib
 version: '1.0-DEV'
 main: dev.notmarra.notlib.NotLib
 api-version: '1.21'
+author: "NotMarra"
 
 dependencies:
   bootstrap: {}
