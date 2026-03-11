@@ -6,6 +6,7 @@ import dev.notmarra.notlib.database.EntityTable;
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,8 +22,14 @@ public class EntityRepository<T> {
         this.table = new EntityTable<>(clazz);
     }
 
+    public QueryBuilder<T> query() {
+        return new QueryBuilder<>(database, table, this);
+    }
+
     public void createTable() {
-        database.withConnection(conn -> conn.createStatement().execute(table.buildCreateTable()));
+        database.withConnection(conn -> {
+            conn.createStatement().execute(table.buildCreateTable());
+        });
     }
 
     public void insert(T entity) {
@@ -37,9 +44,9 @@ public class EntityRepository<T> {
             stmt.executeUpdate();
         });
     }
-    
-    public void insertAsync(T entity) {
-        CompletableFuture.runAsync(() -> insert(entity));
+
+    public CompletableFuture<Void> insertAsync(T entity) {
+        return CompletableFuture.runAsync(() -> insert(entity));
     }
 
     public Optional<T> findById(Object id) {
@@ -51,7 +58,7 @@ public class EntityRepository<T> {
         final Optional<T>[] result = new Optional[]{Optional.empty()};
         database.withConnection(conn -> {
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setObject(1, id.toString());
+            stmt.setObject(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) result[0] = Optional.of(mapRow(rs));
         });
@@ -60,6 +67,20 @@ public class EntityRepository<T> {
 
     public CompletableFuture<Optional<T>> findByIdAsync(Object id) {
         return CompletableFuture.supplyAsync(() -> findById(id));
+    }
+
+    public List<T> findAll() {
+        String sql = "SELECT * FROM " + table.getTableName();
+        List<T> results = new ArrayList<>();
+        database.withConnection(conn -> {
+            ResultSet rs = conn.createStatement().executeQuery(sql);
+            while (rs.next()) results.add(mapRow(rs));
+        });
+        return results;
+    }
+
+    public CompletableFuture<List<T>> findAllAsync() {
+        return CompletableFuture.supplyAsync(this::findAll);
     }
 
     public void update(T entity) {
@@ -82,8 +103,8 @@ public class EntityRepository<T> {
         });
     }
 
-    public void updateAsync(T entity) {
-        CompletableFuture.runAsync(() -> update(entity));
+    public CompletableFuture<Void> updateAsync(T entity) {
+        return CompletableFuture.runAsync(() -> update(entity));
     }
 
     public void delete(Object id) {
@@ -98,8 +119,8 @@ public class EntityRepository<T> {
         });
     }
 
-    public void deleteAsync(Object id) {
-        CompletableFuture.runAsync(() -> delete(id));
+    public CompletableFuture<Void> deleteAsync(Object id) {
+        return CompletableFuture.runAsync(() -> delete(id));
     }
 
     private void bindValues(PreparedStatement stmt, T entity, List<EntityTable.FieldColumn> cols) throws Exception {
@@ -111,7 +132,7 @@ public class EntityRepository<T> {
         }
     }
 
-    private T mapRow(ResultSet rs) throws Exception {
+    T mapRow(ResultSet rs) throws Exception {
         T instance = table.getEntityClass().getDeclaredConstructor().newInstance();
         for (EntityTable.FieldColumn fc : table.getColumns()) {
             fc.field().setAccessible(true);
