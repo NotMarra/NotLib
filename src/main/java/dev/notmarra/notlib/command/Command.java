@@ -3,10 +3,11 @@ package dev.notmarra.notlib.command;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import com.notmarra.notlib.utils.ChatF;
-import com.notmarra.notlib.utils.NotConverter;
-import com.notmarra.notlib.utils.command.arguments.NotArgument;
 
+import dev.notmarra.notlib.chat.Colors;
+import dev.notmarra.notlib.chat.Message;
+import dev.notmarra.notlib.command.arguments.Argument;
+import dev.notmarra.notlib.utils.Converter;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 
@@ -36,25 +37,25 @@ public class Command extends Base<Command> {
             }
         }
 
-        if (current instanceof NotArgument) {
-            return ((NotArgument<?>) current).get();
-        }S
+        if (current instanceof Argument) {
+            return ((Argument<?>) current).get();
+        }
 
         return null;
     }
 
-    public ChatF getHelpFor(List<String> filter) {
-        ChatF help = ChatF.empty();
+    public Message getHelpFor(List<String> filter) {
+        Message help = Message.empty();
         
-        help.append(ChatF.ofBold("/" + this.name, ChatF.C_YELLOW));
+        help.append(Message.ofBold("/" + this.name, Colors.YELLOW.get()));
         
         if (this.description != null) {
-            help.append(ChatF.of(" - ").append(this.description));
+            help.append(Message.of(" - ").append(this.description));
         }
         
         if (!this.arguments.isEmpty()) {
-            HashMap<String, NotArgument<Object>> filtered = new HashMap<>();
-            for (NotArgument<Object> arg : this.arguments.values()) {
+            HashMap<String, Argument<Object>> filtered = new HashMap<>();
+            for (Argument<Object> arg : this.arguments.values()) {
                 String argPath = arg.getPath();
                 if (!filter.isEmpty() && filter.stream().anyMatch(x -> argPath.startsWith(x) || x.startsWith(argPath))) {
                     filtered.put(arg.name, arg);
@@ -67,13 +68,13 @@ public class Command extends Base<Command> {
         return help;
     }
 
-    public ChatF getHelp() {
-        ChatF help = ChatF.empty();
+    public Message getHelp() {
+        Message help = Message.empty();
         
-        help.append(ChatF.ofBold("/" + this.name, ChatF.C_YELLOW));
+        help.append(Message.ofBold("/" + this.name, Colors.YELLOW.get()));
         
         if (this.description != null) {
-            help.append(ChatF.of(" - ").append(this.description));
+            help.append(Message.of(" - ").append(this.description));
         }
         
         if (!this.arguments.isEmpty()) {
@@ -83,8 +84,8 @@ public class Command extends Base<Command> {
         return help;
     }
     
-    private void appendArgumentsTree(ChatF help, HashMap<String, NotArgument<Object>> args, List<String> filter, int depth, String prefix) {
-        List<Map.Entry<String, NotArgument<Object>>> sortedArgs = new ArrayList<>(args.entrySet());
+    private void appendArgumentsTree(Message help, HashMap<String, Argument<Object>> args, List<String> filter, int depth, String prefix) {
+        List<Map.Entry<String, Argument<Object>>> sortedArgs = new ArrayList<>(args.entrySet());
         sortedArgs.sort(Map.Entry.comparingByKey());
 
         sortedArgs.removeIf(x -> {
@@ -93,21 +94,21 @@ public class Command extends Base<Command> {
         });
         
         for (int i = 0; i < sortedArgs.size(); i++) {
-            NotArgument<Object> arg = sortedArgs.get(i).getValue();
+            Argument<Object> arg = sortedArgs.get(i).getValue();
 
             boolean isLast = (i == sortedArgs.size() - 1);
             
             String branchSymbol = isLast ? "└" : "├";
             String nextPrefix = prefix + (isLast ? "  " : "│");
             
-            help.append(ChatF.newline().append(prefix + branchSymbol, ChatF.C_GRAY));
+            help.append(Message.newline().append(prefix + branchSymbol, Colors.GRAY.get()));
 
             String argName = arg.name;
             if (!arg.isLiteral) argName = "<" + argName + ">";
-            help.append(ChatF.ofBold(argName, ChatF.C_GREEN));
+            help.append(Message.ofBold(argName, Colors.GREEN.get()));
             
             if (arg.description != null) {
-                help.append(ChatF.of(" - ").append(arg.description));
+                help.append(Message.of(" - ").append(arg.description));
             }
             
             if (!arg.arguments.isEmpty()) {
@@ -130,12 +131,12 @@ public class Command extends Base<Command> {
         }
         return List.of();
     }
-    public String getStringV(String path) { return NotConverter.toString(get(path)); }
-    public Integer getIntegerV(String path) { return NotConverter.toInteger(get(path)); }
-    public Long getLongV(String path) { return NotConverter.toLong(get(path)); }
-    public Float getFloatV(String path) { return NotConverter.toFloat(get(path)); }
-    public Double getDoubleV(String path) { return NotConverter.toDouble(get(path)); }
-    public Boolean getBooleanV(String path) { return NotConverter.toBoolean(get(path)); }
+    public String getStringV(String path) { return Converter.toString(get(path)); }
+    public Integer getIntegerV(String path) { return Converter.toInteger(get(path)); }
+    public Long getLongV(String path) { return Converter.toLong(get(path)); }
+    public Float getFloatV(String path) { return Converter.toFloat(get(path)); }
+    public Double getDoubleV(String path) { return Converter.toDouble(get(path)); }
+    public Boolean getBooleanV(String path) { return Converter.toBoolean(get(path)); }
     public Player getPlayerV(String path) { return _getValue(path, Player.class); }
     public List<Player> getPlayersV(String path) { return _getListValue(path, Player.class); }
     public Entity getEntityV(String path) { return _getValue(path, Entity.class); }

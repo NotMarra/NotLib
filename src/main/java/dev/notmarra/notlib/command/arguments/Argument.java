@@ -9,6 +9,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 
+import dev.notmarra.notlib.chat.Message;
 import dev.notmarra.notlib.command.Base;
 import dev.notmarra.notlib.command.Command;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -48,7 +49,7 @@ public abstract class Argument<T> extends Base<Argument<T>> {
         return String.join(".", path);
     }
 
-    public ChatF getHelp() {
+    public Message getHelp() {
         return cmd().getHelpFor(List.of(getPath()));
     }
 

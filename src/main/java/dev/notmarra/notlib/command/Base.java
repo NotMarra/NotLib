@@ -75,7 +75,7 @@ public abstract class Base<T extends Base<T>> {
 
     public Argument<?> getArg(String name) {
         List<String> path = List.of(name.split("\\."));
-        Argument<?> arg = this.arguments.get(path.get(0));
+        Argument<?> arg = this.arguments.get(path.getFirst());
         for (int i = 1; i < path.size(); i++) {
             arg = arg.arguments.get(path.get(i));
         }
