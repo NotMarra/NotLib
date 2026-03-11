@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class EntityRepository<T> {
@@ -21,9 +22,7 @@ public class EntityRepository<T> {
     }
 
     public void createTable() {
-        database.withConnection(conn -> {
-            conn.createStatement().execute(table.buildCreateTable());
-        });
+        database.withConnection(conn -> conn.createStatement().execute(table.buildCreateTable()));
     }
 
     public void insert(T entity) {
@@ -48,11 +47,15 @@ public class EntityRepository<T> {
         final Optional<T>[] result = new Optional[]{Optional.empty()};
         database.withConnection(conn -> {
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setObject(1, id.toString()); // toString pro UUID
+            stmt.setObject(1, id.toString());
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) result[0] = Optional.of(mapRow(rs));
         });
         return result[0];
+    }
+
+    public CompletableFuture<Optional<T>> findByIdAsync(Object id) {
+        return CompletableFuture.supplyAsync(() -> findById(id));
     }
 
     public void update(T entity) {
@@ -73,6 +76,10 @@ public class EntityRepository<T> {
             stmt.setObject(nonPkCols.size() + 1, pk.field().get(entity).toString());
             stmt.executeUpdate();
         });
+    }
+
+    public void updateAsync(T entity) {
+        CompletableFuture.runAsync(() -> update(entity));
     }
 
     public void delete(Object id) {
