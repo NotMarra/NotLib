@@ -5,7 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import dev.notmarra.notlib.chat.Colors;
-import dev.notmarra.notlib.chat.Message;
+import dev.notmarra.notlib.chat.Text;
 import dev.notmarra.notlib.command.arguments.Argument;
 import dev.notmarra.notlib.utils.Converter;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -44,13 +44,13 @@ public class Command extends Base<Command> {
         return null;
     }
 
-    public Message getHelpFor(List<String> filter) {
-        Message help = Message.empty();
+    public Text getHelpFor(List<String> filter) {
+        Text help = Text.empty();
         
-        help.append(Message.ofBold("/" + this.name, Colors.YELLOW.get()));
+        help.append(Text.ofBold("/" + this.name, Colors.YELLOW.get()));
         
         if (this.description != null) {
-            help.append(Message.of(" - ").append(this.description));
+            help.append(Text.of(" - ").append(this.description));
         }
         
         if (!this.arguments.isEmpty()) {
@@ -68,13 +68,13 @@ public class Command extends Base<Command> {
         return help;
     }
 
-    public Message getHelp() {
-        Message help = Message.empty();
+    public Text getHelp() {
+        Text help = Text.empty();
         
-        help.append(Message.ofBold("/" + this.name, Colors.YELLOW.get()));
+        help.append(Text.ofBold("/" + this.name, Colors.YELLOW.get()));
         
         if (this.description != null) {
-            help.append(Message.of(" - ").append(this.description));
+            help.append(Text.of(" - ").append(this.description));
         }
         
         if (!this.arguments.isEmpty()) {
@@ -84,7 +84,7 @@ public class Command extends Base<Command> {
         return help;
     }
     
-    private void appendArgumentsTree(Message help, HashMap<String, Argument<Object>> args, List<String> filter, int depth, String prefix) {
+    private void appendArgumentsTree(Text help, HashMap<String, Argument<Object>> args, List<String> filter, int depth, String prefix) {
         List<Map.Entry<String, Argument<Object>>> sortedArgs = new ArrayList<>(args.entrySet());
         sortedArgs.sort(Map.Entry.comparingByKey());
 
@@ -101,14 +101,14 @@ public class Command extends Base<Command> {
             String branchSymbol = isLast ? "└" : "├";
             String nextPrefix = prefix + (isLast ? "  " : "│");
             
-            help.append(Message.newline().append(prefix + branchSymbol, Colors.GRAY.get()));
+            help.append(Text.newline().append(prefix + branchSymbol, Colors.GRAY.get()));
 
             String argName = arg.name;
             if (!arg.isLiteral) argName = "<" + argName + ">";
-            help.append(Message.ofBold(argName, Colors.GREEN.get()));
+            help.append(Text.ofBold(argName, Colors.GREEN.get()));
             
             if (arg.description != null) {
-                help.append(Message.of(" - ").append(arg.description));
+                help.append(Text.of(" - ").append(arg.description));
             }
             
             if (!arg.arguments.isEmpty()) {
