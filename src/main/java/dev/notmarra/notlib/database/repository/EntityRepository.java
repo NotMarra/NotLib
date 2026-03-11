@@ -37,6 +37,10 @@ public class EntityRepository<T> {
             stmt.executeUpdate();
         });
     }
+    
+    public void insertAsync(T entity) {
+        CompletableFuture.runAsync(() -> insert(entity));
+    }
 
     public Optional<T> findById(Object id) {
         EntityTable.FieldColumn pk = table.getPrimaryKey()
@@ -94,6 +98,9 @@ public class EntityRepository<T> {
         });
     }
 
+    public void deleteAsync(Object id) {
+        CompletableFuture.runAsync(() -> delete(id));
+    }
 
     private void bindValues(PreparedStatement stmt, T entity, List<EntityTable.FieldColumn> cols) throws Exception {
         for (int i = 0; i < cols.size(); i++) {
