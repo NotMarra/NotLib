@@ -38,7 +38,7 @@ public class Command extends Base<Command> {
 
         if (current instanceof NotArgument) {
             return ((NotArgument<?>) current).get();
-        }
+        }S
 
         return null;
     }
