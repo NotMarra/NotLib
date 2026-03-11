@@ -53,7 +53,7 @@ public abstract class Database {
         props.setProperty("dataSource.user", user);
         props.setProperty("dataSource.password", password);
         props.setProperty("dataSource.databaseName", databaseName);
-        props.setProperty("dataSource.portNumber", port);
+        props.setProperty("dataSource.port", port);
         props.setProperty("dataSource.serverName", serverName);
         return props;
     }
