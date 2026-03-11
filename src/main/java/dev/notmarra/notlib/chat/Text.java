@@ -1,6 +1,5 @@
 package dev.notmarra.notlib.chat;
 
-import dev.notmarra.notlib.NotLib;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -22,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 
-public class Message {
+public class Text {
     public static String K_MESSAGE = "%message%";
 
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
@@ -33,7 +32,7 @@ public class Message {
     private Audience entity;
     private Audience targetEntity;
 
-    public Message(Component baseComponent) {
+    public Text(Component baseComponent) {
         appendComponents.add(baseComponent);
     }
 
@@ -47,7 +46,7 @@ public class Message {
 
             TextReplacementConfig.Builder builder = TextReplacementConfig.builder().match(key);
 
-            if (value instanceof Message formatted) {
+            if (value instanceof Text formatted) {
                 builder = builder.replacement(formatted.build());
             } else if (value instanceof Component component) {
                 builder = builder.replacement(component);
@@ -101,68 +100,68 @@ public class Message {
         return baseComponent;
     }
 
-    public Message withEntity(Entity entity) {
+    public Text withEntity(Entity entity) {
         this.entity = entity;
         return this;
     }
 
-    public Message withTargetEntity(Entity targetEntity) {
+    public Text withTargetEntity(Entity targetEntity) {
         this.targetEntity = targetEntity;
         return this;
     }
 
-    public Message appendMany(Message... formatters) {
-        for (Message formatter : formatters) {
+    public Text appendMany(Text... formatters) {
+        for (Text formatter : formatters) {
             appendComponents.add(formatter.build());
         }
         return this;
     }
 
-    public Message appendMany(Component... components) {
+    public Text appendMany(Component... components) {
         Collections.addAll(appendComponents, components);
         return this;
     }
 
-    public Message appendMany(String... strings) {
+    public Text appendMany(String... strings) {
         for (String string : strings) {
             appendComponents.add(Component.text(string));
         }
         return this;
     }
 
-    public Message appendListMessage(List<Message> formatters) {
-        for (Message formatter : formatters) {
+    public Text appendListMessage(List<Text> formatters) {
+        for (Text formatter : formatters) {
             appendComponents.add(formatter.build());
         }
         return this;
     }
 
-    public Message appendListComponent(List<Component> components) {
+    public Text appendListComponent(List<Component> components) {
         appendComponents.addAll(components);
         return this;
     }
 
-    public Message appendListString(List<String> strings) {
+    public Text appendListString(List<String> strings) {
         for (String string : strings) append(string);
         return this;
     }
 
-    public Message appendListString(List<String> strings, TextColor color) {
+    public Text appendListString(List<String> strings, TextColor color) {
         for (String string : strings) append(string, color);
         return this;
     }
 
-    public Message appendListString(List<String> strings, Style style) {
+    public Text appendListString(List<String> strings, Style style) {
         for (String string : strings) append(string, style);
         return this;
     }
 
-    public Message nl() {
+    public Text nl() {
         appendComponents.add(Component.newline());
         return this;
     }
 
-    public Message clickInfinite(ClickCallback<Audience> event) {
+    public Text clickInfinite(ClickCallback<Audience> event) {
         if (appendComponents.isEmpty()) return this;
         Component last = appendComponents.removeLast();
         last = last.clickEvent(ClickEvent.callback(event, o -> o.uses(-1)));
@@ -170,7 +169,7 @@ public class Message {
         return this;
     }
 
-    public Message clickWithOptions(int uses, @Nullable TemporalAmount duration, ClickCallback<Audience> event) {
+    public Text clickWithOptions(int uses, @Nullable TemporalAmount duration, ClickCallback<Audience> event) {
         if (appendComponents.isEmpty()) return this;
         Component last = appendComponents.removeLast();
         last = last.clickEvent(ClickEvent.callback(event, o -> {
@@ -181,7 +180,7 @@ public class Message {
         return this;
     }
 
-    private Message _doAction(ClickEvent.Action action, String stuff) {
+    private Text _doAction(ClickEvent.Action action, String stuff) {
         if (appendComponents.isEmpty()) return this;
         Component last = appendComponents.removeLast();
         last = last.clickEvent(ClickEvent.clickEvent(action, stuff));
@@ -189,10 +188,10 @@ public class Message {
         return this;
     }
 
-    public Message clickOpenUrl(String url) { return _doAction(ClickEvent.Action.OPEN_URL, url); }
-    public Message clickCopyToClipboard(String value) { return _doAction(ClickEvent.Action.COPY_TO_CLIPBOARD, value); }
+    public Text clickOpenUrl(String url) { return _doAction(ClickEvent.Action.OPEN_URL, url); }
+    public Text clickCopyToClipboard(String value) { return _doAction(ClickEvent.Action.COPY_TO_CLIPBOARD, value); }
 
-    public Message click(ClickCallback<Audience> event) {
+    public Text click(ClickCallback<Audience> event) {
         if (appendComponents.isEmpty()) return this;
         Component last = appendComponents.removeLast();
         last = last.clickEvent(ClickEvent.callback(event));
@@ -209,7 +208,7 @@ public class Message {
         return this;
     }*/
 
-    public Message hoverEntity(Entity entity) {
+    public Text hoverEntity(Entity entity) {
         if (appendComponents.isEmpty()) return this;
         Component last = appendComponents.removeLast();
         last = last.hoverEvent(entity.asHoverEvent());
@@ -217,9 +216,9 @@ public class Message {
         return this;
     }
 
-    public Message hover(String component) { return hover(Message.of(component)); }
-    public Message hover(Message component) { return hover(component.build()); }
-    public Message hover(Component component) {
+    public Text hover(String component) { return hover(Text.of(component)); }
+    public Text hover(Text component) { return hover(component.build()); }
+    public Text hover(Component component) {
         if (appendComponents.isEmpty()) return this;
         Component last = appendComponents.removeLast();
         last = last.hoverEvent(HoverEvent.showText(component));
@@ -227,11 +226,11 @@ public class Message {
         return this;
     }
 
-    public Message append(Object o) {
+    public Text append(Object o) {
         if (o instanceof Component) {
             return append((Component)o);
-        } else if (o instanceof Message) {
-            return append(((Message)o).build());
+        } else if (o instanceof Text) {
+            return append(((Text)o).build());
         } else if (o instanceof String) {
             return append((String)o);
         } else {
@@ -239,137 +238,137 @@ public class Message {
         }
     }
 
-    public Message append(Message formatter) {
+    public Text append(Text formatter) {
         appendComponents.add(formatter.build());
         return this;
     }
 
-    public Message append(Component component) {
+    public Text append(Component component) {
         appendComponents.add(component);
         return this;
     }
 
-    public Message append(Component component, TextColor color) {
+    public Text append(Component component, TextColor color) {
         appendComponents.add(component.color(color));
         return this;
     }
 
-    public Message append(Component component, Style style) {
+    public Text append(Component component, Style style) {
         appendComponents.add(component.style(style));
         return this;
     }
 
-    public Message append(String string) {
+    public Text append(String string) {
         appendComponents.add(toComponent(string));
         return this;
     }
 
-    public Message append(String string, TextColor color) {
+    public Text append(String string, TextColor color) {
         appendComponents.add(toComponent(string, color));
         return this;
     }
 
-    public Message append(String string, Style style) {
+    public Text append(String string, Style style) {
         appendComponents.add(toComponent(string, style));
         return this;
     }
 
-    public Message append(Character ch) {
+    public Text append(Character ch) {
         appendComponents.add(toComponent(ch));
         return this;
     }
 
-    public Message append(Character ch, TextColor color) {
+    public Text append(Character ch, TextColor color) {
         appendComponents.add(toComponent(ch, color));
         return this;
     }
 
-    public Message append(Character ch, Style style) {
+    public Text append(Character ch, Style style) {
         appendComponents.add(toComponent(ch, style));
         return this;
     }
 
-    public Message appendBold(String string) {
+    public Text appendBold(String string) {
         appendComponents.add(toComponentBold(string));
         return this;
     }
 
-    public Message appendBold(String string, TextColor color) {
+    public Text appendBold(String string, TextColor color) {
         appendComponents.add(toComponentBold(string, color));
         return this;
     }
 
-    public Message replace(String key, Object value) {
+    public Text replace(String key, Object value) {
         replacements.put(key, value);
         return this;
     }
 
-    public static Message empty() {
-        return new Message(Component.empty());
+    public static Text empty() {
+        return new Text(Component.empty());
     }
 
-    public static Message newline() {
-        return new Message(Component.newline());
+    public static Text newline() {
+        return new Text(Component.newline());
     }
 
-    public static Message from(Object o) {
+    public static Text from(Object o) {
         if (o instanceof Component) {
-            return Message.of((Component)o);
-        } else if (o instanceof Message) {
-            return Message.of(((Message)o).build());
+            return Text.of((Component)o);
+        } else if (o instanceof Text) {
+            return Text.of(((Text)o).build());
         } else if (o instanceof String) {
-            return Message.of((String)o);
+            return Text.of((String)o);
         } else {
-            return Message.of(o.toString());
+            return Text.of(o.toString());
         }
     }
 
-    public static Message of(Component inputComponent) {
-        return new Message(inputComponent);
+    public static Text of(Component inputComponent) {
+        return new Text(inputComponent);
     }
 
-    public static Message of(Component inputComponent, TextColor color) {
-        return new Message(inputComponent.color(color));
+    public static Text of(Component inputComponent, TextColor color) {
+        return new Text(inputComponent.color(color));
     }
 
-    public static Message of(Component inputComponent, Style style) {
-        return new Message(inputComponent.style(style));
+    public static Text of(Component inputComponent, Style style) {
+        return new Text(inputComponent.style(style));
     }
 
-    public static Message of(String inputString) {
-        return new Message(toComponent(inputString));
+    public static Text of(String inputString) {
+        return new Text(toComponent(inputString));
     }
 
-    public static Message of(String inputString, TextColor color) {
-        return new Message(toComponent(inputString, color));
+    public static Text of(String inputString, TextColor color) {
+        return new Text(toComponent(inputString, color));
     }
 
-    public static Message of(String inputString, Style style) {
-        return new Message(toComponent(inputString, style));
+    public static Text of(String inputString, Style style) {
+        return new Text(toComponent(inputString, style));
     }
 
-    public static Message of(Character inputCharacter) {
-        return new Message(toComponent(inputCharacter));
+    public static Text of(Character inputCharacter) {
+        return new Text(toComponent(inputCharacter));
     }
 
-    public static Message of(Character inputCharacter, TextColor color) {
-        return new Message(toComponent(inputCharacter, color));
+    public static Text of(Character inputCharacter, TextColor color) {
+        return new Text(toComponent(inputCharacter, color));
     }
 
-    public static Message of(Character inputCharacter, Style style) {
-        return new Message(toComponent(inputCharacter, style));
+    public static Text of(Character inputCharacter, Style style) {
+        return new Text(toComponent(inputCharacter, style));
     }
 
-    public static Message ofBold(String inputString) {
-        return new Message(toComponentBold(inputString));
+    public static Text ofBold(String inputString) {
+        return new Text(toComponentBold(inputString));
     }
 
-    public static Message ofBold(String inputString, TextColor color) {
-        return new Message(toComponentBold(inputString, color));
+    public static Text ofBold(String inputString, TextColor color) {
+        return new Text(toComponentBold(inputString, color));
     }
 
-    public static Message of(Message otherFormatter) {
-        return new Message(otherFormatter.build());
+    public static Text of(Text otherFormatter) {
+        return new Text(otherFormatter.build());
     }
 
     public static Component toComponent(String inputString) {
@@ -515,29 +514,29 @@ public class Message {
         };
     }
 
-    public static Message ofLegacy(String inputString) {
-        return new Message(toComponent(convertLegacyColors(inputString)));
+    public static Text ofLegacy(String inputString) {
+        return new Text(toComponent(convertLegacyColors(inputString)));
     }
 
-    public static Message ofLegacy(String inputString, TextColor color) {
-        return new Message(toComponent(convertLegacyColors(inputString), color));
+    public static Text ofLegacy(String inputString, TextColor color) {
+        return new Text(toComponent(convertLegacyColors(inputString), color));
     }
 
-    public static Message ofLegacy(String inputString, Style style) {
-        return new Message(toComponent(convertLegacyColors(inputString), style));
+    public static Text ofLegacy(String inputString, Style style) {
+        return new Text(toComponent(convertLegacyColors(inputString), style));
     }
 
-    public Message appendLegacy(String string) {
+    public Text appendLegacy(String string) {
         appendComponents.add(toComponent(convertLegacyColors(string)));
         return this;
     }
 
-    public Message appendLegacy(String string, TextColor color) {
+    public Text appendLegacy(String string, TextColor color) {
         appendComponents.add(toComponent(convertLegacyColors(string), color));
         return this;
     }
 
-    public Message appendLegacy(String string, Style style) {
+    public Text appendLegacy(String string, Style style) {
         appendComponents.add(toComponent(convertLegacyColors(string), style));
         return this;
     }
