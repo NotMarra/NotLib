@@ -1,5 +1,8 @@
 package dev.notmarra.notlib.extensions;
 
+import dev.notmarra.notlib.file.ConfigFileManager;
+import dev.notmarra.notlib.file.ConfigOptions;
+import dev.notmarra.notlib.file.ManagedConfig;
 import dev.notmarra.notlib.chat.Colors;
 import dev.notmarra.notlib.chat.Text;
 import dev.notmarra.notlib.scheduler.Scheduler;
@@ -15,193 +18,241 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public abstract class NotPlugin extends JavaPlugin {
-    private final Map<String, Runnable> ON_PLUGIN_ENABLED_CALLBACKS = new HashMap<>();
-    // <path, config>
-    private final Map<String, FileConfiguration> CONFIGS = new HashMap<>();
-    // <id, listener>
-    private final Map<String, NotListener> LISTENERS = new HashMap<>();
-    // <id, cmdGroup>
-    private final Map<String, CommandGroup> CMDGROUPS = new HashMap<>();
-    // <path, [configurable]>
+    private final Map<String, Runnable>         ON_PLUGIN_ENABLED_CALLBACKS = new HashMap<>();
+    private final Map<String, NotListener>      LISTENERS   = new HashMap<>();
+    private final Map<String, CommandGroup>     CMDGROUPS   = new HashMap<>();
+    // <configPath, [configurable]>  – kept for onConfigReload callbacks
     private final Map<String, List<Configurable>> CONFIGURABLES = new HashMap<>();
 
+    // -----------------------------------------------------------------------
+    // ConfigFileManager – single source of truth for all config files
+    // -----------------------------------------------------------------------
+
+    private ConfigFileManager cfm;
+
+    /**
+     * Returns the plugin's {@link ConfigFileManager}.
+     * Available after {@link #onEnable()} initialises it; do not call from a static context.
+     */
+    public ConfigFileManager getCfm() { return cfm; }
+
+    // -----------------------------------------------------------------------
+    // Legacy shims – keep existing API working unchanged
+    // -----------------------------------------------------------------------
+
+    /**
+     * Returns the relative paths of all config files currently managed by the CFM.
+     * Drop-in replacement for the old {@code CONFIGS.keySet()} approach.
+     */
     public List<String> getConfigFilePaths() {
-        return CONFIGS.keySet().stream().toList();
-    }
-    /* TODO
-    private TranslationManager translationManager;
-
-    public TranslationManager tm() {
-        return translationManager;
+        return cfm.getAll().keySet().stream().toList();
     }
 
-    public String tm(String key) {
-        return tm().get(key);
-    }
+    // -----------------------------------------------------------------------
+    // Scheduler & constants
+    // -----------------------------------------------------------------------
 
-    public List<String> tmList(String key) {
-        return tm().getList(key);
-    }
-
-    private DatabaseManager databaseManager;
-
-    public DatabaseManager db() {
-        return databaseManager;
-    }
-
-    public Database db(String dbId) {
-        return databaseManager.getDatabase(dbId);
-    }
-
-    */
     private Scheduler scheduler;
 
-    public Scheduler scheduler() {
-        return scheduler;
-    }
+    public Scheduler scheduler() { return scheduler; }
 
     public final String CONFIG_YML = "config.yml";
+
+    // -----------------------------------------------------------------------
+    // Listener / CommandGroup registration (unchanged)
+    // -----------------------------------------------------------------------
 
     public void addPluginEnabledCallback(String pluginId, Runnable callback) {
         ON_PLUGIN_ENABLED_CALLBACKS.put(pluginId, callback);
     }
 
-    // addListener("listener_id", new Listener(this));
     public void addListener(NotListener notListener) {
         LISTENERS.put(notListener.getId(), notListener);
     }
 
-    public NotListener getListener(String id) {
-        return LISTENERS.get(id);
-    }
+    public NotListener getListener(String id) { return LISTENERS.get(id); }
 
-    // addCommandManager("cmdgroup_id", new CommandManager(this));
     public void addCommandGroup(CommandGroup cmdGroup) {
         CMDGROUPS.put(cmdGroup.getId(), cmdGroup);
     }
 
-    public CommandGroup getCommandGroup(String id) {
-        return CMDGROUPS.get(id);
-    }
+    public CommandGroup getCommandGroup(String id) { return CMDGROUPS.get(id); }
 
+    // -----------------------------------------------------------------------
+    // Configurable registration
+    // -----------------------------------------------------------------------
+
+    /**
+     * Registers a {@link Configurable} for a specific config path.
+     *
+     * <ul>
+     *   <li>If the path is not yet tracked by the CFM it is registered and loaded.</li>
+     *   <li>The configurable is added to the callback list for that path so it receives
+     *       {@link Configurable#onConfigReload} on every reload.</li>
+     * </ul>
+     */
     public void registerConfigurable(Configurable configurable, String configPath) {
-        CONFIGURABLES.computeIfAbsent(configPath, k -> new ArrayList<>());
-        if (!CONFIGURABLES.get(configPath).contains(configurable)) {
-            CONFIGURABLES.get(configPath).add(configurable);
-        }
+        // Register in the callback index
+        CONFIGURABLES.computeIfAbsent(configPath, k -> new ArrayList<>())
+                .add(configurable);
 
-        if (getResource(configPath) != null) {
-            saveDefaultConfig(configPath);
+        // Ensure CFM knows about this file (idempotent)
+        if (!cfm.isRegistered(configPath)) {
+            cfm.register(configPath);
+            cfm.load(configPath);
         }
-        loadConfigFile(configPath);
     }
 
+    /**
+     * Registers a {@link Configurable} for all paths returned by
+     * {@link Configurable#getConfigPaths()}, then triggers an initial reload.
+     */
     public void registerConfigurable(Configurable configurable) {
-        List<String> configPaths = configurable.getConfigPaths();
-        if (configPaths.isEmpty())
-            return;
-        configPaths.forEach(path -> {
-            registerConfigurable(configurable, path);
-            loadConfigFile(path);
-        });
+        List<String> paths = configurable.getConfigPaths();
+        if (paths.isEmpty()) return;
+        paths.forEach(path -> registerConfigurable(configurable, path));
         configurable.reload();
     }
 
+    // -----------------------------------------------------------------------
+    // Config access – delegates to CFM
+    // -----------------------------------------------------------------------
+
+    /**
+     * Returns the {@link FileConfiguration} for the given relative path.
+     * Forwards to the underlying {@link ManagedConfig} in the CFM.
+     *
+     * <p>Returns an empty {@link YamlConfiguration} if the file is not registered,
+     * preserving the old null-safe behaviour callers may rely on.
+     */
+    public FileConfiguration getSubConfig(String file) {
+        if (!cfm.isRegistered(file)) return new YamlConfiguration();
+        return cfm.get(file).yaml();
+    }
+
+    /**
+     * Reloads a config file from disk, updates the CFM cache and notifies all
+     * registered {@link Configurable} instances for that path.
+     *
+     * <p>Drop-in replacement for the old {@code reloadConfig(String)} method.
+     */
+    public FileConfiguration reloadConfig(String file) {
+        if (!cfm.isRegistered(file)) return new YamlConfiguration();
+
+        cfm.reload(file);   // re-reads disk + runs auto-update
+
+        // Notify all configurables registered for this path
+        List<Configurable> subscribers = CONFIGURABLES.getOrDefault(file, List.of());
+        subscribers.forEach(c -> c.onConfigReload(List.of(file)));
+
+        return cfm.get(file).yaml();
+    }
+
+    // -----------------------------------------------------------------------
+    // Directory watching – new feature, integrates with CFM
+    // -----------------------------------------------------------------------
+
+    /**
+     * Watches a directory for user-created YAML files (e.g. language packs, arena configs).
+     *
+     * <p>Delegates to {@link ConfigFileManager#watchDirectory}. Call this from
+     * {@link #initPlugin()} before {@code loadAll()} / {@code onPluginEnable()}.
+     *
+     * <pre>{@code
+     * // In initPlugin():
+     * watchUserDirectory("languages", ConfigOptions.builder()
+     *         .autoUpdate(false)
+     *         .seedFile("languages/en_US.yml")
+     *         .build());
+     * }</pre>
+     *
+     * @param dirPath relative path inside the plugin data folder
+     * @param options options applied to every file found in the directory
+     */
+    public void watchUserDirectory(String dirPath, ConfigOptions options) {
+        cfm.watchDirectory(dirPath, options);
+    }
+
+    /** @see #watchUserDirectory(String, ConfigOptions) */
+    public void watchUserDirectory(String dirPath) {
+        cfm.watchDirectory(dirPath);
+    }
+
+    // -----------------------------------------------------------------------
+    // Legacy config helpers (saveDefaultConfig / loadConfigFile kept for
+    // back-compat; internally they now go through CFM)
+    // -----------------------------------------------------------------------
+
+    /**
+     * Copies the resource to disk if it does not yet exist, then ensures the CFM
+     * has it registered. Equivalent to the old {@code saveDefaultConfig(String)}.
+     */
     public void saveDefaultConfig(String forConfig) {
-        if (forConfig == null)
-            return;
-        if (CONFIGS.containsKey(forConfig))
-            return;
+        if (forConfig == null) return;
+
         File configFile = new File(getDataFolder(), forConfig);
-        if (configFile.exists())
-            return;
-        if (getResource(forConfig) == null)
-            return;
-        configFile.getParentFile().mkdirs();
-        saveResource(forConfig, false);
+        if (!configFile.exists() && getResource(forConfig) != null) {
+            configFile.getParentFile().mkdirs();
+            saveResource(forConfig, false);
+        }
+
+        // Register with CFM (noop if already registered)
+        if (!cfm.isRegistered(forConfig)) {
+            cfm.register(forConfig);
+        }
     }
 
+    /**
+     * Loads a config file through the CFM.
+     * No-op if the file does not exist on disk (preserves old behaviour).
+     *
+     * @deprecated Use {@link ConfigFileManager#load(String)} directly via {@link #getCfm()}.
+     */
+    @Deprecated
     private void loadConfigFile(String configPath) {
-        if (configPath == null || CONFIGS.containsKey(configPath))
-            return;
+        if (configPath == null) return;
+        File f = new File(getDataFolder(), configPath);
+        if (!f.exists()) return;
 
-        File configFile = new File(getDataFolder(), configPath);
-        if (!configFile.exists())
-            return;
-
-        FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-
-        java.io.InputStream defaultStream = getResource(configPath);
-
-        /* TODO
-        if (defaultStream == null && translationManager != null) {
-
-            String langFolder = "lang/";
-            if (configPath.startsWith(langFolder)) {
-                defaultStream = getResource(langFolder + "en.yml");
-            }
+        if (!cfm.isRegistered(configPath)) {
+            cfm.register(configPath);
         }
-        */
-
-        if (defaultStream != null) {
-            YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(
-                    new java.io.InputStreamReader(defaultStream));
-
-            config.setDefaults(defaultConfig);
-            config.options().copyDefaults(true);
-
-            try {
-                config.save(configFile);
-            } catch (IOException e) {
-                getComponentLogger().error("Failed to update configuration file: " + configPath, e);
-            }
-        }
-
-        CONFIGS.put(configPath, config);
+        cfm.load(configPath);
     }
 
-    public File getFile(String child) {
-        return new File(getDataFolder(), child);
-    }
-
-    public String getAbsPath(String child) {
-        return (new File(getDataFolder(), child)).getAbsolutePath();
-    }
+    // -----------------------------------------------------------------------
+    // Plugin lifecycle
+    // -----------------------------------------------------------------------
 
     public abstract void initPlugin();
-
     public abstract void onPluginEnable();
-
     public abstract void onPluginDisable();
-
-    /* TODO
-    public ComponentLogger log() {
-        return getComponentLogger();
-    }
-    */
 
     @Override
     public void onEnable() {
         try {
-            //MinecraftStuff.getInstance().initialize();
-
-            //this.translationManager = new TranslationManager(this);
-            //this.databaseManager = new DatabaseManager(this);
             this.scheduler = new Scheduler(this);
 
+            // Initialise the CFM early so initPlugin() can call register/watchDirectory
+            this.cfm = new ConfigFileManager(this);
+
+            // Ensure the main config is always available
             saveDefaultConfig(CONFIG_YML);
-            loadConfigFile(CONFIG_YML);
-            //tm().discoverAndRegisterLocalLangs();
+            cfm.load(CONFIG_YML);
+
             initPlugin();
 
-            for (String pluginId : ON_PLUGIN_ENABLED_CALLBACKS.keySet()) {
-                if (Bukkit.getPluginManager().isPluginEnabled(pluginId)) {
-                    ON_PLUGIN_ENABLED_CALLBACKS.get(pluginId).run();
-                }
-            }
+            // Load everything the plugin registered during initPlugin()
+            cfm.loadAll();
 
-            LISTENERS.values().forEach(l -> l.register());
-            CMDGROUPS.values().forEach(c -> c.register());
+            // Fire plugin-enabled callbacks
+            ON_PLUGIN_ENABLED_CALLBACKS.forEach((pluginId, cb) -> {
+                if (Bukkit.getPluginManager().isPluginEnabled(pluginId)) cb.run();
+            });
+
+            LISTENERS.values().forEach(NotListener::register);
+            CMDGROUPS.values().forEach(CommandGroup::register);
+
             onPluginEnable();
         } catch (Exception e) {
             getComponentLogger().error(
@@ -209,7 +260,8 @@ public abstract class NotPlugin extends JavaPlugin {
                             .append("[CRITICAL ERROR] Disabling plugin", Colors.RED.get())
                             .nl()
                             .appendListString(
-                                    List.of(e.getStackTrace()).stream().map(x -> "    " + x.toString() + '\n').toList(),
+                                    List.of(e.getStackTrace()).stream()
+                                            .map(x -> "    " + x + '\n').toList(),
                                     Colors.ORANGE.get())
                             .build());
             getServer().getPluginManager().disablePlugin(this);
@@ -219,51 +271,66 @@ public abstract class NotPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         onPluginDisable();
-        //db().close();
     }
 
-    public FileConfiguration getSubConfig(String file) {
-        return CONFIGS.get(file);
-    }
+    // -----------------------------------------------------------------------
+    // Utilities
+    // -----------------------------------------------------------------------
 
-    public FileConfiguration reloadConfig(String file) {
-        File configFile = new File(getDataFolder(), file);
-        if (!configFile.exists())
-            return new YamlConfiguration();
-        CONFIGS.put(file, YamlConfiguration.loadConfiguration(configFile));
-        if (CONFIGURABLES.containsKey(file)) {
-            CONFIGURABLES.get(file).forEach(c -> c.onConfigReload(List.of(file)));
-        }
-        return CONFIGS.get(file);
-    }
+    public File getFile(String child)        { return new File(getDataFolder(), child); }
+    public String getAbsPath(String child)   { return new File(getDataFolder(), child).getAbsolutePath(); }
 
+    /**
+     * Lists all resources inside the given folder path in the plugin jar.
+     * Unchanged from the original implementation.
+     */
     public List<String> listResources(String folderPath) {
         List<String> resources = new ArrayList<>();
-
         try {
-            // Get the JAR file of your plugin
-            JarFile jarFile = new JarFile(this.getClass().getProtectionDomain()
-                    .getCodeSource().getLocation().getPath());
-
-            // Get all entries in the JAR
+            JarFile jarFile = new JarFile(
+                    this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
             Enumeration<JarEntry> entries = jarFile.entries();
-
-            // Loop through all entries
             while (entries.hasMoreElements()) {
                 JarEntry entry = entries.nextElement();
                 String name = entry.getName();
-
-                // Check if this entry is in the specified folder and is not a directory
-                if (name.startsWith(folderPath) && !name.endsWith("/")) {
-                    resources.add(name);
-                }
+                if (name.startsWith(folderPath) && !name.endsWith("/")) resources.add(name);
             }
-
             jarFile.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return resources;
+    }
+
+    /**
+     * Convenience method: watches a directory whose contents are discovered via
+     * {@link #listResources(String)} and seeds it from jar resources on first run.
+     *
+     * <p>Useful for bundling multiple default files (e.g. all built-in language files)
+     * while still allowing users to add their own:
+     *
+     * <pre>{@code
+     * // Copies languages/en_US.yml and languages/cs_CZ.yml from the jar,
+     * // then also loads any extra *.yml files users drop into the folder.
+     * watchResourceDirectory("languages");
+     * }</pre>
+     *
+     * @param folderPath folder path as used in the jar (e.g. {@code "languages"})
+     */
+    public void watchResourceDirectory(String folderPath) {
+        // Copy every bundled file in the folder to disk on first run
+        listResources(folderPath + "/").forEach(resourcePath -> {
+            File dest = new File(getDataFolder(), resourcePath);
+            if (!dest.exists() && getResource(resourcePath) != null) {
+                dest.getParentFile().mkdirs();
+                saveResource(resourcePath, false);
+            }
+        });
+
+        // Then watch the directory so user-added files are also picked up
+        cfm.watchDirectory(folderPath, ConfigOptions.builder()
+                .autoUpdate(false)
+                .copyFromResources(false)
+                .build());
     }
 }
