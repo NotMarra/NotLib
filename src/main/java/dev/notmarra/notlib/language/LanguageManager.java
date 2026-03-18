@@ -6,8 +6,8 @@ import dev.notmarra.notlib.file.ManagedConfig;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
@@ -17,88 +17,80 @@ import java.util.logging.Logger;
  * <pre>
  * plugins/MyPlugin/
  *   languages/
- *     en_US.yml   ← default / fallback locale
+ *     en_US.yml   ← default / fallback
  *     cs_CZ.yml
- *     de_DE.yml
  * </pre>
+ *
+ * <h3>config.yml integration</h3>
+ * <pre>{@code
+ * language:
+ *   default: "en_US"
+ * }</pre>
  *
  * <h3>YAML message file format</h3>
  * <pre>{@code
  * prefix: "<gray>[<aqua>MyPlugin</aqua>]</gray> "
  *
  * player:
- *   join: "%prefix%<green>%player% joined the server!"
- *   quit: "%prefix%<red>%player% left the server."
- *   level_up: "%prefix%<yellow>%player% reached level %level%!"
- *
- * error:
- *   no_permission: "%prefix%<red>You don't have permission."
- *   player_only: "%prefix%<red>This command can only be used by players."
+ *   join: "%prefix%<green>%player% joined!"
+ *   quit: "%prefix%<red>%player% left."
  * }</pre>
  *
- * <h3>Minimal setup inside NotPlugin</h3>
+ * <h3>Setup inside NotPlugin</h3>
  * <pre>{@code
- * private LanguageManager lang;
+ * lang = languageManager()
+ *         .defaultLocale("en_US")
+ *         .seedFile("languages/en_US.yml")
+ *         .build();
  *
- * @Override
- * public void initPlugin() {
- *     lang = LanguageManager.builder(this)
- *             .directory("languages")
- *             .defaultLocale("en_US")
- *             .seedFile("languages/en_US.yml")
- *             .build();
- * }
- *
- * // Sending a message:
- * lang.get("player.join")
- *     .withPlayer(player)
- *     .sendTo(player);
- *
- * // Switching locale per player:
- * lang.setLocale(player.getUniqueId().toString(), "cs_CZ");
+ * lang.get("player.join").withPlayer(player).sendTo(player);
  * }</pre>
- *
- * <h3>Prefix</h3>
- * Every message value may contain {@code %prefix%} which is replaced with the
- * {@code prefix} key from the active locale file. If the key is absent the
- * replacement is an empty string — no NullPointerException.
  */
 public class LanguageManager {
 
     private static final Logger LOGGER = Logger.getLogger(LanguageManager.class.getName());
 
-    private static final String PREFIX_KEY     = "prefix";
-    private static final String PREFIX_HOLDER  = "%prefix%";
+    private static final String PREFIX_KEY    = "prefix";
+    private static final String PREFIX_HOLDER = "%prefix%";
+    private static final String CFG_DEFAULT   = "language.default";
 
     private final JavaPlugin plugin;
     private final ConfigFileManager cfm;
-
     private final String directory;
-    private final String defaultLocale;
+    private final String configPath;
+    private final String builderDefaultLocale;
 
-    /** Maps arbitrary entity IDs (player UUID string, "console", …) to locale codes. */
-    private final java.util.Map<String, String> localeMap = new java.util.HashMap<>();
+    /** Active locale — read from config on every reload. */
+    private String defaultLocale;
+
+    /** locale code → in-memory FileConfiguration. Rebuilt on every reload. */
+    private final Map<String, FileConfiguration> localeCache = new ConcurrentHashMap<>();
+
+    /** locale code → resolved prefix string. Rebuilt on every reload. */
+    private final Map<String, String> prefixCache = new ConcurrentHashMap<>();
 
     // ── CONSTRUCTOR ──────────────────────────────────────────────────────────
 
     private LanguageManager(Builder b) {
-        this.plugin        = b.plugin;
-        this.directory     = b.directory;
-        this.defaultLocale = normalise(b.defaultLocale);
+        this.plugin               = b.plugin;
+        this.directory            = b.directory;
+        this.configPath           = b.configPath;
+        this.builderDefaultLocale = normalise(b.defaultLocale);
+        this.defaultLocale        = this.builderDefaultLocale;
 
-        // Wire into the plugin's ConfigFileManager so reloadAll() picks it up
         this.cfm = b.cfm != null ? b.cfm : new ConfigFileManager(plugin);
 
-        ConfigOptions opts = ConfigOptions.builder()
-                .autoUpdate(false)          // user-maintained translation files
+        cfm.watchDirectory(directory, ConfigOptions.builder()
+                .autoUpdate(false)
                 .copyFromResources(false)
                 .seedFile(b.seedFile)
-                .build();
-
-        cfm.watchDirectory(directory, opts);
+                .build());
         cfm.loadAll();
 
-        if (getLocaleConfig(defaultLocale).isEmpty()) {
+        readConfig();
+        rebuildLocaleCache();
+
+        if (!localeCache.containsKey(defaultLocale)) {
             LOGGER.warning("[LanguageManager] Default locale '" + defaultLocale
                     + "' not found in '" + directory + "/'. Messages will return their keys.");
         }
@@ -106,117 +98,72 @@ public class LanguageManager {
 
     // ── PUBLIC API ───────────────────────────────────────────────────────────
 
-    /**
-     * Returns a {@link LangMessage} for the given dot-separated key using the
-     * <em>default</em> locale.
-     *
-     * @param key dot-separated YAML path, e.g. {@code "player.join"}
-     */
+    /** Returns a {@link LangMessage} for {@code key} in the active server locale. */
     public LangMessage get(String key) {
         return new LangMessage(this, key);
     }
 
-    /**
-     * Returns a {@link LangMessage} for the given key using the locale registered
-     * for {@code entityId}, falling back to the default locale if none is set.
-     *
-     * @param entityId arbitrary ID, typically a player's UUID string
-     * @param key      dot-separated YAML path
-     */
-    public LangMessage getFor(String entityId, String key) {
-        return new LangMessage(this, key, localeFor(entityId));
+    /** Returns all locale codes currently loaded. */
+    public Set<String> availableLocales() {
+        return Collections.unmodifiableSet(localeCache.keySet());
     }
 
-    /**
-     * Returns a {@link LangMessage} for the given key using the locale registered
-     * for the given {@link org.bukkit.entity.Player}.
-     */
-    public LangMessage getFor(org.bukkit.entity.Player player, String key) {
-        return getFor(player.getUniqueId().toString(), key);
-    }
-
-    /**
-     * Registers a locale override for an entity.
-     *
-     * @param entityId arbitrary ID (player UUID string, "console", …)
-     * @param locale   locale code matching a file in the language directory,
-     *                 e.g. {@code "cs_CZ"} for {@code cs_CZ.yml}
-     */
-    public void setLocale(String entityId, String locale) {
-        localeMap.put(entityId, normalise(locale));
-    }
-
-    /** Removes the locale override for an entity (falls back to the default). */
-    public void clearLocale(String entityId) {
-        localeMap.remove(entityId);
-    }
-
-    /** Returns the active locale for an entity, or the default locale if none is set. */
-    public String localeFor(String entityId) {
-        return localeMap.getOrDefault(entityId, defaultLocale);
-    }
-
-    /** Returns all locale codes currently loaded (file stems without {@code .yml}). */
-    public java.util.Set<String> availableLocales() {
-        java.util.Set<String> locales = new java.util.LinkedHashSet<>();
-        for (ManagedConfig cfg : cfm.getDirectory(directory)) {
-            locales.add(stemOf(cfg.getFileName()));
-        }
-        return locales;
-    }
-
-    /** Reloads all language files from disk. */
-    public void reload() {
-        cfm.reloadDirectory(directory);
-        LOGGER.info("[LanguageManager] Reloaded " + availableLocales().size() + " locale(s).");
-    }
+    /** Returns the currently active server locale. */
+    public String getDefaultLocale() { return defaultLocale; }
 
     /** Returns the underlying plugin instance. */
     public JavaPlugin getPlugin() { return plugin; }
 
-    // ── INTERNAL ─────────────────────────────────────────────────────────────
-
     /**
-     * Resolves a key against the default locale, injects the prefix, and returns
-     * the raw MiniMessage string. Used by {@link LangMessage#build()}.
+     * Reloads all language files from disk, re-reads config and rebuilds caches.
      */
-    String resolve(String key) {
-        return resolveIn(key, defaultLocale);
+    public void reload() {
+        cfm.reloadDirectory(directory);
+        readConfig();
+        rebuildLocaleCache();
+        LOGGER.info("[LanguageManager] Reloaded " + localeCache.size()
+                + " locale(s). Active: " + defaultLocale);
     }
 
-    /**
-     * Resolves a key against a specific locale with default-locale fallback.
-     */
-    String resolveIn(String key, String locale) {
-        // 1. Try requested locale
-        Optional<FileConfiguration> yaml = getLocaleConfig(locale).map(ManagedConfig::yaml);
-        String raw = yaml.map(y -> y.getString(key)).orElse(null);
+    // ── INTERNAL – RESOLUTION ────────────────────────────────────────────────
 
-        // 2. Fallback to default locale
-        if (raw == null && !locale.equals(defaultLocale)) {
-            Optional<FileConfiguration> fallback = getLocaleConfig(defaultLocale).map(ManagedConfig::yaml);
-            raw = fallback.map(y -> y.getString(key)).orElse(null);
-        }
+    /** Resolves {@code key} in the active locale with fallback to the key string. */
+    String resolve(String key) {
+        FileConfiguration yaml = localeCache.get(defaultLocale);
+        String raw = yaml != null ? yaml.getString(key) : null;
 
-        // 3. Last resort – return the key itself so nothing explodes silently
         if (raw == null) {
-            LOGGER.warning("[LanguageManager] Missing key '" + key + "' in locale '" + locale + "'.");
+            LOGGER.warning("[LanguageManager] Missing key '" + key
+                    + "' in locale '" + defaultLocale + "'.");
             return key;
         }
 
-        // Inject prefix
-        String prefix = yaml.map(y -> y.getString(PREFIX_KEY, "")).orElse("");
-        return raw.replace(PREFIX_HOLDER, prefix);
+        return raw.replace(PREFIX_HOLDER, prefixCache.getOrDefault(defaultLocale, ""));
     }
 
-    private Optional<ManagedConfig> getLocaleConfig(String locale) {
-        Collection<ManagedConfig> configs = cfm.getDirectory(directory);
-        return configs.stream()
-                .filter(c -> stemOf(c.getFileName()).equalsIgnoreCase(locale))
-                .findFirst();
+    // ── INTERNAL – CACHE MANAGEMENT ──────────────────────────────────────────
+
+    private void rebuildLocaleCache() {
+        localeCache.clear();
+        prefixCache.clear();
+        for (ManagedConfig cfg : cfm.getDirectory(directory)) {
+            String locale = stemOf(cfg.getFileName());
+            FileConfiguration yaml = cfg.yaml();
+            localeCache.put(locale, yaml);
+            prefixCache.put(locale, yaml.getString(PREFIX_KEY, ""));
+        }
     }
 
-    /** {@code "languages/en_US.yml"} → {@code "en_US"} */
+    private void readConfig() {
+        if (!cfm.isRegistered(configPath)) return;
+        String cfgLocale = cfm.get(configPath).yaml().getString(CFG_DEFAULT);
+        defaultLocale = (cfgLocale != null && !cfgLocale.isBlank())
+                ? normalise(cfgLocale)
+                : builderDefaultLocale;
+    }
+
+    // ── INTERNAL – HELPERS ───────────────────────────────────────────────────
+
     private static String stemOf(String fileName) {
         String name = fileName.contains("/")
                 ? fileName.substring(fileName.lastIndexOf('/') + 1)
@@ -226,10 +173,8 @@ public class LanguageManager {
                 : name;
     }
 
-    /** Normalises locale codes: {@code "en-us"} → {@code "en_US"} etc. */
     private static String normalise(String locale) {
         if (locale == null) return "en_US";
-        // Accept both "en_US" and "en-US" forms
         return locale.replace('-', '_');
     }
 
@@ -241,56 +186,47 @@ public class LanguageManager {
 
     public static class Builder {
         private final JavaPlugin plugin;
-        private String directory    = "languages";
+        private String directory     = "languages";
         private String defaultLocale = "en_US";
-        private String seedFile     = null;
+        private String seedFile      = null;
+        private String configPath    = "config.yml";
         private ConfigFileManager cfm = null;
 
-        private Builder(JavaPlugin plugin) {
-            this.plugin = plugin;
-        }
+        private Builder(JavaPlugin plugin) { this.plugin = plugin; }
 
-        /**
-         * Directory (relative to the plugin data folder) that contains locale YAML files.
-         * Default: {@code "languages"}.
-         */
+        /** Directory containing locale YAML files. Default: {@code "languages"}. */
         public Builder directory(String directory) {
-            this.directory = directory;
-            return this;
+            this.directory = directory; return this;
         }
 
         /**
-         * Locale code of the file used as the primary source and fallback.
-         * Default: {@code "en_US"} (expects {@code languages/en_US.yml}).
+         * Fallback locale used when {@code language.default} is absent from config.
+         * Default: {@code "en_US"}.
          */
         public Builder defaultLocale(String locale) {
-            this.defaultLocale = locale;
-            return this;
+            this.defaultLocale = locale; return this;
         }
 
-        /**
-         * Resource path of an example file to copy into the language directory on
-         * first startup, giving server admins a template to translate.
-         *
-         * <p>Example: {@code .seedFile("languages/en_US.yml")}
-         */
+        /** Resource path copied to the language directory on first startup. */
         public Builder seedFile(String resourcePath) {
-            this.seedFile = resourcePath;
-            return this;
+            this.seedFile = resourcePath; return this;
         }
 
         /**
-         * Provide an existing {@link ConfigFileManager} to share (e.g. the one
-         * from {@code NotPlugin.getCfm()}). If omitted a new one is created internally.
+         * Config file containing {@code language.default}.
+         * Default: {@code "config.yml"}.
          */
+        public Builder configPath(String configPath) {
+            this.configPath = configPath; return this;
+        }
+
+        /** Share an existing {@link ConfigFileManager} (done automatically via {@code NotPlugin.languageManager()}). */
         public Builder configFileManager(ConfigFileManager cfm) {
-            this.cfm = cfm;
-            return this;
+            this.cfm = cfm; return this;
         }
 
         public LanguageManager build() {
             return new LanguageManager(this);
         }
     }
-
 }
