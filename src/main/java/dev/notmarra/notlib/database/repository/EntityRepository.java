@@ -13,19 +13,45 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 
 public class EntityRepository<T> {
     private final Database database;
     private final EntityTable<T> table;
 
+    /**
+     * Executor used by all *Async methods.
+     * Defaults to ForkJoinPool.commonPool() – override via withExecutor() to use
+     * a Folia/Paper-safe async scheduler so DB callbacks never touch the wrong thread.
+     *
+     * <pre>{@code
+     * // Folia / Paper example:
+     * Executor foliaAsync = r -> plugin.getServer().getAsyncScheduler()
+     *         .runNow(plugin, $ -> r.run());
+     * EntityRepository<PlayerProfile> repo =
+     *         new EntityRepository<>(db, PlayerProfile.class).withExecutor(foliaAsync);
+     * }</pre>
+     */
+    private Executor executor = ForkJoinPool.commonPool();
+
     public EntityRepository(Database database, Class<T> clazz) {
         this.database = database;
         this.table = new EntityTable<>(clazz, database.getDialect());
     }
 
+    /**
+     * Returns a new repository instance that uses the given executor for all
+     * async operations. The original instance is unchanged.
+     */
+    public EntityRepository<T> withExecutor(Executor executor) {
+        this.executor = executor;
+        return this;
+    }
+
     public QueryBuilder<T> query() {
-        return new QueryBuilder<>(database, table, this);
+        return new QueryBuilder<>(database, table, this, executor);
     }
 
     public void createTable() {
@@ -47,7 +73,7 @@ public class EntityRepository<T> {
     }
 
     public CompletableFuture<Void> insertAsync(T entity) {
-        return CompletableFuture.runAsync(() -> insert(entity));
+        return CompletableFuture.runAsync(() -> insert(entity), executor);
     }
 
     // Bulk insert
@@ -75,7 +101,7 @@ public class EntityRepository<T> {
     }
 
     public CompletableFuture<Void> insertAllAsync(List<T> entities) {
-        return CompletableFuture.runAsync(() -> insertAll(entities));
+        return CompletableFuture.runAsync(() -> insertAll(entities), executor);
     }
 
     // ── UPSERT ───────────────────────────────────────────────────────────────
@@ -111,7 +137,54 @@ public class EntityRepository<T> {
     }
 
     public CompletableFuture<Void> upsertAsync(T entity) {
-        return CompletableFuture.runAsync(() -> upsert(entity));
+        return CompletableFuture.runAsync(() -> upsert(entity), executor);
+    }
+
+    // Bulk upsert
+    public void upsertAll(List<T> entities) {
+        if (entities.isEmpty()) return;
+        // Build the upsert SQL once and batch all entities
+        List<EntityTable.FieldColumn> cols = table.getColumns();
+        List<EntityTable.FieldColumn> nonPkCols = cols.stream()
+                .filter(fc -> !fc.annotation().primaryKey()).toList();
+
+        String columns = cols.stream().map(fc -> fc.annotation().name()).collect(Collectors.joining(", "));
+        String placeholders = cols.stream().map(fc -> "?").collect(Collectors.joining(", "));
+
+        String sql;
+        if (database.getDialect() == DbDialect.SQLITE) {
+            sql = "INSERT OR REPLACE INTO " + table.getTableName()
+                    + " (" + columns + ") VALUES (" + placeholders + ")";
+        } else {
+            String updateClause = nonPkCols.stream()
+                    .map(fc -> fc.annotation().name() + " = VALUES(" + fc.annotation().name() + ")")
+                    .collect(Collectors.joining(", "));
+            sql = "INSERT INTO " + table.getTableName()
+                    + " (" + columns + ") VALUES (" + placeholders + ")"
+                    + " ON DUPLICATE KEY UPDATE " + updateClause;
+        }
+
+        database.withConnection(conn -> {
+            conn.setAutoCommit(false);
+            try {
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                for (T entity : entities) {
+                    bindValues(stmt, entity, cols);
+                    stmt.addBatch();
+                }
+                stmt.executeBatch();
+                conn.commit();
+            } catch (Exception e) {
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> upsertAllAsync(List<T> entities) {
+        return CompletableFuture.runAsync(() -> upsertAll(entities), executor);
     }
 
     // ── FIND ─────────────────────────────────────────────────────────────────
@@ -133,7 +206,7 @@ public class EntityRepository<T> {
     }
 
     public CompletableFuture<Optional<T>> findByIdAsync(Object id) {
-        return CompletableFuture.supplyAsync(() -> findById(id));
+        return CompletableFuture.supplyAsync(() -> findById(id), executor);
     }
 
     public List<T> findAll() {
@@ -147,7 +220,7 @@ public class EntityRepository<T> {
     }
 
     public CompletableFuture<List<T>> findAllAsync() {
-        return CompletableFuture.supplyAsync(this::findAll);
+        return CompletableFuture.supplyAsync(this::findAll, executor);
     }
 
     public boolean exists(Object id) {
@@ -155,7 +228,7 @@ public class EntityRepository<T> {
     }
 
     public CompletableFuture<Boolean> existsAsync(Object id) {
-        return CompletableFuture.supplyAsync(() -> exists(id));
+        return CompletableFuture.supplyAsync(() -> exists(id), executor);
     }
 
     // ── UPDATE ───────────────────────────────────────────────────────────────
@@ -182,7 +255,7 @@ public class EntityRepository<T> {
     }
 
     public CompletableFuture<Void> updateAsync(T entity) {
-        return CompletableFuture.runAsync(() -> update(entity));
+        return CompletableFuture.runAsync(() -> update(entity), executor);
     }
 
     // ── DELETE ───────────────────────────────────────────────────────────────
@@ -200,7 +273,7 @@ public class EntityRepository<T> {
     }
 
     public CompletableFuture<Void> deleteAsync(Object id) {
-        return CompletableFuture.runAsync(() -> delete(id));
+        return CompletableFuture.runAsync(() -> delete(id), executor);
     }
 
     // ── HELPERS ──────────────────────────────────────────────────────────────
