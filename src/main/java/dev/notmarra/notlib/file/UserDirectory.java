@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  *       picked up automatically.</li>
  * </ol>
  *
- * <p>Instances are created exclusively by {@link dev.library.config.ConfigFileManager}.
+ * <p>Instances are created exclusively by {@link ConfigFileManager}.
  */
 public class UserDirectory {
 

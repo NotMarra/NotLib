@@ -123,7 +123,7 @@ public abstract class NotPlugin extends JavaPlugin {
      * Forwards to the underlying {@link ManagedConfig} in the CFM.
      *
      * <p>Returns an empty {@link YamlConfiguration} if the file is not registered,
-     * preserving the old null-safe behaviour callers may rely on.
+     * preserving the old null-safe behavior callers may rely on.
      */
     public FileConfiguration getSubConfig(String file) {
         if (!cfm.isRegistered(file)) return new YamlConfiguration();
@@ -204,7 +204,7 @@ public abstract class NotPlugin extends JavaPlugin {
 
     /**
      * Loads a config file through the CFM.
-     * No-op if the file does not exist on disk (preserves old behaviour).
+     * No-op if the file does not exist on disk (preserves old behavior).
      *
      * @deprecated Use {@link ConfigFileManager#load(String)} directly via {@link #getCfm()}.
      */
@@ -233,7 +233,7 @@ public abstract class NotPlugin extends JavaPlugin {
         try {
             this.scheduler = new Scheduler(this);
 
-            // Initialise the CFM early so initPlugin() can call register/watchDirectory
+            // Initialize the CFM early so initPlugin() can call register/watchDirectory
             this.cfm = new ConfigFileManager(this);
 
             // Ensure the main config is always available

@@ -19,7 +19,7 @@ import java.util.logging.Level;
  *   <li>Reload from disk</li>
  * </ul>
  *
- * <p>Instances are created exclusively by {@link ConfigFileManager} and {@link dev.library.config.userfiles.UserDirectory}.
+ * <p>Instances are created exclusively by {@link ConfigFileManager} and {@link UserDirectory}.
  */
 public class ManagedConfig {
 
