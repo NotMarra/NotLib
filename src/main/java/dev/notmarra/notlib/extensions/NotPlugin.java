@@ -7,6 +7,7 @@ import dev.notmarra.notlib.chat.Colors;
 import dev.notmarra.notlib.chat.Text;
 import dev.notmarra.notlib.scheduler.Scheduler;
 import dev.notmarra.notlib.database.DatabaseManager;
+import dev.notmarra.notlib.language.LanguageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -115,6 +116,30 @@ public abstract class NotPlugin extends JavaPlugin {
     /** Returns the Folia-safe async {@link Executor} backed by this plugin's async scheduler. */
     public Executor foliaAsyncExecutor() {
         return r -> getServer().getAsyncScheduler().runNow(this, $ -> r.run());
+    }
+
+    // -----------------------------------------------------------------------
+    // LanguageManager – convenience factory pre-wired with the plugin's CFM
+    // -----------------------------------------------------------------------
+
+    /**
+     * Creates a {@link LanguageManager.Builder} pre-wired with this plugin's
+     * {@link dev.notmarra.notlib.file.ConfigFileManager} so language files are
+     * part of the same reload cycle as all other configs.
+     *
+     * <pre>{@code
+     * // in initPlugin():
+     * lang = languageManager()
+     *         .defaultLocale("en_US")
+     *         .seedFile("languages/en_US.yml")
+     *         .build();
+     *
+     * // Sending a message:
+     * lang.get("player.join").withPlayer(player).sendTo(player);
+     * }</pre>
+     */
+    public LanguageManager.Builder languageManager() {
+        return LanguageManager.builder(this).configFileManager(getCfm());
     }
 
     /**
