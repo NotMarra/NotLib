@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 public class QueryBuilder<T> {
@@ -22,16 +23,18 @@ public class QueryBuilder<T> {
     private final Database database;
     private final EntityTable<T> table;
     private final EntityRepository<T> repository;
+    private final Executor executor;
 
     private final List<WhereClause> whereClauses = new ArrayList<>();
     private final List<OrderClause> orderClauses = new ArrayList<>();
     private Integer limit = null;
     private Integer offset = null;
 
-    public QueryBuilder(Database database, EntityTable<T> table, EntityRepository<T> repository) {
+    public QueryBuilder(Database database, EntityTable<T> table, EntityRepository<T> repository, Executor executor) {
         this.database = database;
         this.table = table;
         this.repository = repository;
+        this.executor = executor;
     }
 
     // ── WHERE ────────────────────────────────────────────────────────────────
@@ -182,18 +185,18 @@ public class QueryBuilder<T> {
     // ── ASYNC VARIANTS ───────────────────────────────────────────────────────
 
     public CompletableFuture<List<T>> findAllAsync() {
-        return CompletableFuture.supplyAsync(this::findAll);
+        return CompletableFuture.supplyAsync(this::findAll, executor);
     }
 
     public CompletableFuture<Optional<T>> findFirstAsync() {
-        return CompletableFuture.supplyAsync(this::findFirst);
+        return CompletableFuture.supplyAsync(this::findFirst, executor);
     }
 
     public CompletableFuture<Long> countAsync() {
-        return CompletableFuture.supplyAsync(this::count);
+        return CompletableFuture.supplyAsync(this::count, executor);
     }
 
     public CompletableFuture<Void> deleteAsync() {
-        return CompletableFuture.runAsync(this::delete);
+        return CompletableFuture.runAsync(this::delete, executor);
     }
 }

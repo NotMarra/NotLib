@@ -8,7 +8,10 @@ import dev.notmarra.notlib.database.repository.EntityRepository;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ForkJoinPool;
 import java.util.logging.Logger;
 
 /**
@@ -62,16 +65,18 @@ public class DatabaseManager {
     private final int defaultCacheMaxSize;
     private final long defaultTtlMillis;
     private final CacheEvictionPolicy defaultEvictionPolicy;
+    private final Executor defaultExecutor;
 
     // ── CONSTRUCTOR ──────────────────────────────────────────────────────────
 
     private DatabaseManager(Builder b) {
-        this.database                 = b.database;
-        this.defaultWriteStrategy     = b.defaultWriteStrategy;
+        this.database                   = b.database;
+        this.defaultWriteStrategy       = b.defaultWriteStrategy;
         this.defaultFlushIntervalMillis = b.defaultFlushIntervalMillis;
-        this.defaultCacheMaxSize      = b.defaultCacheMaxSize;
-        this.defaultTtlMillis         = b.defaultTtlMillis;
-        this.defaultEvictionPolicy    = b.defaultEvictionPolicy;
+        this.defaultCacheMaxSize        = b.defaultCacheMaxSize;
+        this.defaultTtlMillis           = b.defaultTtlMillis;
+        this.defaultEvictionPolicy      = b.defaultEvictionPolicy;
+        this.defaultExecutor            = b.defaultExecutor;
     }
 
     // ── REGISTER ─────────────────────────────────────────────────────────────
@@ -104,6 +109,7 @@ public class DatabaseManager {
                 .writeStrategy(strategy)
                 .flushIntervalMillis(defaultFlushIntervalMillis)
                 .cache(cache)
+                .executor(defaultExecutor)
                 .build();
         repo.createTable();
         cachedRepos.put(entityClass, repo);
@@ -118,7 +124,8 @@ public class DatabaseManager {
      * caching adds no value.
      */
     public <V> EntityRepository<V> registerPlain(Class<V> entityClass) {
-        EntityRepository<V> repo = new EntityRepository<>(database, entityClass);
+        EntityRepository<V> repo = new EntityRepository<>(database, entityClass)
+                .withExecutor(defaultExecutor);
         repo.createTable();
         plainRepos.put(entityClass, repo);
         LOGGER.info("[DatabaseManager] Registered plain repo: " + entityClass.getSimpleName());
@@ -202,14 +209,26 @@ public class DatabaseManager {
 
     public static class Builder {
         private final Database database;
-        private WriteStrategy defaultWriteStrategy       = WriteStrategy.WRITE_THROUGH;
-        private long defaultFlushIntervalMillis          = 30_000L;
-        private int defaultCacheMaxSize                  = 500;
-        private long defaultTtlMillis                   = 10 * 60 * 1000L; // 10 min
+        private WriteStrategy defaultWriteStrategy        = WriteStrategy.WRITE_THROUGH;
+        private long defaultFlushIntervalMillis           = 30_000L;
+        private int defaultCacheMaxSize                   = 500;
+        private long defaultTtlMillis                     = 10 * 60 * 1000L;
         private CacheEvictionPolicy defaultEvictionPolicy = CacheEvictionPolicy.LRU;
+        private Executor defaultExecutor                  = ForkJoinPool.commonPool();
 
         private Builder(Database database) {
             this.database = database;
+        }
+
+        /** Copy constructor – used internally by NotPlugin.ManagedBuilder. */
+        protected Builder(Builder other) {
+            this.database                   = other.database;
+            this.defaultWriteStrategy       = other.defaultWriteStrategy;
+            this.defaultFlushIntervalMillis = other.defaultFlushIntervalMillis;
+            this.defaultCacheMaxSize        = other.defaultCacheMaxSize;
+            this.defaultTtlMillis           = other.defaultTtlMillis;
+            this.defaultEvictionPolicy      = other.defaultEvictionPolicy;
+            this.defaultExecutor            = other.defaultExecutor;
         }
 
         public Builder defaultWriteStrategy(WriteStrategy strategy) {
@@ -234,6 +253,17 @@ public class DatabaseManager {
 
         public Builder defaultEvictionPolicy(CacheEvictionPolicy policy) {
             this.defaultEvictionPolicy = policy; return this;
+        }
+
+        /**
+         * Sets the executor used for all *Async operations across every repository
+         * created by this manager. Override to use a Folia/Paper-safe async scheduler:
+         * <pre>{@code
+         * .executor(r -> plugin.getServer().getAsyncScheduler().runNow(plugin, $ -> r.run()))
+         * }</pre>
+         */
+        public Builder executor(Executor executor) {
+            this.defaultExecutor = executor; return this;
         }
 
         public DatabaseManager build() {

@@ -6,6 +6,7 @@ import dev.notmarra.notlib.file.ManagedConfig;
 import dev.notmarra.notlib.chat.Colors;
 import dev.notmarra.notlib.chat.Text;
 import dev.notmarra.notlib.scheduler.Scheduler;
+import dev.notmarra.notlib.database.DatabaseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.Executor;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -57,6 +59,80 @@ public abstract class NotPlugin extends JavaPlugin {
     public Scheduler scheduler() { return scheduler; }
 
     public final String CONFIG_YML = "config.yml";
+
+    // -----------------------------------------------------------------------
+    // DatabaseManager – wired with the Folia-safe async executor automatically
+    // -----------------------------------------------------------------------
+
+    private final List<DatabaseManager> managedDatabases = new ArrayList<>();
+
+    /**
+     * Creates a {@link DatabaseManager.Builder} pre-configured with a
+     * Folia/Paper-safe async executor sourced from this plugin's scheduler.
+     * Call {@code .build()} on the returned builder and store the result yourself.
+     *
+     * <pre>{@code
+     * // in initPlugin():
+     * db = sqliteDatabase(getDataFolder(), "data").build();
+     * db.registerCached(PlayerProfile.class);
+     * }</pre>
+     *
+     * The returned manager is automatically closed (flushing all WRITE_BEHIND
+     * entries) when the plugin is disabled – you don't need to call db.close()
+     * manually, though doing so is safe.
+     */
+    public DatabaseManager.Builder sqliteDatabase(File dataFolder, String fileName) {
+        return new ManagedBuilder(DatabaseManager.sqlite(dataFolder, fileName)
+                .executor(foliaAsyncExecutor()));
+    }
+
+    /**
+     * Creates a {@link DatabaseManager.Builder} for MariaDB, pre-wired with
+     * the Folia-safe async executor.
+     */
+    public DatabaseManager.Builder mariaDatabase(String host, String port, String dbName,
+                                                 String user, String password) {
+        return new ManagedBuilder(DatabaseManager.mariadb(host, port, dbName, user, password)
+                .executor(foliaAsyncExecutor()));
+    }
+
+    /**
+     * Registers an externally-built {@link DatabaseManager} so it is
+     * automatically closed on plugin disable. Use this when you need full
+     * control over the builder but still want lifecycle management:
+     *
+     * <pre>{@code
+     * db = DatabaseManager.sqlite(...)
+     *         .executor(myCustomExecutor)
+     *         .build();
+     * manageDatabase(db);
+     * }</pre>
+     */
+    public void manageDatabase(DatabaseManager db) {
+        managedDatabases.add(db);
+    }
+
+    /** Returns the Folia-safe async {@link Executor} backed by this plugin's async scheduler. */
+    public Executor foliaAsyncExecutor() {
+        return r -> getServer().getAsyncScheduler().runNow(this, $ -> r.run());
+    }
+
+    /**
+     * Wraps {@link DatabaseManager.Builder} so that {@link #build()} automatically
+     * registers the result with this plugin's lifecycle.
+     */
+    private class ManagedBuilder extends DatabaseManager.Builder {
+        private ManagedBuilder(DatabaseManager.Builder delegate) {
+            super(delegate);
+        }
+
+        @Override
+        public DatabaseManager build() {
+            DatabaseManager db = super.build();
+            managedDatabases.add(db);
+            return db;
+        }
+    }
 
     // -----------------------------------------------------------------------
     // Listener / CommandGroup registration (unchanged)
@@ -271,6 +347,7 @@ public abstract class NotPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         onPluginDisable();
+        managedDatabases.forEach(DatabaseManager::close);
     }
 
     // -----------------------------------------------------------------------

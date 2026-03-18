@@ -6,14 +6,9 @@ import dev.notmarra.notlib.database.repository.EntityRepository;
 import dev.notmarra.notlib.database.repository.QueryBuilder;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
@@ -59,6 +54,7 @@ public class CachedRepository<K, V> {
     private final NotCache<K, V> cache;
     private final WriteStrategy writeStrategy;
     private final Field pkField;
+    private final Executor executor;
 
     // ── WRITE-BEHIND FLUSH ───────────────────────────────────────────────────
 
@@ -69,7 +65,8 @@ public class CachedRepository<K, V> {
 
     @SuppressWarnings("unchecked")
     private CachedRepository(Builder<K, V> b) {
-        this.repo = new EntityRepository<>(b.database, b.entityClass);
+        this.executor = b.executor;
+        this.repo = new EntityRepository<>(b.database, b.entityClass).withExecutor(b.executor);
         this.cache = b.cache;
         this.writeStrategy = b.writeStrategy;
 
@@ -115,7 +112,7 @@ public class CachedRepository<K, V> {
     }
 
     public CompletableFuture<Optional<V>> findByIdAsync(K id) {
-        return CompletableFuture.supplyAsync(() -> findById(id));
+        return CompletableFuture.supplyAsync(() -> findById(id), executor);
     }
 
     public List<V> findAll() {
@@ -125,7 +122,7 @@ public class CachedRepository<K, V> {
     }
 
     public CompletableFuture<List<V>> findAllAsync() {
-        return CompletableFuture.supplyAsync(this::findAll);
+        return CompletableFuture.supplyAsync(this::findAll, executor);
     }
 
     public boolean exists(K id) {
@@ -134,7 +131,7 @@ public class CachedRepository<K, V> {
     }
 
     public CompletableFuture<Boolean> existsAsync(K id) {
-        return CompletableFuture.supplyAsync(() -> exists(id));
+        return CompletableFuture.supplyAsync(() -> exists(id), executor);
     }
 
     // ── INSERT ───────────────────────────────────────────────────────────────
@@ -157,7 +154,7 @@ public class CachedRepository<K, V> {
     }
 
     public CompletableFuture<Void> insertAsync(V entity) {
-        return CompletableFuture.runAsync(() -> insert(entity));
+        return CompletableFuture.runAsync(() -> insert(entity), executor);
     }
 
     public void insertAll(List<V> entities) {
@@ -177,7 +174,7 @@ public class CachedRepository<K, V> {
     }
 
     public CompletableFuture<Void> insertAllAsync(List<V> entities) {
-        return CompletableFuture.runAsync(() -> insertAll(entities));
+        return CompletableFuture.runAsync(() -> insertAll(entities), executor);
     }
 
     // ── UPDATE ───────────────────────────────────────────────────────────────
@@ -200,7 +197,7 @@ public class CachedRepository<K, V> {
     }
 
     public CompletableFuture<Void> updateAsync(V entity) {
-        return CompletableFuture.runAsync(() -> update(entity));
+        return CompletableFuture.runAsync(() -> update(entity), executor);
     }
 
     // ── UPSERT ───────────────────────────────────────────────────────────────
@@ -223,7 +220,7 @@ public class CachedRepository<K, V> {
     }
 
     public CompletableFuture<Void> upsertAsync(V entity) {
-        return CompletableFuture.runAsync(() -> upsert(entity));
+        return CompletableFuture.runAsync(() -> upsert(entity), executor);
     }
 
     // ── DELETE ───────────────────────────────────────────────────────────────
@@ -234,7 +231,7 @@ public class CachedRepository<K, V> {
     }
 
     public CompletableFuture<Void> deleteAsync(K id) {
-        return CompletableFuture.runAsync(() -> delete(id));
+        return CompletableFuture.runAsync(() -> delete(id), executor);
     }
 
     // ── QUERY BUILDER (bypasses cache – use for complex queries) ──────────────
@@ -274,18 +271,19 @@ public class CachedRepository<K, V> {
     // ── FLUSH (write-behind sync) ────────────────────────────────────────────
 
     /**
-     * Flushes all dirty cache entries to the database.
+     * Flushes all dirty cache entries to the database using batch upsert.
      * Safe to call manually at any time (e.g. on plugin disable).
+     * Called automatically by the background scheduler when using WRITE_BEHIND.
      */
     public void flush() {
         synchronized (flushLock) {
             Map<K, V> dirty = cache.getDirtyEntries();
             if (dirty.isEmpty()) return;
 
-            LOGGER.info("[CachedRepository] Flushing " + dirty.size() + " dirty entries to DB...");
+            List<V> entities = new ArrayList<>(dirty.values());
+            LOGGER.info("[CachedRepository] Flushing " + entities.size() + " dirty entries to DB...");
             try {
-                repo.insertAll(new ArrayList<>(dirty.values()));
-                // insertAll with upsert semantics – override if your DB supports it
+                repo.upsertAll(entities);
                 cache.markAllClean();
                 LOGGER.info("[CachedRepository] Flush complete.");
             } catch (Exception e) {
@@ -295,25 +293,8 @@ public class CachedRepository<K, V> {
         }
     }
 
-    /**
-     * Flush using upsert semantics (recommended for WRITE_BEHIND).
-     */
-    public void flushWithUpsert() {
-        synchronized (flushLock) {
-            Map<K, V> dirty = cache.getDirtyEntries();
-            if (dirty.isEmpty()) return;
-
-            LOGGER.info("[CachedRepository] Upserting " + dirty.size() + " dirty entries...");
-            for (V entity : dirty.values()) {
-                repo.upsert(entity);
-            }
-            cache.markAllClean();
-            LOGGER.info("[CachedRepository] Upsert flush complete.");
-        }
-    }
-
     public CompletableFuture<Void> flushAsync() {
-        return CompletableFuture.runAsync(this::flushWithUpsert);
+        return CompletableFuture.runAsync(this::flush, executor);
     }
 
     // ── CALLBACKS ────────────────────────────────────────────────────────────
@@ -333,7 +314,7 @@ public class CachedRepository<K, V> {
      */
     public void close() {
         if (writeStrategy == WriteStrategy.WRITE_BEHIND) {
-            flushWithUpsert();
+            flush();
         }
         flushScheduler.shutdownNow();
         cache.shutdown();
@@ -360,13 +341,13 @@ public class CachedRepository<K, V> {
         private final Database database;
         private final Class<V> entityClass;
         private WriteStrategy writeStrategy = WriteStrategy.WRITE_THROUGH;
-        private long flushIntervalMillis = 30_000L; // 30 s default for WRITE_BEHIND
+        private long flushIntervalMillis = 30_000L;
         private NotCache<K, V> cache;
+        private Executor executor = ForkJoinPool.commonPool();
 
         private Builder(Database database, Class<V> entityClass) {
             this.database = database;
             this.entityClass = entityClass;
-            // Default cache – can be overridden with .cache(...)
             this.cache = NotCache.<K, V>builder()
                     .maxSize(500)
                     .ttlMinutes(10)
@@ -394,9 +375,20 @@ public class CachedRepository<K, V> {
             return this;
         }
 
+        /**
+         * Sets the executor used for all *Async operations.
+         * Override to use a Folia/Paper-safe async scheduler:
+         * <pre>{@code
+         * .executor(r -> plugin.getServer().getAsyncScheduler().runNow(plugin, $ -> r.run()))
+         * }</pre>
+         */
+        public Builder<K, V> executor(Executor executor) {
+            this.executor = executor;
+            return this;
+        }
+
         public CachedRepository<K, V> build() {
             return new CachedRepository<>(this);
         }
     }
 }
-
