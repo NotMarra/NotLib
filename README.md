@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="https://i.imgur.com/placeholder.png" alt="NotLib" width="120" />
-
 # NotLib
 
 **A batteries-included developer library for Paper & Folia Minecraft plugins.**
