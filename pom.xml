@@ -6,7 +6,7 @@
 
     <groupId>dev.notmarra</groupId>
     <artifactId>notlib</artifactId>
-    <version>0.1.0-DEV</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
 
     <name>notlib</name>

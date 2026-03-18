@@ -1,0 +1,36 @@
+name: Feature request
+description: Suggest an idea or improvement for NotLib.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Please describe it clearly so we can evaluate it.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+      description: What problem does this feature solve? Why do you need it?
+      placeholder: "I keep having to write boilerplate for X every time I..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: How would you like the feature to work? Code examples are very welcome.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any other approaches you've thought about?
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
