@@ -1,6 +1,7 @@
 package dev.notmarra.notlib.language;
 
 import dev.notmarra.notlib.chat.Text;
+import dev.notmarra.notlib.extensions.NotPlugin;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
@@ -59,6 +60,10 @@ public class LangMessage {
     public void sendToAll(Iterable<? extends Audience> audiences) {
         Component built = buildComponent();
         for (Audience a : audiences) a.sendMessage(built);
+    }
+
+    public void sendToConsole(NotPlugin plugin) {
+        plugin.getLogger().info(build().buildString());
     }
 
     public void broadcast() {
