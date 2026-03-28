@@ -1,5 +1,6 @@
 package dev.notmarra.notlib.chat;
 
+import dev.notmarra.notlib.gui.GUIItem;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -12,17 +13,27 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.intellij.lang.annotations.RegExp;
 
 import javax.annotation.Nullable;
 import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 
+/**
+ * Fluent builder for creating Adventure {@link Component} messages.
+ * <p>
+ * This class supports appending values, placeholder replacements, legacy color conversion,
+ * and click/hover interactions on the most recently appended component.
+ */
 public class Text {
-    public static String K_MESSAGE = "%message%";
+    public static String K_MESSAGE;
+
+    static {
+        K_MESSAGE = "%message%";
+    }
 
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
 
@@ -32,27 +43,38 @@ public class Text {
     private Audience entity;
     private Audience targetEntity;
 
+    /**
+     * Creates a new text builder with the given base component.
+     *
+     * @param baseComponent initial component to add
+     */
     public Text(Component baseComponent) {
         appendComponents.add(baseComponent);
     }
 
+    /**
+     * Builds the final component and serializes it as MiniMessage.
+     *
+     * @return built text in MiniMessage format
+     */
     public String buildString() {
         return miniMessage.serialize(build());
     }
 
+    /**
+     * Applies regex-based replacements to a component.
+     *
+     * @param baseComponent component to transform
+     * @param replacements map of regex keys to replacement values
+     * @return transformed component
+     */
     private Component buildReplacements(Component baseComponent, HashMap<String, Object> replacements) {
-        for (String key : replacements.keySet()) {
+        for (@RegExp String key : replacements.keySet()) {
             Object value = replacements.get(key);
 
-            TextReplacementConfig.Builder builder = TextReplacementConfig.builder().match(key);
-
-            if (value instanceof Text formatted) {
-                builder = builder.replacement(formatted.build());
-            } else if (value instanceof Component component) {
-                builder = builder.replacement(component);
-            } else {
-                builder = builder.replacement(value.toString());
-            }
+            TextReplacementConfig.Builder builder = TextReplacementConfig.builder()
+                    .match(key)
+                    .replacement(toComponent(value));
 
             baseComponent = baseComponent.replaceText(builder.build());
         }
@@ -60,6 +82,11 @@ public class Text {
         return baseComponent;
     }
 
+    /**
+     * Builds the final component from appended parts and all replacements.
+     *
+     * @return final component
+     */
     public Component build() {
         Component baseComponent = Component.empty();
 
@@ -68,23 +95,16 @@ public class Text {
         }
 
         baseComponent = buildReplacements(baseComponent, replacements);
-        /* TODO
-        if (NotLib.hasPlaceholderAPI() && entity instanceof Player player) {
-            String message = miniMessage.serialize(baseComponent);
-            String placeholder = PlaceholderAPI.setPlaceholders(player, message);
-            baseComponent = miniMessage.deserialize(placeholder);
-        } else {
-            if (entity != null) {
-                HashMap<String, Object> builtInReplacements = new HashMap<>();
-                if (entity instanceof Player player) {
-                    builtInReplacements.put("%player_name%", player.getName());
-                    builtInReplacements.put("%player_x%", player.getLocation().getBlockX());
-                    builtInReplacements.put("%player_y%", player.getLocation().getBlockY());
-                    builtInReplacements.put("%player_z%", player.getLocation().getBlockZ());
-                }
-                baseComponent = buildReplacements(baseComponent, builtInReplacements);
+        if (entity != null) {
+            HashMap<String, Object> builtInReplacements = new HashMap<>();
+            if (entity instanceof Player player) {
+                builtInReplacements.put("%player_name%", player.getName());
+                builtInReplacements.put("%player_x%", player.getLocation().getBlockX());
+                builtInReplacements.put("%player_y%", player.getLocation().getBlockY());
+                builtInReplacements.put("%player_z%", player.getLocation().getBlockZ());
             }
-        }*/
+            baseComponent = buildReplacements(baseComponent, builtInReplacements);
+        }
 
         if (targetEntity != null) {
             HashMap<String, Object> builtInReplacements = new HashMap<>();
@@ -100,67 +120,90 @@ public class Text {
         return baseComponent;
     }
 
+    /**
+     * Sets the source entity used by built-in {@code %player_*%} replacements.
+     *
+     * @param entity source entity
+     * @return this builder
+     */
     public Text withEntity(Entity entity) {
         this.entity = entity;
         return this;
     }
 
+    /**
+     * Sets the target entity used by built-in {@code %target_*%} replacements.
+     *
+     * @param targetEntity target entity
+     * @return this builder
+     */
     public Text withTargetEntity(Entity targetEntity) {
         this.targetEntity = targetEntity;
         return this;
     }
 
-    public Text appendMany(Text... formatters) {
-        for (Text formatter : formatters) {
-            appendComponents.add(formatter.build());
-        }
+    /**
+     * Appends multiple values in order.
+     *
+     * @param items values to append
+     * @return this builder
+     */
+    public Text appendMany(Object... items) {
+        for (Object item : items) append(item);
         return this;
     }
 
-    public Text appendMany(Component... components) {
-        Collections.addAll(appendComponents, components);
+    /**
+     * Appends all values from a list.
+     *
+     * @param items values to append
+     * @return this builder
+     */
+    public Text appendList(List<?> items) {
+        for (Object item : items) append(item);
         return this;
     }
 
-    public Text appendMany(String... strings) {
-        for (String string : strings) {
-            appendComponents.add(Component.text(string));
-        }
+    /**
+     * Appends all values from a list with the same color.
+     *
+     * @param items values to append
+     * @param color color applied to each appended value
+     * @return this builder
+     */
+    public Text appendList(List<?> items, TextColor color) {
+        for (Object item : items) append(item, color);
         return this;
     }
 
-    public Text appendListMessage(List<Text> formatters) {
-        for (Text formatter : formatters) {
-            appendComponents.add(formatter.build());
-        }
+    /**
+     * Appends all values from a list with the same style.
+     *
+     * @param items values to append
+     * @param style style applied to each appended value
+     * @return this builder
+     */
+    public Text appendList(List<?> items, Style style) {
+        for (Object item : items) append(item, style);
         return this;
     }
 
-    public Text appendListComponent(List<Component> components) {
-        appendComponents.addAll(components);
-        return this;
-    }
-
-    public Text appendListString(List<String> strings) {
-        for (String string : strings) append(string);
-        return this;
-    }
-
-    public Text appendListString(List<String> strings, TextColor color) {
-        for (String string : strings) append(string, color);
-        return this;
-    }
-
-    public Text appendListString(List<String> strings, Style style) {
-        for (String string : strings) append(string, style);
-        return this;
-    }
-
+    /**
+     * Appends a newline component.
+     *
+     * @return this builder
+     */
     public Text nl() {
         appendComponents.add(Component.newline());
         return this;
     }
 
+    /**
+     * Adds an unlimited-use click callback to the last appended component.
+     *
+     * @param event callback to execute on click
+     * @return this builder
+     */
     public Text clickInfinite(ClickCallback<Audience> event) {
         if (appendComponents.isEmpty()) return this;
         Component last = appendComponents.removeLast();
@@ -169,6 +212,14 @@ public class Text {
         return this;
     }
 
+    /**
+     * Adds a click callback with usage and lifetime options to the last component.
+     *
+     * @param uses number of allowed uses (-1 for unlimited)
+     * @param duration optional callback lifetime
+     * @param event callback to execute on click
+     * @return this builder
+     */
     public Text clickWithOptions(int uses, @Nullable TemporalAmount duration, ClickCallback<Audience> event) {
         if (appendComponents.isEmpty()) return this;
         Component last = appendComponents.removeLast();
@@ -180,17 +231,43 @@ public class Text {
         return this;
     }
 
+    /**
+     * Internal helper that applies a click action to the last appended component.
+     *
+     * @param action click action
+     * @param stuff action payload
+     * @return this builder
+     */
     private Text _doAction(ClickEvent.Action action, String stuff) {
         if (appendComponents.isEmpty()) return this;
         Component last = appendComponents.removeLast();
-        last = last.clickEvent(ClickEvent.clickEvent(action, stuff));
+        last = last.clickEvent(ClickEvent.clickEvent(action, ClickEvent.Payload.string(stuff)));
         appendComponents.add(last);
         return this;
     }
 
+    /**
+     * Sets an OPEN_URL click action on the last appended component.
+     *
+     * @param url URL to open
+     * @return this builder
+     */
     public Text clickOpenUrl(String url) { return _doAction(ClickEvent.Action.OPEN_URL, url); }
+
+    /**
+     * Sets a COPY_TO_CLIPBOARD click action on the last appended component.
+     *
+     * @param value text to copy
+     * @return this builder
+     */
     public Text clickCopyToClipboard(String value) { return _doAction(ClickEvent.Action.COPY_TO_CLIPBOARD, value); }
 
+    /**
+     * Adds a click callback to the last appended component.
+     *
+     * @param event callback to execute on click
+     * @return this builder
+     */
     public Text click(ClickCallback<Audience> event) {
         if (appendComponents.isEmpty()) return this;
         Component last = appendComponents.removeLast();
@@ -199,15 +276,26 @@ public class Text {
         return this;
     }
 
-    /*TODO
-    public Message hoverItem(NotGUIItem item) {
+    /**
+     * Adds an item hover event to the last appended component.
+     *
+     * @param item item shown on hover
+     * @return this builder
+     */
+    public Text hoverItem(GUIItem item) {
         if (appendComponents.isEmpty()) return this;
         Component last = appendComponents.removeLast();
         last = last.hoverEvent(item.build().asHoverEvent());
         appendComponents.add(last);
         return this;
-    }*/
+    }
 
+    /**
+     * Adds an entity hover event to the last appended component.
+     *
+     * @param entity entity shown on hover
+     * @return this builder
+     */
     public Text hoverEntity(Entity entity) {
         if (appendComponents.isEmpty()) return this;
         Component last = appendComponents.removeLast();
@@ -216,8 +304,28 @@ public class Text {
         return this;
     }
 
+    /**
+     * Adds a hover text from a string to the last appended component.
+     *
+     * @param component hover text
+     * @return this builder
+     */
     public Text hover(String component) { return hover(Text.of(component)); }
+
+    /**
+     * Adds a hover text from another {@link Text} instance to the last component.
+     *
+     * @param component hover text builder
+     * @return this builder
+     */
     public Text hover(Text component) { return hover(component.build()); }
+
+    /**
+     * Adds a hover text component to the last appended component.
+     *
+     * @param component hover component
+     * @return this builder
+     */
     public Text hover(Component component) {
         if (appendComponents.isEmpty()) return this;
         Component last = appendComponents.removeLast();
@@ -226,183 +334,211 @@ public class Text {
         return this;
     }
 
+    /**
+     * Appends a value converted to a component.
+     *
+     * @param o value to append
+     * @return this builder
+     */
     public Text append(Object o) {
-        if (o instanceof Component) {
-            return append((Component)o);
-        } else if (o instanceof Text) {
-            return append(((Text)o).build());
-        } else if (o instanceof String) {
-            return append((String)o);
-        } else {
-            return append(o.toString());
-        }
-    }
-
-    public Text append(Text formatter) {
-        appendComponents.add(formatter.build());
+        appendComponents.add(toComponent(o));
         return this;
     }
 
-    public Text append(Component component) {
-        appendComponents.add(component);
+    /**
+     * Appends a value with a specific color.
+     *
+     * @param o value to append
+     * @param color color to apply
+     * @return this builder
+     */
+    public Text append(Object o, TextColor color) {
+        appendComponents.add(toComponent(o).color(color));
         return this;
     }
 
-    public Text append(Component component, TextColor color) {
-        appendComponents.add(component.color(color));
+    /**
+     * Appends a value with a specific style.
+     *
+     * @param o value to append
+     * @param style style to apply
+     * @return this builder
+     */
+    public Text append(Object o, Style style) {
+        appendComponents.add(toComponent(o).style(style));
         return this;
     }
 
-    public Text append(Component component, Style style) {
-        appendComponents.add(component.style(style));
+    /**
+     * Appends a value in bold.
+     *
+     * @param o value to append
+     * @return this builder
+     */
+    public Text appendBold(Object o) {
+        appendComponents.add(toComponent(o).style(Style.style(TextDecoration.BOLD)));
         return this;
     }
 
-    public Text append(String string) {
-        appendComponents.add(toComponent(string));
+    /**
+     * Appends a value in bold with a specific color.
+     *
+     * @param o value to append
+     * @param color color to apply
+     * @return this builder
+     */
+    public Text appendBold(Object o, TextColor color) {
+        appendComponents.add(toComponent(o).style(Style.style(TextDecoration.BOLD)).color(color));
         return this;
     }
 
-    public Text append(String string, TextColor color) {
-        appendComponents.add(toComponent(string, color));
-        return this;
-    }
-
-    public Text append(String string, Style style) {
-        appendComponents.add(toComponent(string, style));
-        return this;
-    }
-
-    public Text append(Character ch) {
-        appendComponents.add(toComponent(ch));
-        return this;
-    }
-
-    public Text append(Character ch, TextColor color) {
-        appendComponents.add(toComponent(ch, color));
-        return this;
-    }
-
-    public Text append(Character ch, Style style) {
-        appendComponents.add(toComponent(ch, style));
-        return this;
-    }
-
-    public Text appendBold(String string) {
-        appendComponents.add(toComponentBold(string));
-        return this;
-    }
-
-    public Text appendBold(String string, TextColor color) {
-        appendComponents.add(toComponentBold(string, color));
-        return this;
-    }
-
+    /**
+     * Adds a replacement entry where key is treated as a regex.
+     *
+     * @param key regex key to match
+     * @param value replacement value
+     * @return this builder
+     */
     public Text replace(String key, Object value) {
         replacements.put(key, value);
         return this;
     }
 
+    /**
+     * Creates an empty text builder.
+     *
+     * @return new empty {@link Text}
+     */
     public static Text empty() {
         return new Text(Component.empty());
     }
 
+    /**
+     * Creates a text builder that starts with a newline component.
+     *
+     * @return new {@link Text} containing one newline
+     */
     public static Text newline() {
         return new Text(Component.newline());
     }
 
-    public static Text from(Object o) {
-        if (o instanceof Component) {
-            return Text.of((Component)o);
-        } else if (o instanceof Text) {
-            return Text.of(((Text)o).build());
-        } else if (o instanceof String) {
-            return Text.of((String)o);
-        } else {
-            return Text.of(o.toString());
-        }
+    /**
+     * Creates a text builder from any value.
+     *
+     * @param o source value
+     * @return new {@link Text}
+     */
+    public static Text of(Object o) {
+        return new Text(toComponent(o));
     }
 
-    public static Text of(Component inputComponent) {
-        return new Text(inputComponent);
+    /**
+     * Creates a text builder from any value with a color.
+     *
+     * @param o source value
+     * @param color color to apply
+     * @return new {@link Text}
+     */
+    public static Text of(Object o, TextColor color) {
+        return new Text(toComponent(o, color));
     }
 
-    public static Text of(Component inputComponent, TextColor color) {
-        return new Text(inputComponent.color(color));
+    /**
+     * Creates a text builder from any value with a style.
+     *
+     * @param o source value
+     * @param style style to apply
+     * @return new {@link Text}
+     */
+    public static Text of(Object o, Style style) {
+        return new Text(toComponent(o, style));
     }
 
-    public static Text of(Component inputComponent, Style style) {
-        return new Text(inputComponent.style(style));
+    /**
+     * Creates a text builder from any value in bold.
+     *
+     * @param o source value
+     * @return new {@link Text}
+     */
+    public static Text ofBold(Object o) {
+        return new Text(toComponentBold(o));
     }
 
-    public static Text of(String inputString) {
-        return new Text(toComponent(inputString));
+    /**
+     * Creates a text builder from any value in bold with a color.
+     *
+     * @param o source value
+     * @param color color to apply
+     * @return new {@link Text}
+     */
+    public static Text ofBold(Object o, TextColor color) { return new Text(toComponentBold(o, color)); }
+
+    /**
+     * Converts an arbitrary value to an Adventure component.
+     *
+     * @param o value to convert
+     * @return converted component
+     */
+    public static Component toComponent(Object o) {
+        return switch (o) {
+            case Component c -> c;
+            case Text t -> t.build();
+            case Character ch -> miniMessage.deserialize(convertLegacyColors(String.valueOf(ch)))
+                    .decoration(TextDecoration.ITALIC, false);
+            case String s -> miniMessage.deserialize(convertLegacyColors(s));
+            default -> miniMessage.deserialize(convertLegacyColors(o.toString()));
+        };
     }
 
-    public static Text of(String inputString, TextColor color) {
-        return new Text(toComponent(inputString, color));
+    /**
+     * Converts an arbitrary value to a component and applies a color.
+     *
+     * @param o value to convert
+     * @param color color to apply
+     * @return converted component
+     */
+    public static Component toComponent(Object o, TextColor color) {
+        return toComponent(o).color(color);
     }
 
-    public static Text of(String inputString, Style style) {
-        return new Text(toComponent(inputString, style));
+    /**
+     * Converts an arbitrary value to a component and applies a style.
+     *
+     * @param o value to convert
+     * @param style style to apply
+     * @return converted component
+     */
+    public static Component toComponent(Object o, Style style) {
+        return toComponent(o).style(style);
     }
 
-    public static Text of(Character inputCharacter) {
-        return new Text(toComponent(inputCharacter));
+    /**
+     * Converts an arbitrary value to a bold component.
+     *
+     * @param o value to convert
+     * @return converted component
+     */
+    public static Component toComponentBold(Object o) {
+        return toComponent(o).style(Style.style(TextDecoration.BOLD));
     }
 
-    public static Text of(Character inputCharacter, TextColor color) {
-        return new Text(toComponent(inputCharacter, color));
+    /**
+     * Converts an arbitrary value to a bold component with color.
+     *
+     * @param o value to convert
+     * @param color color to apply
+     * @return converted component
+     */
+    public static Component toComponentBold(Object o, TextColor color) {
+        return toComponentBold(o).color(color);
     }
 
-    public static Text of(Character inputCharacter, Style style) {
-        return new Text(toComponent(inputCharacter, style));
-    }
-
-    public static Text ofBold(String inputString) {
-        return new Text(toComponentBold(inputString));
-    }
-
-    public static Text ofBold(String inputString, TextColor color) {
-        return new Text(toComponentBold(inputString, color));
-    }
-
-    public static Text of(Text otherFormatter) {
-        return new Text(otherFormatter.build());
-    }
-
-    public static Component toComponent(String inputString) {
-        return miniMessage.deserialize(convertLegacyColors(inputString));
-    }
-
-    public static Component toComponent(String inputString, TextColor color) {
-        return toComponent(inputString).color(color);
-    }
-
-    public static Component toComponent(String inputString, Style style) {
-        return toComponent(inputString).style(style);
-    }
-
-    public static Component toComponent(Character inputCharacter) {
-        return miniMessage.deserialize(convertLegacyColors(String.valueOf(inputCharacter))).decoration(TextDecoration.ITALIC, false);
-    }
-
-    public static Component toComponent(Character inputCharacter, TextColor color) {
-        return toComponent(inputCharacter).color(color);
-    }
-
-    public static Component toComponent(Character inputCharacter, Style style) {
-        return toComponent(inputCharacter).style(style);
-    }
-
-    public static Component toComponentBold(String inputString) {
-        return toComponent(inputString).style(Style.style(TextDecoration.BOLD));
-    }
-
-    public static Component toComponentBold(String inputString, TextColor color) {
-        return toComponent(inputString).style(Style.style(TextDecoration.BOLD)).color(color);
-    }
-
+    /**
+     * Converts supported legacy color syntaxes into MiniMessage tags.
+     *
+     * @param i input text, may be {@code null}
+     * @return converted text, or {@code null} when input is {@code null}
+     */
     public static String convertLegacyColors(String i) {
         if (i == null) return null;
 
@@ -416,9 +552,15 @@ public class Text {
         return result;
     }
 
+    /**
+     * Converts legacy gradient syntax into MiniMessage gradient tags.
+     *
+     * @param i input text
+     * @return converted text
+     */
     private static String convertLegacyGradients(String i) {
         Matcher matcher = LegacyPatterns.LEGACY_GRADIENT.matcher(i);
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         while (matcher.find()) {
             String startColor = matcher.group(1);
@@ -436,13 +578,19 @@ public class Text {
         return sb.toString();
     }
 
+    /**
+     * Converts long legacy hex syntax (for example, {@code &x&F&F&A&A&0&0}).
+     *
+     * @param i input text
+     * @return converted text
+     */
     private static String convertLegacyHexColors(String i) {
         Matcher matcher = LegacyPatterns.LEGACY_HEX.matcher(i);
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         while (matcher.find()) {
             String hexCode = matcher.group(0);
-            String hex = hexCode.replaceAll("&[x]?", "");
+            String hex = hexCode.replaceAll("&x?", "");
             String replacement = "<color:#" + hex + ">";
             matcher.appendReplacement(sb, replacement);
         }
@@ -451,9 +599,15 @@ public class Text {
         return sb.toString();
     }
 
+    /**
+     * Converts short legacy hex syntax (for example, {@code &#FFAA00}).
+     *
+     * @param i input text
+     * @return converted text
+     */
     private static String convertLegacyHexShort(String i) {
         Matcher matcher = LegacyPatterns.LEGACY_HEX_SHORT.matcher(i);
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         while (matcher.find()) {
             String hex = matcher.group(1);
@@ -465,6 +619,12 @@ public class Text {
         return sb.toString();
     }
 
+    /**
+     * Converts basic legacy color and formatting codes into MiniMessage tags.
+     *
+     * @param input input text
+     * @return converted text
+     */
     private static String convertLegacyBasicColors(String input) {
         return input
                 .replace("&0", "<black>")
@@ -492,6 +652,12 @@ public class Text {
                 .replace("&r", "<reset>");
     }
 
+    /**
+     * Converts a named vanilla color to its hex value.
+     *
+     * @param colorName color name
+     * @return hex value without {@code #}, or original input if unknown
+     */
     private static String convertColorNameToHex(String colorName) {
         return switch (colorName.toLowerCase()) {
             case "black" -> "000000";
@@ -514,39 +680,13 @@ public class Text {
         };
     }
 
-    public static Text ofLegacy(String inputString) {
-        return new Text(toComponent(convertLegacyColors(inputString)));
-    }
-
-    public static Text ofLegacy(String inputString, TextColor color) {
-        return new Text(toComponent(convertLegacyColors(inputString), color));
-    }
-
-    public static Text ofLegacy(String inputString, Style style) {
-        return new Text(toComponent(convertLegacyColors(inputString), style));
-    }
-
-    public Text appendLegacy(String string) {
-        appendComponents.add(toComponent(convertLegacyColors(string)));
-        return this;
-    }
-
-    public Text appendLegacy(String string, TextColor color) {
-        appendComponents.add(toComponent(convertLegacyColors(string), color));
-        return this;
-    }
-
-    public Text appendLegacy(String string, Style style) {
-        appendComponents.add(toComponent(convertLegacyColors(string), style));
-        return this;
-    }
-
-    public static Component toComponentWithLegacy(String inputString) {
-        return toComponent(convertLegacyColors(inputString));
-    }
-
     // shorthands
 
+    /**
+     * Builds this message and sends it to the given audience.
+     *
+     * @param audience recipient audience
+     */
     public void sendTo(Audience audience) {
         if (entity == null) entity = audience;
         audience.sendMessage(build());
