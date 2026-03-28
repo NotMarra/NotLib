@@ -10,7 +10,7 @@
 [![Folia](https://img.shields.io/badge/Folia-compatible-brightgreen?style=for-the-badge)](https://papermc.io/software/folia)
 [![Java](https://img.shields.io/badge/Java-21%2B-orange?style=for-the-badge)](https://adoptium.net)
 
-[📖 Documentation](https://wiki.notmarra.dev/notlib/getting-started/installation/) · [🐛 Report a bug](https://github.com/NotMarra/NotLib/issues/new?template=bug_report.md) · [💡 Request a feature](https://github.com/NotMarra/NotLib/issues/new?template=feature_request.md)
+[📖 Documentation](https://wiki.notmarra.dev/notlib/getting-started/installation/) · [🐛 Report a bug](https://github.com/NotMarra/NotLib/issues/new?template=bug_report.yml) · [💡 Request a feature](https://github.com/NotMarra/NotLib/issues/new?template=feature_request.yml)
 
 </div>
 

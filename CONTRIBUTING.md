@@ -15,7 +15,7 @@ Thanks for taking the time to contribute! Here's everything you need to get star
 
 ### Reporting bugs
 
-Open a [bug report](https://github.com/NotMarra/NotLib/issues/new?template=bug_report.md) and include:
+Open a [bug report](https://github.com/NotMarra/NotLib/issues/new?template=bug_report.yml) and include:
 - NotLib version
 - Paper / Folia version
 - A minimal reproduction case
@@ -23,7 +23,7 @@ Open a [bug report](https://github.com/NotMarra/NotLib/issues/new?template=bug_r
 
 ### Suggesting features
 
-Open a [feature request](https://github.com/NotMarra/NotLib/issues/new?template=feature_request.md) and describe:
+Open a [feature request](https://github.com/NotMarra/NotLib/issues/new?template=feature_request.yml) and describe:
 - The problem you're trying to solve
 - Your proposed solution
 - Any alternatives you've considered
