@@ -360,7 +360,7 @@ public abstract class NotPlugin extends JavaPlugin {
                     Text.empty()
                             .append("[CRITICAL ERROR] Disabling plugin", Colors.RED.get())
                             .nl()
-                            .appendListString(
+                            .appendList(
                                     List.of(e.getStackTrace()).stream()
                                             .map(x -> "    " + x + '\n').toList(),
                                     Colors.ORANGE.get())
