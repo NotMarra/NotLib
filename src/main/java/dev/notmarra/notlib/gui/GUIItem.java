@@ -259,11 +259,21 @@ public class GUIItem {
 
     /**
      * Appends a single lore line from a legacy/MiniMessage string.
+     * Accepts strings with '\n' and automatically splits them
      *
      * @param line lore text
      * @return this builder
      */
-    public GUIItem lore(String line) { return loreLine(Text.of(line).build()); }
+    public GUIItem lore(String line) {
+        String[] lines = line.split("\n");
+        if (lines.length == 1) {
+            return loreLine(Text.of(line).build());
+        }
+        for (String l : lines) {
+            loreLine(Text.of(l).build());
+        }
+        return this;
+    }
 
     /**
      * Appends a single lore line from an Adventure {@link Component}.
