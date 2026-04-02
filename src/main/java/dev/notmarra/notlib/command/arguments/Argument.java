@@ -21,34 +21,36 @@ public abstract class Argument<T> extends Base<Argument<T>> {
         super(name);
     }
 
+    /** Returns the root {@link Command} by walking up the parent chain. */
     public Command cmd() {
         Base<?> parent = this;
         while (parent.parent != null) parent = parent.parent;
-        return (Command)parent;
+        return (Command) parent;
     }
 
+    /** Builds the Brigadier argument node. Implement to return the appropriate builder. */
     public abstract ArgumentBuilder<CommandSourceStack, ?> construct();
 
+    /**
+     * Returns the value of this argument from the current command context.
+     * Only call this inside an executor.
+     */
     public abstract T get();
 
-    private String sigArgs(List<String> args) {
-        return String.join(" ", args.stream().map(x -> "<" + x + ">").toList());
-    }
-
+    /** Returns the dot-notation path to this argument from the root, e.g. {@code "pay.amount"}. */
     public String getPath() {
         List<String> path = new ArrayList<>();
         path.add(name);
         Base<?> current = parent;
         while (current != null) {
-            if (!(current instanceof Command)) {
-                path.add(current.name);
-            }
+            if (!(current instanceof Command)) path.add(current.name);
             current = current.parent;
         }
         Collections.reverse(path);
         return String.join(".", path);
     }
 
+    /** Returns the help text for the subtree rooted at this argument. */
     public Text getHelp() {
         return cmd().getHelpFor(List.of(getPath()));
     }
@@ -56,21 +58,19 @@ public abstract class Argument<T> extends Base<Argument<T>> {
     public String getSignature() {
         List<String> path = new ArrayList<>();
         path.add(name);
-
         Base<?> current = parent;
         while (current != null) {
             path.add(current.name);
             current = current.parent;
         }
-
         Collections.reverse(path);
         String command = path.get(0);
         List<String> subArgs = path.subList(1, path.size() - 1);
-        return "/" + command + " " + sigArgs(subArgs);
+        return "/" + command + " " + String.join(" ", subArgs.stream().map(x -> "<" + x + ">").toList());
     }
 
     public String getSignatureWith(String... suffixArgs) {
-        return getSignature() + " " + sigArgs(List.of(suffixArgs));
+        return getSignature() + " " + String.join(" ", List.of(suffixArgs).stream().map(x -> "<" + x + ">").toList());
     }
 
     @Override
@@ -88,19 +88,14 @@ public abstract class Argument<T> extends Base<Argument<T>> {
 
         if (arg instanceof RequiredArgumentBuilder && !this.suggestions.isEmpty()) {
             ((RequiredArgumentBuilder<CommandSourceStack, ?>) arg).suggests(
-                (ctx, suggestionsBuilder) -> {
-                    this.suggestions.forEach(suggestionsBuilder::suggest);
-                    return suggestionsBuilder.buildFuture();
-                }
+                    (ctx, suggestionsBuilder) -> {
+                        this.suggestions.forEach(suggestionsBuilder::suggest);
+                        return suggestionsBuilder.buildFuture();
+                    }
             );
         }
 
-        arg.requires(source -> {
-            if (this.permission != null) {
-                return source.getSender().hasPermission(this.permission);
-            }
-            return true;
-        });
+        arg.requires(source -> permission == null || source.getSender().hasPermission(permission));
 
         if (this.executor != null) {
             arg.executes(ctx -> {
@@ -119,4 +114,3 @@ public abstract class Argument<T> extends Base<Argument<T>> {
         return arg.build();
     }
 }
-
