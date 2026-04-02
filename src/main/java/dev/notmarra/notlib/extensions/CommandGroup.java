@@ -2,35 +2,73 @@ package dev.notmarra.notlib.extensions;
 
 import dev.notmarra.notlib.command.Command;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import org.bukkit.Server;
 
 import java.util.List;
 
-public abstract class CommandGroup extends Configurable {
+/**
+ * A container for commands registered into Minecraft via the Paper Brigadier API.
+ *
+ * <p>Extend this class, implement {@link #notCommands()}, and call
+ * {@link #register()} in your plugin's {@code onEnable()}.
+ *
+ * <h3>Example:</h3>
+ * <pre>{@code
+ * public class AdminCommands extends CommandGroup {
+ *     public AdminCommands(NotPlugin plugin) { super(plugin); }
+ *
+ *     @Override
+ *     public List<Command> notCommands() {
+ *         return List.of(
+ *             Command.of("kick", "Kick a player")
+ *                 .setPermission("admin.kick")
+ *                 .playerArg("target")
+ *                     .onExecute(arg -> {
+ *                         arg.cmd().getPlayerV("target").kick(Component.text("You were kicked."));
+ *                     })
+ *         );
+ *     }
+ * }
+ *
+ * // In onEnable():
+ * new AdminCommands(this).register();
+ * }</pre>
+ *
+ * <p>If your group also needs config, extend {@link ConfigurableCommandGroup} instead.
+ */
+public abstract class CommandGroup {
+    protected final NotPlugin plugin;
     private boolean isRegistered = false;
 
-    public CommandGroup(NotPlugin plugin) { super(plugin); }
+    public CommandGroup(NotPlugin plugin) {
+        this.plugin = plugin;
+    }
 
-    public abstract String getId();
-
-    public void onRegister() {}
-
+    /**
+     * Returns the list of commands this group registers.
+     *
+     * @return list of {@link Command} instances
+     */
     public abstract List<Command> notCommands();
 
-    public Server getServer() { return plugin.getServer(); }
+    /**
+     * Called just before commands are registered with the server.
+     * Override to set up any dependencies or state your commands need.
+     */
+    public void onRegister() {}
 
-    @Override
-    public List<String> getConfigPaths() { return List.of(); }
-
+    /**
+     * Registers all commands from {@link #notCommands()} into the Paper Brigadier API.
+     * Safe to call multiple times — registration only happens once.
+     */
     public void register() {
-        if (isRegistered) return;
+        if (isRegistered) {
+            plugin.getLogger().warning(getClass().getSimpleName() + " is already registered, skipping.");
+            return;
+        }
         isRegistered = true;
-
-        if (!isEnabled()) return;
-        this.onRegister();
-
-        plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
-            notCommands().forEach(cmd -> commands.registrar().register(cmd.build()));
-        });
+        onRegister();
+        plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands ->
+                notCommands().forEach(cmd -> commands.registrar().register(cmd.build()))
+        );
     }
 }

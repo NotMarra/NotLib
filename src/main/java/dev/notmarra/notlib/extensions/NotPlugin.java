@@ -174,10 +174,14 @@ public abstract class NotPlugin extends JavaPlugin {
     public NotListener getListener(String id) { return LISTENERS.get(id); }
 
     public void addCommandGroup(CommandGroup cmdGroup) {
-        CMDGROUPS.put(cmdGroup.getId(), cmdGroup);
+        CMDGROUPS.put(cmdGroup.getClass().getSimpleName(), cmdGroup);
     }
 
     public CommandGroup getCommandGroup(String id) { return CMDGROUPS.get(id); }
+
+    public <T extends CommandGroup> T getCommandGroup(Class<T> clazz) {
+        return clazz.cast(CMDGROUPS.get(clazz.getSimpleName()));
+    }
 
     // -----------------------------------------------------------------------
     // Configurable registration
