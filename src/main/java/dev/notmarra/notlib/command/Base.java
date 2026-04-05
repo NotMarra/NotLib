@@ -54,10 +54,10 @@ public abstract class Base<T extends Base<T>> {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public Base<T> addArg(Argument arg) {
+    public Argument addArg(Argument arg) {
         arg.parent = this;
         this.arguments.put(arg.name, arg);
-        return this;
+        return arg;
     }
 
     public Argument<?> getArg(String name) {
